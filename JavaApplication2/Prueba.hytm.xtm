@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink" id="lor.hytm">
+   <topic id="p0001">
+      <instanceOf>
+         <topicRef xlink:href="#t_persona">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Lorenzo Miguel Elguea Fernandez</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="p0002">
+      <instanceOf>
+         <topicRef xlink:href="#t_persona">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Rosy Neumann</baseNameString>
+      </baseName>
+   </topic>
+    <topic id="p0003">
+      <instanceOf>
+         <topicRef xlink:href="#t_persona">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Rosy Neumann</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="p0004">
+      <instanceOf>
+         <topicRef xlink:href="#t_persona">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Hugo Sanchez</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="a0001">
+      <instanceOf>
+         <topicRef xlink:href="#t_auto">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Audi Q7</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="t_persona">
+      <baseName>
+         <baseNameString>Persona</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="t_auto">
+      <baseName>
+         <baseNameString>Automovil</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="t_relacion">
+      <baseName>
+         <baseNameString>Relacion</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="t_posesion">
+      <baseName>
+         <baseNameString>Posesión</baseNameString>
+      </baseName>
+   </topic>
+
+   <association>
+      <instanceOf>
+         <topicRef xlink:href="#t_relacion">
+         </topicRef>
+      </instanceOf>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#t_persona">
+            </topicRef>
+         </roleSpec>
+
+         <topicRef xlink:href="#p0001">
+         </topicRef>
+      </member>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#t_persona"></topicRef>
+         </roleSpec>
+         <topicRef xlink:href="#p0002">
+         </topicRef>
+      </member>
+   </association>
+   <association>
+      <instanceOf>
+         <topicRef xlink:href="#t_posesion">
+         </topicRef>
+      </instanceOf>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#t_persona">
+            </topicRef>
+         </roleSpec>
+
+         <topicRef xlink:href="#p0001">
+         </topicRef>
+      </member>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#t_auto"></topicRef>
+         </roleSpec>
+         <topicRef xlink:href="#a0001">
+         </topicRef>
+      </member>
+   </association>
+
+
+
+</topicMap>
+

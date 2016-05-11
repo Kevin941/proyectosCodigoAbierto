@@ -1,0 +1,3450 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Omnigator: The Topic Maps Browser</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>Omnigator: The Topic Maps Browser</h1>
+<h2 class="subtitle">User&rsquo;s Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>This document is the user's guide to the Ontopia Omnigator, the
+omnivorous topic map navigator built using Ontopia. It explains how to
+navigate topic maps using the Omnigator, and also provides some
+guidance on how to create and load your own topic maps. It assumes
+some basic knowledge about topic maps.  We welcome any suggestions you
+might have on ways of improving this User Guide. Please send them to
+<a href="mailto:dev@ontopia.net">dev@ontopia.net</a>.</p>
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10027">1. Introduction</a>
+</li>
+<ul>
+<li>
+<a href="#N10032">1.1. A word about the user interface</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1004E">1.2. About this user guide</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10078">1.3. How the Omnigator works</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10094">2. The Guided Tour</a>
+</li>
+<ul>
+<li>
+<a href="#N1009C">2.1. The Welcome Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#tm-page">2.2. The Index Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10197">2.3. The Topic Page (of a topic type)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1020F">2.4. The Topic Page (of an individual topic)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10273">2.5. Cruising the Knowledge Web</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10291">2.6. The Topic Page (of an occurrence type)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102BA">2.7. The Topic Page (of an association type)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#vizigator">2.8. The Gentle Art of Vizigation</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10344">3. Advanced Omnigator Topics</a>
+</li>
+<ul>
+<li>
+<a href="#rdf-support">3.1. RDF support in the Omnigator</a>
+</li>
+<ul></ul>
+<li>
+<a href="#manage-page">3.2. The Manage Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#plugin-page">3.3. The Plug-in Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#fulltext-admin">3.4. The Full-text Indexing Plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#customise-page">3.5. The Customize Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#plug-ins">3.6. The Plug-ins</a>
+</li>
+<ul>
+<li>
+<a href="#edit-page">3.6.1. The Edit plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#set-context-page">3.6.2. The Filter plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1056D">3.6.3. The Merge plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N105A2">3.6.4. The Export plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#rdf2tm-plug-in">3.6.5. The RDF2TM plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#query-plug-in">3.6.6. The Query plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#validate-plug-in">3.6.7. The Validate plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#fulltext">3.6.8. The Full-text Search Plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N106A8">3.6.9. The Statistics plug-in</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+<li>
+<a href="#tutorial">4. Building Your Own Topic Map</a>
+</li>
+<ul>
+<li>
+<a href="#N106E3">4.1. Step 1: Determining scope and basic ontology</a>
+</li>
+<ul></ul>
+<li>
+<a href="#step2">4.2. Step 2: Getting the framework in place</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1071A">4.3. Step 3: Creating the first topic</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1073F">4.4. Step 4: Adding a topic type</a>
+</li>
+<ul></ul>
+<li>
+<a href="#adding-occurrences">4.5. Step 5: Adding occurrences</a>
+</li>
+<ul></ul>
+<li>
+<a href="#using-PSIs">4.6. Step 6: Identification of subjects</a>
+</li>
+<ul></ul>
+<li>
+<a href="#adding-associations">4.7. Step 7: Adding associations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#reification">4.8. Step 8: Reification</a>
+</li>
+<ul></ul>
+<li>
+<a href="#metadata">4.9. Step 9: Adding metadata to your topic map</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10872">4.10. Step 10: Over to you</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10885">4.11. Jill's First TM</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N108A1">4.12. Jill's First TM in LTM syntax</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+
+
+
+
+
+
+
+
+<h2>
+<a name="N10027">1. Introduction</a>
+</h2>
+
+
+
+<p>The Omnigator is an application that lets you load and browse
+any topic map, including your own, using a standard web browser. The
+name is a contraction of "omnivorous navigator", and was chosen to
+underline the application's principal design goal, which is to be able
+to make sense of <em>any</em> conforming topic map. The
+Omnigator is intended as a teaching aid, to help you understand topic
+map concepts, and as an aid in developing your own topic maps.</p>
+
+
+<h3>
+<a name="N10032">1.1. A word about the user interface</a>
+</h3>
+
+
+
+<p>Before going any further it needs to be made clear that the
+Omnigator&rsquo;s user interface is not to be recommended for an
+end-user application. End-users shouldn&rsquo;t need to know that the
+application they are using is driven by a topic map. They don&rsquo;t
+need to understand concepts like &ldquo;topic&rdquo;, &ldquo;topic
+type&rdquo;, &ldquo;association&rdquo;, and &ldquo;scope&rdquo;, and
+they shouldn&rsquo;t even be exposed to such terms. The user should
+simply experience a user interface that for once makes it possible to
+really find the information they are looking for, quickly, easily, and
+intuitively.</p>
+
+
+<p>So why have we chosen not to hide the underlying machinery in
+the user interface of the Omnigator? Precisely because it is intended
+as a teaching aid targeted at authors, knowledge workers,
+documentalists, and developers, who want to understand more about
+Topic Maps and perhaps create (and debug) their own topic maps. So
+don&rsquo;t be surprised by the &ldquo;jargon&rdquo; terms you will come across: They
+are there for a purpose. Think instead about how the real-world
+applications you will build can hide the technicalities while at the
+same time harnessing the power of Topic Maps to provide an even more
+exhilarating experience for your end users! The <a href="http://www.ontopia.net/solutions/navigator.html">Ontopia
+Navigator Framework</a> (part of Ontopia) is the toolkit you need
+for building that kind of application. The Omnigator is just a generic
+browser implemented using the Navigator Framework. (For examples of other,
+jargon-free interfaces see the <a href="http://www.ontopia.net/operamap/">OperaMap</a>,<a href="http://www.ontopia.net/i18n/">Scripts and Languages</a>, and
+<a href="http://www.garshol.priv.no/download/xmltools/">Free XML Tools</a>
+applica&shy;tions.)</p>
+
+
+
+
+<h3>
+<a name="N1004E">1.2. About this user guide</a>
+</h3>
+
+
+
+<p>This guide starts with a brief tour of one of the topic maps
+included in the Omnigator distribution, explaining the various aspects
+of the user interface and the information it provides. It that assumes
+you have some basic knowledge about topic maps. If you don&rsquo;t,
+try reading one of the simple introductions, such as <a href="http://www.ontopia.net/topicmaps/materials/tao.html">The TAO of
+Topic Maps</a>, available from the Ontopia web site, or the
+chapter "Topic Maps: Knowledge navigation aids" in the
+<a href="http://www.xmlbooks.com/xhb.htm">XML Handbook</a>. If
+you are technically minded you might also want to look at the <a href="http://www.topicmaps.org/xtm/1.0">XTM Specification</a>, the
+original <a href="http://www.y12.doe.gov/sgml/sc34/document/0129.pdf">ISO 13250
+standard</a>, or the new version of ISO 13250, especially the
+<a href="http://www.isotopicmaps.org/sam/sam-model/">Data
+Model</a> and the <a href="http://www.isotopicmaps.org/sam/sam-xtm/">XTM 2.0
+syntax</a>.</p>
+
+
+<p>Following the Guided Tour we discuss some of the more
+sophisticated aspects of the Omnigator. Finally, for those that have
+never created their own topic map, we offer a short tutorial to prove
+just how easy it is to get up and running with your very first topic map
+in the Omnigator!</p>
+
+
+<p>If you want to know how the Omnigator works, a brief description
+follows. If you&rsquo;re not interested, go straight to the next
+section.</p>
+
+
+
+
+<h3>
+<a name="N10078">1.3. How the Omnigator works</a>
+</h3>
+
+
+
+<p>The Omnigator uses a simple client-server architecture based on a
+standard http protocol.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/omnigator.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 1. The Omnigator Architecture</b>
+</p>
+
+
+<p>On the server side there is a J2EE web application built using
+Ontopia, that runs in the Tomcat web server. This application reads
+(and writes) topic maps and generates HTML pages on the fly. On the
+client, a standard web browser receives these HTML pages and displays
+a view of some portion of the topic map. This view is rich in links,
+built from the data structures that constitute the topic map. Each
+time the user clicks on a link, a request is sent to the server
+application, resulting in a new set of information extracted from the
+topic map.</p>
+
+
+<p>If you have a standard installation of the free Omnigator
+download, the Tomcat server will be running on the same machine as the
+client. Alternatively, your local technical support team may have
+installed the server on another machine. If you are using our online
+demo, the server is on the Ontopia web site. But whatever the
+configuration, the view from the client side will be pretty much the
+same.</p>
+
+
+
+
+
+
+
+
+<h2>
+<a name="N10094">2. The Guided Tour</a>
+</h2>
+
+
+
+<p>This section assumes that you have a correctly configured
+installation of the Omnigator with the server up and running, or that you
+are using the online demo. (For installation and start-up information, see
+the installation guide that accompanies your distribution.)</p>
+
+
+<h3>
+<a name="N1009C">2.1. The Welcome Page</a>
+</h3>
+
+
+
+<p>To begin this demonstration start your web browser and point it at
+one of the following URLs:</p>
+
+
+<dl>
+<dt>Local installation</dt>
+<dd>
+<a href="http://localhost:8080/omnigator/">http://localhost:8080/omnigator/</a>
+</dd>
+<dt>Online demo</dt>
+<dd>
+<a href="http://www.ontopia.net/omnigator/">http://www.ontopia.net/omnigator/</a>
+</dd>
+<dt>Custom installation</dt>
+<dd>
+<em>Contact your local technical support team for
+details.</em>
+</dd>
+</dl>
+
+
+<p>You should now see the <dfn>Welcome Page</dfn>, saying
+&ldquo;Welcome to the Omnigator&rdquo;. If you have difficulty getting
+to this starting point, then please refer to the install documentation,
+contact your local technical support team, or contact the Ontopia
+support team at <a href="mailto:support@ontopia.net">support@ontopia.net</a>.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/WelcomePage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 2. The Welcome Page</b>
+</p>
+
+
+<p>On the Welcome Page there is a list of topic maps that are available
+to the application. (You will find out how to add one of your own in
+<a href="#manage-page">section
+        3.2</a> of this User Guide). The Welcome Page also
+contains a number of useful links to provide you with short cuts to
+topic map information and examples.</p>
+
+
+<p>This demonstration uses Steve Pepper&rsquo;s <em>Italian
+Opera Topic Map</em>, a fairly small but semantically rich topic
+map that has been used in many talks and tutorials in the last few
+years.</p>
+
+
+<p>You can return to the Welcome Page from anywhere in the
+application by clicking on the <strong>Open...</strong> button in
+the top right-hand corner.</p>
+
+
+
+<h3>
+<a name="tm-page">2.2. The Index Page</a>
+</h3>
+
+
+
+<p>To go to the <tt>opera.ltm</tt> topic map,
+click on it in the list of topic maps, which is on the left hand side of
+the Welcome Page. A new page opens, shown in the figure below. We call
+this page the <dfn>Index Page</dfn>. At the top you will see
+a row of buttons. The <strong>Welcome</strong> button
+takes you back to the Welcome Page. The other buttons are generated by
+<dfn>plug-ins</dfn>, which are discussed in <a href="#plug-ins">section
+        3.6</a>.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/TopicMapPage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 3. The Index Page for the Italian Opera Topic Map</b>
+</p>
+
+
+<p>The purpose of the Index Page is to provide you with various
+overviews of the topic map as a whole. The views can be chosen from the
+list of links on the left, as follows:</p>
+
+
+<dl>
+<dt>Ontology</dt>
+<dd>The ontology view shows the "types", or
+&ldquo;kinds of things&rdquo; that exist in the topic map. It does so
+by providing alphabetical lists of topic types, association types,
+association role types, and occurrence types. All of these types are
+also topics; clicking on any one of them causes it to become the
+current topic, but more about that in a moment. Note that the
+Omnigator&rsquo;s notion of what constitutes a typing topic is
+entirely empirical: For example, if (and only if) a topic has
+instances that are themselves topics, then it is regarded as a topic
+type, regardless of what the author&rsquo;s intention might have
+been.</dd>
+<dt>Master Index</dt>
+<dd>The master index view counts and lists all the topics in the topic
+map, in alphabetical order, under the heading <strong>Index of Topics</strong>.</dd>
+<dt>Index of Individuals</dt>
+<dd>This view lists all topics <em>except</em> typing
+topics.</dd>
+<dt>Index of Themes</dt>
+<dd>The themes view lists all topics that are used as themes in the
+topic map. (Themes are topics that are used to defined scope and are
+therefore sometimes called scoping topics.) The themes are grouped
+according to the kinds of topic characteristics (names, variant names,
+occurrences, and associations) they are used to scope.</dd>
+<dt>Unnamed Topics</dt>
+<dd>This link only appears if the topic map contains topics that have
+no base name. Clicking on it results in a list of such topics labelled
+either by their XML ID (if they have one; topics from merged topic maps
+do not) or by their internal object ID, and followed by their type (if
+any). This list is useful for debugging since the absence of a base name
+often indicates an error in the topic map.</dd>
+<dt>Hierarchies</dt>
+<dd>Under this heading a list of hierarchical association types is
+displayed (if any are present in the topic map). These are association
+types that conform to Techquila&rsquo;s <a href="http://www.techquila.com/psi/hierarchy/#hierarchical-relation-type">hierarchical
+relationship design pattern</a>. Clicking on one of these links
+results in a tree view of that particular hierarchy. (One reason for
+introducing this feature was because people were abusing the
+supertype-subtype relationship in order to get the Omnigator to display
+other kinds of hierarchical relationships using indentation. With the
+new generalized tree widget, this should no longer be necessary.)</dd>
+</dl>
+
+
+<p>In the screen shot above, the name of the topic map is displayed
+at the top of the page. If the topic map does not have a name, the
+Omnigator simply displays the words &ldquo;Index Page&rdquo;. (In order
+to give a topic map a name it must be <em>reified</em>, as
+described in <a href="#reification">section
+        4.8</a>.)</p>
+
+
+<p>If metadata has been assigned to the topic map (using the
+mechanism described in <a href="#metadata">section
+        4.9</a>), it will be displayed
+in a box headed <strong>Topic Map Metadata</strong> on the left-hand
+side of the screen.</p>
+
+
+<p>To open another topic map, use the <strong>Open...</strong>
+button in the top right-hand corner of the screen.</p>
+
+
+<p>If you use an application other than Ontopia&rsquo;s new
+ontology-driven editor, Ontopoly, to modify a topic map that is already
+loaded, you will need to reload it in order to see the effects of your
+changes. This is easily done via the <strong>Reload</strong>
+button in the top right-hand corner. After reloading the topic map, the
+Omnigator attempts to return you to the topic page you were on; if this
+is not possible (because the topic map no longer contains a topic with
+the same XML ID), you will be returned to the topic map&rsquo;s Index
+Page. (NOTE: If the topic map is full-text indexed (see <a href="#fulltext">section
+        3.6.8</a>), it will be automatically reindexed when you
+reload it. If the topic map is large this might take some time.)</p>
+
+
+
+<h3>
+<a name="N10197">2.3. The Topic Page (of a topic type)</a>
+</h3>
+
+
+
+<p>Having investigated the index views and hopefully gained some idea
+of what the topic map itself is all about, go to the ontology view and
+click on the topic 'Composer'. A new page opens, shown in the diagram
+below. We call this page the <dfn>Topic Page</dfn> and
+'Composer' is the <dfn>current topic</dfn>.</p>
+
+
+<p>Note that a new button appears on the button bar, to the right of
+the <strong>Welcome</strong> button, containing either
+the name of the topic map (in its short form, if it has one, which it
+does in our example), or the text <strong>Index Page</strong>. Clicking on this button
+will always bring you back to the topic map&rsquo;s Index Page. (To learn how
+to specify a short name for a topic map, see <a href="#reification">section
+        4.8</a>.)</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/TopicPage-composer.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 4. The Topic Page for topic type 'Composer'</b>
+</p>
+
+
+<p>The Topic Page presents the information held in the topic map
+about the current topic, in this case the information about the topic
+'Composer'.</p>
+
+
+<p>The <em>kind</em> of information presented will depend
+on the nature of the current topic. The main title will always be the
+most appropriate name of the topic, based on the type(s) of the topic
+and the <em>current context</em> (described in <a href="#set-context-page">section
+        3.6.2</a>). In addition, all the base names (and any
+variant names) of this topic will be shown, along with the themes that
+define their scopes (unless context-based filtering is in effect). In
+the illustration we see that the topic 'Composer' has seven names: one
+in the unconstrained scope, and six others in language scopes
+corresponding to French, Italian, Czech, Finnish, Hungarian, Dutch,
+German, and Norwegian.</p>
+
+
+<p>Names that have no type are grouped together under the heading
+<strong>Untyped Names</strong>, as in the example above. Typed
+names, on the other hand, are grouped separately and the name type is
+used as a heading. In the example in the next section, the composer
+Puccini has two untyped names (one of them scoped), and also a name of
+type <strong>Normal form</strong>, &ldquo;Giacomo Puccini&rdquo;.
+(NOTE: Typed names were introduced with the revised 2006 version of the
+Topic Maps standard. Topic maps written using XTM 1.0 will only have
+untyped names.)</p>
+
+
+<p>Under <strong>Associations</strong> we find the topics that
+'Composer' is associated with. The topic 'Composer' doesn&rsquo;t
+participate in any associations, apart from subclassing associations.
+The association section is therefore empty, except for the association
+to its supertype ('Musician'). For other kinds of topics we would
+typically see more associations (as the screenshots to follow will
+show).</p>
+
+
+<p>Because 'Composer' is a <dfn>topic type</dfn> (i.e., a
+topic that defines a class of topics), we also get a list of topics of
+this type, in other words, an Index of Composers. If the current topic
+is an <dfn>association role type</dfn> (i.e., a topic that
+defines a class of roles played in associations), the Omnigator displays
+a similar list with the heading <strong>Players of this
+Role</strong> (see the topic 'Person' for an example of this).</p>
+
+
+<p>Sometimes the same topic is used for both purposes, i.e., to type
+other topics and to type association roles. The topic 'Composer' is a
+case in point: It also defines one of the role types in 'Composed by'
+associations. In cases like this, the Omnigator will display
+<em>two</em> lists of topics (one entitled <strong>Topics
+of this Type</strong>, the other entitled <strong>Players of this
+Role</strong>) <em>unless</em> the two lists are identical
+(as they are in the case of 'Composer'), in which case only the first
+list is displayed. (<strong>TIP:</strong> When the
+Omnigator displays two such lists and their contents are very similar,
+it often indicates an inconsistency in your topic map.)</p>
+
+
+<p>Finally, under <strong>Subject Identifiers</strong> are listed
+URIs for each <dfn>subject identifier</dfn> that this topic
+has been given. In this case there is just one. Sometimes there are none
+and there may also be more than one. Subject identifiers are a mechanism
+for establishing which subject a topic represents; they are the basis
+for performing topic map merging without the problems normally caused by
+homonyms and synonyms. If the author of the topic map has followed
+<a href="http://www.ontopia.net/tmp/pubsubj-gentle-intro.htm">OASIS'
+recommendations</a> for Published Subjects, clicking on a subject
+identifier should lead to a resource called a <dfn>subject
+indicator</dfn> that provides a human-interpretable
+&ldquo;indication&rdquo; of the identity of the subject represented by
+the current topic.</p>
+
+
+<p>If the current topic represents an information resource and has a
+<dfn>subject locator</dfn>, this will be shown in addition
+to any subject identifiers.</p>
+
+
+
+<h3>
+<a name="N1020F">2.4. The Topic Page (of an individual topic)</a>
+</h3>
+
+
+
+<p>All the themes, types, topic instances, and role players on a
+Topic Page are also topics. You can click on any one of them, and it
+then becomes the current topic. Try this by clicking on the topic
+'Puccini'. The result is a new Topic Page, shown below, with Puccini as
+the current topic.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/TopicPage-Puccini.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 5. The Topic Page for topic 'Puccini'</b>
+</p>
+
+
+<p>'Puccini' is a different kind of topic than 'Composer'. Whereas
+'Composer' is a topic type (and association role type), 'Puccini' is an
+individual, and therefore the kind of information that is presented is
+slightly different. We still have the principal name and a complete list
+of names. We also have a section for <strong>Associations</strong>, but this time the
+contents are rather more extensive. We also see several new headings,
+explained below.</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Types</strong> simply lists the types (or
+classes) of which 'Puccini' is an instance, in this case,
+Composer.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Internal Occurrences</strong> displays
+occurrences of the topic 'Puccini' that are internal to the topic map,
+in this case, the composer&rsquo;s dates of birth and death.</p>
+
+</li>
+<li>
+
+<p>
+<strong>External Occurrences</strong> displays
+occurrences that are resources external to the topic map.</p>
+
+</li>
+</ul>
+
+
+<p>Occurrences are organized by type, the name of the type being
+displayed in bold as a heading. Note that occurrences are displayed in
+different ways, depending on whether the occurrences are internal or
+external to the topic map. With internal resources (encoded using
+<tt>&lt;resourceData&gt;</tt> elements in XTM syntax), the
+contents of the resource are shown inline. With external resources
+(encoded using <tt>&lt;resourceRef&gt;</tt> elements in XTM
+syntax), only the locator of the resource is shown, unless there is a
+topic that represents the resource, in which case the resource&rsquo;s name is
+displayed instead (along with a small icon). (To learn how to name a
+resource in this way, see <a href="#using-PSIs">section
+        4.6</a>.) Clicking on the
+locator (or the icon) makes your browser go to the resource. Clicking on
+the name takes you to the topic page for that resource (from which you
+can access the resource itself via its subject locator).</p>
+
+
+<p>The section headed <strong>Associations</strong>, lists topics that are related
+with the current topic through associations, grouped according to the
+type of the association. It is the equivalent of &ldquo;see also&rsquo;s&rdquo; in a
+back-of-book index (except that here there is an association type that
+tells us something about the <em>nature</em> of the &ldquo;see
+also&rdquo; relationship). For 'Puccini' we have associations labelled 'Born
+in', 'Composed', 'Died in', 'Exponent of', and 'Pupil of'. Under each of
+these labels are the associated topics. We see that Puccini was born in
+Lucca, that he composed a number of operas, including <em>La
+Boh&egrave;me</em>, <em>Tosca</em>, and
+<em>Turandot</em>, that he died in Brussels, was an exponent
+of the musical style known as verismo, and that he was a pupil of
+Ponchielli.</p>
+
+
+<p>When displaying names of associated topics, the Omnigator assumes
+a current context defined by the current topic. Thus the name of La
+Boh&egrave;me is given as &ldquo;La Boh&egrave;me&rdquo; even though its name in the unconstrained
+scope (in order to distinguish it from Leoncavallo&rsquo;s opera of the same
+name) is actually &ldquo;La Boh&egrave;me (Puccini)&rdquo;. The section headed <strong>Scoped
+Names</strong> at the bottom of the page lists topics whose names are scoped by
+the current topic. (If any occurrences were scoped by this topic, they
+would be listed in a separate section labelled <strong>Scoped Occurrences</strong>;
+similarly, if any associations were scoped by the current topic their
+types would be listed in a separate section labelled <strong>Scoped Association
+Types</strong>. See the topics 'Italian' and 'Biography' for more
+examples.)</p>
+
+
+<p>If you move the cursor over the associated topics (for example
+'Lucca'), you&rsquo;ll see the text &ldquo;Role type: Place&rdquo; appear as a pop-up (or
+however your browser displays element titles). This tells you that
+'Lucca' plays the role of 'Place' in the 'Born in' association. If the
+association is scoped, the names of the topics comprising the scope will
+also be displayed.</p>
+
+
+<p>All of the associations in which Puccini plays a role are binary,
+i.e., they involve exactly two topics (Puccini and one other). However,
+associations can have any arity: They may be n-ary (i.e., involve three
+or more topics) or even unary (involving just one topic). You will see
+how the Omnigator displays n-ary associations shortly. Unary
+associations are less usual, but some topic map authors use them to
+represent boolean properties, such as 'Unfinished'. Unary associations
+are displayed separately from other associations, as you will see if you
+click on 'Turandot'.</p>
+
+
+
+
+<h3>
+<a name="N10273">2.5. Cruising the Knowledge Web</a>
+</h3>
+
+
+
+<p>Click now on 'Lucca'. A new topic page opens, and Lucca is the
+current topic. It is a topic of type 'City', located in Italy, and the
+birthplace of both Puccini and Catalani. The association with Puccini is
+the same as the one we just used to get to this page, it is simply
+labelled differently. This illustrates an important point about topic
+maps: There is no directionality in associations, just different roles
+played by the participants, thus giving a structure which can be
+navigated in any direction required by an application. (To find out how
+to label your association types differently in different contexts, see
+<a href="#adding-associations">section
+        4.7</a> in the tutorial.)</p>
+
+
+<p>Now click on 'Catalani'. He becomes the current topic. We see that
+he too was a composer of operas, born in Lucca (well, we already knew
+that: that&rsquo;s how we found him), and that he died in Milan.</p>
+
+
+<p>Click on 'Milan'. Milan is an interesting city: Not many people
+were born there, but lots of people died there! Why? Well, if you know
+anything about Italian opera, you know that Milan is the home of the
+opera house La Scala and thus the &ldquo;Mecca&rdquo; of Italian opera. A composer
+may not have happened to be born in Milan, but if he was any good he
+would tend to gravitate there during his career, and that would increase
+the chance of him dying there! (This, by the way, is an interesting
+example of the kind of new insights revealed by the juxtaposition of
+information found in a topic map. The author of this topic map did not
+set out to illustrate Milan&rsquo;s position as the Mecca of Italian opera;
+that fact was &ldquo;revealed&rdquo; by the characteristics that collectively
+constitute the topic 'Milan'.)</p>
+
+
+<p>Click now on 'Teatro alla Scala', and you will see a list of all
+the operas that were first performed there. (See, it must have been an
+important place!) Choose 'Madame Butterfly'. You see the premi&egrave;re date,
+the name of its most famous aria, the play on which it was based, its
+principal characters, who the composer was (our old friend, Puccini),
+etc.</p>
+
+
+<p>Click now on 'Cio-cio-san' for an example of how the Omnigator
+displays n-ary associations. Two ternary associations are shown under
+the headings 'Killed by' and 'Kills (by)'. These are actually the same
+association type, but since Cio-cio-san plays different roles in them
+they are presented separately and labelled differently. In fact they are
+actually the same association (the one representing Cio-cio-san&rsquo;s
+suicide, in which she plays the role of both victim and perpetrator!).
+Note how the fact that one topic plays multiple roles in a single
+association is emphasized through the use of the label <strong>[self]</strong>.</p>
+
+
+<p>Now retrace your tracks to 'Madame Butterfly'. What you have
+essentially been doing is wandering around a semantic network, or
+knowledge web, about Italian opera. Hopefully you are learning a lot
+about that domain in the process, even without visiting any of the
+information resources themselves. To delve deeper into a particular
+topic of interest, simply follow a link to one of the resources. For
+Madame Butterfly they include two synopses, the libretto, and
+more.</p>
+
+
+
+
+<h3>
+<a name="N10291">2.6. The Topic Page (of an occurrence type)</a>
+</h3>
+
+
+
+<p>So far we have only looked at topics that type other topics and
+association roles ('Composer'), and topics that are individuals
+('Puccini', 'Lucca', 'Catalani', 'Milan', 'La Scala', 'Madame
+Butterfly', 'Cio-cio-san'). Now let&rsquo;s look at a topic that is an
+occurrence type. Under <strong>External Occurrences</strong> find
+one of the occurrences that is of type 'Synopsis' and click on the link
+in bold text; 'Synopsis' becomes the current topic. The information
+shown for a topic that types occurrences is of a different kind: What
+you see now is (on the left) a list of topics that have occurrences of
+this type, and (on the right) the addresses of all those
+occurrences.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/TopicPage-synopsis.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 6. The Topic Page for occurrence type 'Synopsis'</b>
+</p>
+
+
+<p>To see another example of an occurrence type topic, click on
+'Aida' (at the top of the list of occurrences), and then on 'Premi&egrave;re
+date' (under <strong>Internal Occurrences</strong>). The result is
+an alphabetically ordered list of every topic that has a premi&egrave;re date,
+and a chronological list of all the corresponding dates. This time the
+<em>contents</em> of the occurrences are shown rather than
+the addresses, because all the occurrences are internal rather than
+external.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/TopicPage-premiere.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 7. The Topic Page for occurrence type 'Premi&egrave;re date'</b>
+</p>
+
+
+
+
+<h3>
+<a name="N102BA">2.7. The Topic Page (of an association type)</a>
+</h3>
+
+
+
+<p>Now go back to Tosca (first performed in 1900) and from there to
+the character Floria Tosca (under 'Dramatis personae'). Note the
+associations of type 'Killed by' and 'Kills (by)'. Floria Tosca is also
+involved in two such associations, one of them in two different roles
+(because she too kills herself). Click on the heading 'Killed by'. The
+topic 'Killed by', which types these associations, becomes the current
+topic. The information shown for a topic that types associations is
+different yet again: This time we see all topics that play roles in
+associations of this type, grouped according to the role they play. (The
+association type 'Killed by', as we have seen, is not binary; it can
+(and usually does) have more than two roles. In this case they are
+'Cause of death', 'Perpetrator', and 'Victim'. In the case of suicides,
+both the latter roles are played by the same character.)</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/TopicPage-death.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 8. The Topic Page for association type 'Killed by'</b>
+</p>
+
+
+<p>On this gory note, we used to end our guided tour of the basic
+Omnigator interface. But there is another way to view your topic maps:
+Using the Vizigator.</p>
+
+
+
+
+<h3>
+<a name="vizigator">2.8. The Gentle Art of Vizigation</a>
+</h3>
+
+
+
+<p>Hit the Back button a couple of times and you should be back at
+the topic 'Tosca' (the opera, not the character). Click on the <strong>Vizigate</strong> button, wait a few seconds while the
+applet loads, and you should get a graphic display like the one shown
+below:</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/Viz-tosca-1.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 9. Vizigating 'Tosca' (locality = 1)</b>
+</p>
+
+
+<p>What you see is the focus topic ('Tosca') and all directly related
+topics, i.e., characters (e.g. Mario, Scarpia, Floria Tosca, etc.),
+arias (Vissi d&rsquo;arte, etc.), the composer Puccini, the setting (Rome),
+the librettists (Illica and Giacosa), and the play on which the opera
+was based (La Tosca). Topics are shown as labelled nodes and
+associations as arcs. Shapes and colours denote different topic types
+and association types. Mousing over an arc displays the name of the
+association type (e.g. &ldquo;composed by&rdquo; for the blue arc connecting Tosca
+and Puccini).</p>
+
+
+<p>You can zoom in and out by using the <dfn>Zoom
+bar</dfn> at the top of the screen and you can move the whole
+graph around, either by using the scroll bars on the right and at the
+bottom, or by dragging the background. Topic nodes can also be dragged
+to different positions. (The Vizigator does have a mind of its own and
+will want to have a say in how nodes are distributed. If you insist on
+deciding exactly where a topic node should be positioned, right click on
+it and select <strong>Sticky</strong>.)</p>
+
+
+<p>The Vizigator chooses a name in a special scope (whose PSI is
+<tt class="symbol">http://​psi.ontopia.net/​basename/​#short-name</tt>),
+if there is one. Otherwise it chooses a name in the unconstrained scope.
+(There should always be one of these if your topic map follows good
+modelling practice.) Failing that a scoped name is chosen at random. If
+the name is too long, it is abbreviated; in that case, mousing over the
+topic will show the full name.</p>
+
+
+<p>Other names, types, identifiers, and occurrences can be viewed by
+right-clicking on the topic and selecting <strong>Properties</strong>. You can navigate directly to any
+external occurrences displayed in this box by first marking them (single
+click) and then right-clicking and selecting <strong>Go to...</strong>.</p>
+
+
+<p>Topic nodes can be added and removed from the display in a number
+of ways:</p>
+
+
+<ol>
+<li>
+
+<p>By increasing or decreasing the <dfn>Locality
+factor</dfn> using the increment/decrement number control to the
+left of the Zoom bar. This can take a couple of seconds, so be patient.
+You will quickly discover that topic maps of any size rapidly become
+very &ldquo;busy&rdquo; and you will have to zoom out to get a full overview, or
+zoom in to see details.</p>
+</li>
+<li>
+
+<p>By clicking on a topic node that has a little red box in the top
+right-hand corner. This tells you that the topic has additional
+associations that are not displayed. Clicking on the topic brings those
+new associations into view.</p>
+</li>
+<li>
+
+<p>By right clicking on a topic node and selecting either <strong>Expand node</strong>, <strong>Collapse node</strong>, or <strong>Hide node</strong>.
+Expanding has the same effect as clicking on the node; collapsing has
+the effect of hiding all associated topics that are not associated with
+some other topic; hiding speaks for itself.</p>
+</li>
+</ol>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/Viz-tosca-2.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 10. Zooming in on 'Tosca' at locality = 2</b>
+</p>
+
+
+<p>Other options on the Context Menu reached by right-clicking on a
+topic node are: <strong>Set as Start Topic</strong>,
+which refocuses the graph on that topic, and <strong>Go to Topic Page</strong>, which takes you to the Topic Page for that topic
+in the normal Omnigator interface.</p>
+
+
+<p>The Vizigate plug-in will work with any topic map, including your
+own. However, most of the topic maps that are bundled with the Omnigator
+use predefined configurations created using the VizDesktop, which is
+part of Ontopia. The VizDesktop provides an interface for defining
+shapes, colours and fonts, and for designating which topic types and
+association types should be filtered out of the display in order to
+make the visualization more manageable.</p>
+
+
+<p>The VizDesktop also allows you to configure whether or not
+association role types are displayed. For the Italian Opera Topic Map it
+was decided not to display the role types since these can mostly be
+inferred quite easily. The default setting however, and the one you will
+see in your own topic map, is for role types to be displayed along with
+association types.</p>
+
+
+<p>Our introductory tour of the Omnigator is now finished. The
+following section describes some of the more sophisticated aspects of
+the application, including the Manage Page, the Customize Page, the
+Plug-ins, and the support for RDF. Thereafter follows a tutorial on
+creating your first topic map.</p>
+
+
+
+
+
+
+
+
+<h2>
+<a name="N10344">3. Advanced Omnigator Topics</a>
+</h2>
+
+
+
+<h3>
+<a name="rdf-support">3.1. RDF support in the Omnigator</a>
+</h3>
+
+
+
+<p>The Omnigator allows you to load an RDF model and browse it as
+though it were a topic map, and to export it in XTM syntax. You can also
+export a topic map as an RDF model and even merge topic maps and RDF
+models. This new functionality constitutes an important step towards
+full interoperability between RDF and Topic Maps and signals the start
+of the Omnigator&rsquo;s evolution into a general Semantic Web agent.</p>
+
+
+<p>The theoretical foundation for this implementation of Topic
+Maps/RDF interoperability is to be found in Lars Marius Garshol&rsquo;s paper
+<a href="http://www.ontopia.net/topicmaps/materials/tmrdf.html">Living with
+Topic Maps and RDF</a>. The basic tenet of this approach is that
+generic mappings make no sense because Topic Maps and RDF operate at
+different levels of semantics. In order to know how best to represent an
+RDF model conforming to a particular schema or ontology as a topic map,
+it is necessary to specify what kind of topic map construct each
+individual predicate should be mapped to. To illustrate this, consider
+the following example, taken from the <a href="http://www.w3.org/TR/rdf-primer/">RDF Primer</a>:</p>
+
+
+<p align="center">
+<b>RDF example</b>
+</p>
+
+
+<code>
+<pre>&lt;?xml version="1.0"?&gt;
+&lt;rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:contact="http://www.w3.org/2000/10/swap/pim/contact#"&gt;
+  &lt;contact:Person
+    rdf:about="http://www.w3.org/People/EM/contact#me"&gt;
+    &lt;contact:fullName&gt;Eric Miller&lt;/contact:fullName&gt;
+    &lt;contact:mailbox rdf:resource="mailto:em@w3.org"/&gt;
+    &lt;contact:personalTitle&gt;Dr.&lt;/contact:personalTitle&gt;
+  &lt;/contact:Person&gt;
+&lt;/rdf:RDF&gt;</pre>
+</code>
+
+
+
+<p>This example contains three predicates (in the &ldquo;contact&rdquo;
+namespace): fullName, mailbox, and personalTitle. (Note that Person is a
+type, not a predicate.) The first of these should be mapped to a base
+name, the second and third to occurrences. Ontopia has defined an <a href="http://psi.ontopia.net/rdf2tm/">RDF vocabulary</a> for
+expressing such mappings. For the example above, the mappings would look
+as follows:</p>
+
+
+<p align="center">
+<b>Example RDF-to-TM mapping</b>
+</p>
+
+
+<code>
+<pre>&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#fullName"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#basename"/&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#mailbox"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#occurrence"/&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#personalTitle"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#occurrence"/&gt;
+&lt;/rdf:Description&gt;</pre>
+</code>
+
+
+
+<p>Including these three statements (and an additional namespace
+declaration) with the original RDF provides the Omnigator with enough
+information to be able to interpret the RDF as a topic map. Adding a
+little more schema information and a couple of additional mappings
+yields an even better result:</p>
+
+
+<p align="center">
+<b>Complete RDF-as-TM example</b>
+</p>
+
+
+<code>
+<pre>&lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
+&lt;rdf:RDF
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+   xmlns:contact="http://www.w3.org/2000/10/swap/pim/contact#"
+   xmlns:rtm="http://psi.ontopia.net/rdf2tm/#"
+&gt;
+
+&lt;contact:Person
+  rdf:about="http://www.w3.org/People/EM/contact#me"&gt;
+  &lt;contact:fullName&gt;Eric Miller&lt;/contact:fullName&gt;
+  &lt;contact:mailbox rdf:resource="mailto:em@w3.org"/&gt;
+  &lt;contact:personalTitle&gt;Dr.&lt;/contact:personalTitle&gt;
+&lt;/contact:Person&gt;
+
+&lt;!--RDF schema definitions: Person, mailbox, personalTitle
+    (to get labels) --&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#Person"&gt;
+  &lt;rdfs:label&gt;Person&lt;/rdfs:label&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#mailbox"&gt;
+  &lt;rdfs:label&gt;Mailbox&lt;/rdfs:label&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#personalTitle"&gt;
+  &lt;rdfs:label&gt;Personal Title&lt;/rdfs:label&gt;
+&lt;/rdf:Description&gt;
+
+&lt;!-- RDF to Topic Maps mapping: type, label, fullName,
+     mailbox, personalTitle --&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#instance-of"/&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/01/rdf-schema#label"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#basename"/&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#fullName"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#basename"/&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#mailbox"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#occurrence"/&gt;
+&lt;/rdf:Description&gt;
+
+&lt;rdf:Description
+  rdf:about=
+    ="http://www.w3.org/2000/10/swap/pim/contact#personalTitle"&gt;
+  &lt;rtm:maps-to
+    rdf:resource="http://psi.ontopia.net/rdf2tm/#occurrence"/&gt;
+&lt;/rdf:Description&gt;
+
+&lt;/rdf:RDF&gt;</pre>
+</code>
+
+
+
+<p>An alternative to including the mapping information in the RDF
+document is to put it in a separate mapping file. The RDF2TM
+plug-in uses this approach and provides an easy interface for
+configuring mappings, as described in <a href="#rdf2tm-plug-in">section
+        3.6.5</a>.</p>
+
+
+<p>To learn more about the Omnigator&rsquo;s RDF support, please refer to
+the papers and documentation mentioned above. For a more extensive
+mapping example, see the file <tt>concert.rdf</tt>, based on
+Masahide Kanzaki&rsquo;s <a href="http://www.kanzaki.com/ns/music">Music
+Vocabulary</a> and included in the Omnigator distribution by kind
+permission of the author.</p>
+
+
+
+
+<h3>
+<a name="manage-page">3.2. The Manage Page</a>
+</h3>
+
+
+
+<p>The <dfn>Manage Page</dfn> is used to control
+various aspects of the Omnigator&rsquo;s configuration, and to load,
+reload, and drop topic maps. (Note: The Manage Page is not accessible
+in the online demo, and may also have been disabled by your system
+administrator.) The functionality available via this page is described
+in detail in the Ontopia Navigator Framework Developer Guide. Users of
+the Omnigator will primarily be interested in two Manage Page
+functions: controlling which topic maps are loaded and controlling
+which plug-ins are activated. (The configuration files mentioned in
+this section are found in the
+<tt>$TOMCAT_HOME/​webapps/​omnigator/​WEB-INF/​config/</tt>
+directory.)</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/ManagePage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 11. The Manage Page</b>
+</p>
+
+
+<p>Under the heading <strong>Registry Items</strong> the page
+presents a complete list of all the topic maps known to the system,
+based on the paths, extensions, and other information provided in the
+<tt>tm-sources.xml</tt> file. (This file, and all other
+configuration files for the Omnigator, is described in the Navigator
+Framework Configuration guide.) The default is to recognise all files
+with the extensions <tt>.xtm</tt>,
+<tt>.hytm</tt>, <tt>.ltm</tt>, or
+<tt>.rdf</tt> in the <tt>{Ontopia}/topicmaps/</tt>
+directory. (LTM is the Linear Topic Map Notation, a compact clear-text
+syntax for topic maps, defined by Ontopia and useful for rapid
+prototyping. An example LTM file is included in the distribution of the
+Omnigator. Documentation is included in the distribution and can also be
+found at <a href="http://www.ontopia.net/download/ltm.html">http://www.ontopia.net/download/ltm.html</a>.
+The Omnigator&rsquo;s support for RDF is described in <a href="#rdf-support">section
+        3.1</a>.)</p>
+
+
+<p>Some of these topic maps (those listed in the
+<tt>application.xml</tt> configuration file) are loaded
+automatically. Others can be loaded manually by clicking on the
+<strong>Load</strong> button. Once loaded, the name of the topic
+map document is shown in a larger font, and the
+<strong>Load</strong> button changes to
+<strong>Drop</strong> and <strong>Reload</strong> buttons.
+Clicking on the name of a loaded topic map takes you straight to its
+Index Page.</p>
+
+
+<p>If the topic map document is not well-formed, or contains errors,
+it will not load. In such a case you will need to fix the errors and
+then try again. Some typical errors are:</p>
+
+
+<dl>
+<dt>Well-formedness error</dt>
+<dd>The error message will tell you which line the error occurred on.
+You may have misspelt (or omitted) a start-tag or end-tag.</dd>
+<dt>Validity error</dt>
+<dd>If validation of XTM files has been turned on in your
+<tt>tm-sources.xml</tt> file you will get errors if your
+XTM file is not valid according to the XTM 1.0 DTD. These will be
+displayed in the same way as the well-formedness errors.</dd>
+<dt>Character encoding error</dt>
+<dd>You have used a character that is not legal in the character
+encoding the XML parser thinks you are using. This tends to happen when
+using one of the ISO 8859-x character encodings without declaring them
+in the XML declaration, since the parser will then assume that you are
+using the Unicode encoding UTF-8. The error message will suggest that an
+XML encoding declaration may be missing.</dd>
+<dt>Namespace error</dt>
+<dd>If you get the error message &ldquo;No topic maps in document&rdquo;
+you have either made a mistake in the namespace declaration (see
+<a href="#step2">section
+        4.2</a> for what it should look like), or you do not
+have a <tt>&lt;topicMap&gt;</tt> element in your document.</dd>
+</dl>
+
+
+<p>The <strong>Refresh Sources</strong> button is
+used to refresh the list of topic maps available to the system without
+restarting the application. This is useful if you have just added a new
+topic map (perhaps your own!) to the <tt>{Ontopia}/topicmaps/</tt>
+directory.</p>
+
+
+
+<h3>
+<a name="plugin-page">3.3. The Plug-in Page</a>
+</h3>
+
+
+
+<p>The other part of the Manage Page that you might want to
+experiment with is the Plug-ins section. Plug-ins are modules that can
+be added to Navigator applications to provide additional
+functionality.  (Some of those that are shipped with the Omnigator are
+described in <a href="#plug-ins">section
+        3.6</a>.) Clicking the <strong>Plug-ins</strong> link at the top brings up the
+<dfn>Plug-ins Page</dfn>, which lists the names and
+descriptions of all the currently installed plug-ins and allows you to
+switch them on or off according to your needs. You can also control
+which plug-ins are to appear on which pages in the Omnigator.</p>
+
+
+<p>Please note that any changes you make here will not be saved,
+and so the Omnigator will revert to the original settings when you
+restart it. To make your changes persistent you should change the
+configuration files of the plug-ins. (See
+<a href="plugins.html"><cite>The Ontopia Navigator Plug-ins:
+Developer&rsquo;s Guide</cite></a> for more information.)</p>
+
+
+
+<h3>
+<a name="fulltext-admin">3.4. The Full-text Indexing Plug-in</a>
+</h3>
+
+
+
+<p>Next to the link to the Plug-ins section at the top of the Manage
+page is a link to the <em>Full-text indexing page</em>. This
+page allows you to create full-text indexes for your topic maps so that
+you can use the full-text search plug-in (see <a href="#fulltext">section
+        3.6.8</a>) to search them.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/fulltext-admin.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 12. The Full-text Indexing Plug-in</b>
+</p>
+
+
+<p>In the screenshot above, most of the topic maps have full-text
+indexes. To create an index for one that hasn&rsquo;t, simply press the
+<strong>Create index</strong> button and the Omnigator
+will create a full-text index for that topic map. The Omnigator will
+<em>not</em> index external occurrences referenced from the
+topic map, although the full-text system can do that when run from the
+command-line.</p>
+
+
+<p>If the topic maps are changed the indexes will be out of date and
+you will get strange results when you try searching. This is because the
+full-text index stores the object IDs of the objects indexed, and when
+topic maps are loaded from a file the object IDs are assigned
+sequentially. If the topic map file changes, so do the object IDs, with
+the result that the full-text index will be out of sync with the topic
+map. Using the <strong>Reindex</strong> button you can
+update the index for any of the topic maps whenever they change.</p>
+
+
+<p>For information on how to search a topic map, see <a href="#fulltext">section
+        3.6.8</a>.</p>
+
+
+
+
+<h3>
+<a name="customise-page">3.5. The Customize Page</a>
+</h3>
+
+
+
+<p>An Ontopia Navigator application such as the Omnigator is built in
+three layers, called Model, View, and Skin, respectively.</p>
+
+
+<p>
+<strong>Models</strong> control the set of information that is
+extracted from the topic map and placed in each page. The Omnigator is
+currently shipped with two models, called &ldquo;Complete&rdquo; (the
+default) and &ldquo;Nontopoly&rdquo;. The Complete model, as its name
+implies, includes everything that the topic map contains; this includes,
+for example, system information from Ontopoly, Ontopia&rsquo;s
+ontology-driven editor. The Nontopoly model hides most of this system
+information..</p>
+
+
+<p>
+<strong>Views</strong> control the visual structure or layout
+of the HTML pages appearing in the client browser. Two views are
+currently shipped: &ldquo;No frames&rdquo; (a two-column layout), and
+&ldquo;Single column&rdquo; (for use with limited screen real estate,
+e.g. in portlets and on PDAs, in conjunction with the
+&ldquo;Compact&rdquo; skin).</p>
+
+
+<p>
+<strong>Skins</strong> are CSS stylesheets that
+control the styling of a page, i.e., improving its detailed appearance
+in browsers that support CSS. The Omnigator ships with two style
+sheets, some tasteful, others less so. (Feel free to try creating your
+own and send us the results!)</p>
+
+
+<p>Clicking on the <strong>Customize</strong> button
+from anywhere in the Omnigator brings up the <dfn>Customize
+Page</dfn>:</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/CustomisePage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 13. The Customize Page</b>
+</p>
+
+
+<p>Experiment with changing the settings on this page to get a feel
+for the kind of flexibility offered to application designers. (Note:
+Depending on the caching used by your browser, you may have to use its
+reload command (normally <tt class="symbol">F5</tt>) to see the effect of the
+changes.)</p>
+
+
+
+
+<h3>
+<a name="plug-ins">3.6. The Plug-ins</a>
+</h3>
+
+
+
+<p>Plug-ins are a general concept that allows extra functionality to
+be dropped into any Navigator application by simply adding files to a
+directory. One example of how this could be used is to add a topic map
+visualisation application into the Omnigator. This section describes
+some of the plug-ins that are shipped with the product.</p>
+
+
+<p>How to develop your own Omnigator plug-ins is described in this
+document: <a href="plugins.html">The
+Ontopia Navigator, Plug-ins Developer's Guide</a>.</p>
+
+
+<h4>
+<a name="edit-page">3.6.1. The Edit plug-in</a>
+</h4>
+
+
+
+<p>The Edit plug-in allows you to edit your topic map using
+Ontopia&rsquo;s new ontology-driven editor, Ontopoly. What happens when
+you click on the <strong>Edit</strong> button depends on whether
+the topic map contains Ontopoly system information or not, i.e., whether
+or not it is an <dfn>Ontopoly topic map</dfn>. Any topic map
+created in (or imported to) Ontopoly will have such information; all
+others will not.</p>
+
+
+<p>If you choose to edit an Ontopoly topic map you will either be
+taken to Ontopoly&rsquo;s Instance Indexes Page (if you start from an
+Omnigator Index Page), to the appropriate Instance Page (if you start
+from the Topic Page of an instance topic), or to the appropriate
+Configuration Page (if you start from the Topic Page of a typing
+topic).</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/Ontopoly.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 14. Editing an instance with Ontopoly</b>
+</p>
+
+
+<p>If you attempt to edit one of Ontopoly&rsquo;s system topics
+(e.g., 'Field order'), you will be taken to the Instance Indexes
+Page.</p>
+
+
+<p>If you choose to edit an non-Ontopoly topic map you will be
+informed about the need to convert the topic map and given the choice of
+either updating the existing topic map or creating a new one. Once you
+have made your choice, Ontopoly will infer an ontology and schema from
+the topic map and take you to its Ontology Index Page for topic types so
+that you can inspect the ontology before proceeding to edit the topic
+map.</p>
+
+
+<p>(While we are on the subject of Ontopoly, you may be interested to
+know that it is possible to hide the system information when browsing an
+Ontopoly topic map. To find out how, see <a href="#customise-page">section
+        3.5</a>. For a complete introduction to Ontopoly, see
+the <a href="../../../ontopoly/doc/user-guide.html">Ontopoly
+User&rsquo;s Guide</a>.</p>
+
+
+
+<h4>
+<a name="set-context-page">3.6.2. The Filter plug-in</a>
+</h4>
+
+
+
+<p>This plug-in allows you to customize your view of the topic map by
+establishing a <dfn>context</dfn> within which the scope of
+topic characteristics is evaluated. You do this by simply specifying the
+themes (i.e., scoping topics) you are interested in via the
+<dfn>Set Context Page</dfn>.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/SetContextPage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 15. The Set Context Page</b>
+</p>
+
+
+<p>Clicking on the <strong>Filter</strong> button
+brings up the Set Context Page. Here themes are grouped in two levels:
+first according to whether they are used to scope names, associations,
+or occurrences; and then by axis. Axes are determined automatically
+based on the classes to which themes belong. (Themes that don&rsquo;t belong
+to any class are grouped along an axis labelled <strong>[unspecified]</strong>.)</p>
+
+
+<p>Context themes are currently used for two purposes:
+<em>selecting</em> (i.e., choosing the most relevant name),
+and <em>filtering</em> (i.e., removing unwanted associations
+and occurrences).</p>
+
+
+<p>Since name context is used for selection, it usually makes sense
+to only specify one name theme (at most) from each axis. Once you have
+set your preferences, the application will endeavour to use the most
+appropriate name based on whatever themes you have specified. To test
+this using the <em>Italian Opera Topic Map</em>, go to
+Puccini&rsquo;s opera <em>La fanciulla del West</em>, click on the
+<strong>Filter</strong> button, set your language preference
+(under Name Context) to English, and press
+<strong>Activate</strong>. You will be returned to the same Topic
+Page, but now the name of the topic has changed to "The Girl of
+the Golden West".</p>
+
+
+<p>Association context and occurrence context is used differently. In
+this case, the more themes you specify, the more associations and
+occurrences will be shown (unless you don&rsquo;t specify any themes, in
+which case all the associations and occurrences will be shown). To test
+this functionality, return to 'Puccini' and take careful note of the
+number of <strong>Associations</strong> and
+<strong>Occurrences</strong>. Now click on the <strong>Filter</strong> button and set your preferences to
+'Biography' (for association context) and 'Italian' (for occurrence
+context). Click <strong>Activate</strong> and compare the results.
+You should see only three association types ('Born in', 'Died in', and
+'Pupil of', all biographical) and a shorter list of occurrences.</p>
+
+
+<p>Scope is a powerful mechanism but the ISO standard and the XTM
+specification neither specify nor constrain the ways in which it might
+be used. Since the Omnigator is designed to work across a wide range of
+topic maps, the implementation of selection and filtering by scope is
+based on certain general principles:</p>
+
+
+<ol>
+<li>
+
+<p>A distinction is made between <dfn>principal
+themes</dfn> and <dfn>incidental themes</dfn>. Only
+principal themes are shown for selection on the Filter Page, otherwise
+the task of choosing among them would be difficult, to say the least.
+(The <em>Italian Opera Topic Map</em> uses over 70 topics as
+themes, but only half of them appear on the Set Context Page.)</p>
+
+<p>A principal theme is one that the author has deliberately employed
+in order to provide different kinds of topic names (e.g., in different
+languages) for use in different contexts, or to provide ways of reducing
+the number of associations or occurrences. An incidental theme, on the
+other hand, is one whose sole purpose is to disambiguate topic names
+(i.e., to avoid the topic naming constraint), or some other specific
+purpose that is under the control of the application rather than the
+user.</p>
+
+</li>
+<li>
+
+<p>The Omnigator only uses context to govern the
+<em>selection</em> of names (in situations in which just
+one name is required), and the <em>filtering</em> of
+associations and occurrences.</p>
+
+<p>When a name context is specified, the name whose scope has the
+most themes in common with the context is selected. (If there are no
+names whose scope contains a context theme, a name in the unconstrained
+scope is used, if it exists. If not, a name is chosen at random.)</p>
+
+<p>When an association or occurrence context is specified, only
+associations and occurrences that have at least one theme in common with
+the context are allowed through the filter (along with any that are in
+the unconstrained scope).</p>
+
+</li>
+<li>
+
+<p>Themes are grouped on the Set Context Page along <em>axes of
+scope</em>, according to the classes to which they belong. (The
+concept of axes was introduced in the paper <a href="http://www.ontopia.net/topicmaps/materials/scope.htm">Towards a
+General Theory of Scope</a>, available at the Ontopia web
+site.)</p>
+
+<p>In the current version of the Omnigator the only purpose of axes
+is to provide a less cluttered user interface. However, later versions
+may exploit this concept to provide more powerful filtering
+capabilities. Topic map authors are therefore advised to follow what in
+any case is a sound design principle: Ensure that any topics used as
+themes have explicit types.</p>
+
+</li>
+</ol>
+
+
+
+
+<h4>
+<a name="N1056D">3.6.3. The Merge plug-in</a>
+</h4>
+
+
+
+<p>This plug-in (which is not available in the online demo) allows
+you to merge a second topic map with the current one, or suppress
+duplicates in the current topic map. Clicking on the <strong>Merge</strong> button takes you to a page with a scroll
+box from which you can choose any of the topic maps registered with the
+system (except the current topic map). After merging you can browse the
+resulting topic map.</p>
+
+
+<p>The <strong>Also do name-based merging</strong> checkbox allows you to control
+whether or not topics with the same base names in the same scope will be
+merged in accordance with the topic naming constraint. If you don&rsquo;t want
+the system to enforce the topic naming constraint, leave this box
+unchecked.</p>
+
+
+<p>Whatever your setting for the name based merging option, topics
+will be merged if they have the same subject identifier or subject
+locator. In addition, duplicate names, associations, and occurrences
+<em>that arise as a result of the merge</em> will be
+removed.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/MergePage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 16. The Merge Page</b>
+</p>
+
+
+<p>Duplicates in the source topic maps will be treated in accordance
+with the settings for performing duplicate suppression when loading a
+topic map. The default is for no duplicate suppression to be performed.
+(This allows the Omnigator to be used as a debugger and also speeds up
+loading.) The default can be overridden by modifying the
+duplicateSuppression properties in the
+<tt>tm-sources.xml</tt> file. If you have loaded a topic map
+with duplicate suppression switched off and want to remove any
+duplicates that it might contain, simply click on the 'Suppress' button
+on the Merging and Duplicate Suppression page.</p>
+
+
+<p>
+<strong>TIP:</strong> A useful trick for testing
+the consistency of your topic map is to merge it with itself and compare
+the statistics of the result with those of the original. Put two copies
+of your topic map in the <tt>{Ontopia}/topicmaps/</tt> directory
+under different names, and <strong>Refresh Sources</strong> from the Manage Page. Load
+one of them and run the Statistics plug-in. Open the same topic map in a
+new browser window and merge it with the copy using the Merge plug-in.
+(Note the way that the URL of the resulting merged topic map contains
+the names of both the source topic maps.) Run the Statistics plug-in on
+the merged topic map and compare the results with the statistics of the
+first topic map. Any discrepancies between the two could indicate
+inconsistencies or redundancies in your topic map.</p>
+
+
+
+
+<h4>
+<a name="N105A2">3.6.4. The Export plug-in</a>
+</h4>
+
+
+
+<p>This plug-in creates a serialisation of the current topic map in
+XTM, LTM, TM/XML, or RDF syntax and allows you to either save it
+directly to a disk file or load it as XML into your browser. Some of
+the situations in which you might want to use it are:</p>
+
+
+<ul>
+<li>
+
+<p>you have loaded a topic map in one format and want to write it
+out in another;</p>
+
+</li>
+<li>
+
+<p>you have merged two or more topic maps and want to persist
+the result; or</p>
+
+</li>
+<li>
+
+<p>you have modified the topic map in some way (for example,
+via a plug-in) and want to save the result.</p>
+
+</li>
+</ul>
+
+
+<p>When exporting back to the same format as the source format, the
+exporter does not preserve white space, comments, or the ordering of
+elements. However, it <em>does</em> preserve XML IDs, except
+when merging has been performed (either by <tt>&lt;mergeMap&gt;</tt>
+or the Merge plug-in), or when the IDs in question have the form
+<tt class="symbol">id#</tt>, where <tt class="symbol">#</tt> is a number.</p>
+
+
+<p>When topic maps have been merged, the uniqueness of IDs can no
+longer be guaranteed. The exporter will therefore only preserve IDs that
+originated in the base topic map; IDs that originated in topic maps
+merged into the base topic map will be replaced by automatically
+generated IDs of the form <tt class="symbol">id#</tt>, where <tt class="symbol">#</tt>
+is a decimal number. In order to prevent clashes, IDs that have the form
+<tt class="symbol">id#</tt>; in the source topic map are never
+preserved.</p>
+
+
+<p>The Export plug-in also allows you to generate a basic schema for
+your topic map, expressed in <a href="../schema/tutorial.html">Ontopia Schema Language (OSL)</a>.
+That schema can then be further refined by hand and used to validate the
+original topic map or other topic maps that conform to the same
+ontology.</p>
+
+
+
+
+<h4>
+<a name="rdf2tm-plug-in">3.6.5. The RDF2TM plug-in</a>
+</h4>
+
+
+
+<p>This plug-in provides an easy point-and-click interface for
+configuring RDF2TM mappings as described in <a href="#rdf-support">section
+        3.1</a>. Specify the desired mapping for each property
+using the selection box and press Confirm to accept proposed and/or
+changed mappings.</p>
+
+
+<p>Each RDF property can be mapped to a characteristic (a basename,
+occurrence, or association) or to an identifier (subject identifier,
+subject locator, or source locator); or else it can be ignored.</p>
+
+
+<p>A table of existing mappings (usually <tt>mapping.rdff</tt>
+in the Omnigator&rsquo;s <tt>topicmaps</tt> directory) is used to
+record mappings for later use.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/RDF2TMPage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 17. The RDF2TM Mapping Page</b>
+</p>
+
+
+<p>When the Omnigator encounters a property for which no mapping exists
+it makes a &ldquo;best guess&rdquo; proposal based on the kinds of values exhibited
+by the property: Properties whose values are literals are mapped to
+occurrences; those whose values are URIrefs or blank nodes are mapped to
+associations. These proposed mappings can sometimes be improved as
+follows:</p>
+
+
+<ul>
+<li>
+
+<p>Some properties whose values are literals (e.g. dc:title) are
+more appropriately mapped to basenames (or scoped basenames).</p>
+</li>
+<li>
+<p>Some properties whose values are URIs (e.g. foaf:homepage) are
+more appropriately mapped to (external) occurrences.</p>
+</li>
+<li>
+<p>Other properties whose values are URIs (e.g.
+skos:subjectIndicator) might be more appropriately mapped to an
+identifier.</p>
+</li>
+</ul>
+
+
+<p>Properties are used to type the resulting occurrences and
+associations, or to scope basenames. Thus, for example, dc:description
+properties mapped to occurrences will result in occurrences of type
+dc:description; foaf:knows properties mapped to associations will
+result in associations of type foaf:knows; and foaf:nick properties
+mapped to scoped basenames will result in basenames scoped by
+foaf:nick.</p>
+
+
+<p>The role types of associations are set to the predefined subjects
+rdf2tm:subject and rdf2tm:object (where rdf2tm is the namespace
+&lt;http://psi.ontopia.net/rdf2tm/&gt;).</p>
+
+
+<p>The technical details of this mapping are described in an
+<a href="http://www.ontopia.net/topicmaps/materials/rdf2tm.html">Ontopia
+Technical Report</a>. Ontopia is currently leading a <a href="http://www.w3.org/2001/sw/BestPractices/RDFTM/">Task Force</a>
+within the Semantic Web Best Practices and Deployment Working Group of
+the W3C to create guidelines for RDF/Topic Maps Interoperability.</p>
+
+
+
+<h4>
+<a name="query-plug-in">3.6.6. The Query plug-in</a>
+</h4>
+
+
+
+<p>The Query plug-in lets you perform queries on your topic map using
+the <em>tolog</em> query language. Clicking on the
+<strong>Query</strong> button brings up a page with a text entry
+box in which you write your query using tolog syntax. (For most of the
+topic maps delivered with the Omnigator you can also choose one or more
+example queries from a drop-down list.) For example, using the
+<tt>opera.ltm</tt> topic map you might enter the following
+query:</p>
+
+
+<p align="center">
+<b>Sample tolog query</b>
+</p>
+
+
+<code>
+<pre>select $COMPOSER, count($OPERA) from
+composed-by($OPERA : opera, $COMPOSER : composer)
+order by $OPERA desc?</pre>
+</code>
+
+
+
+<p>This query finds all operas and composers and then returns a list
+of composers and the number of operas they composed, sorted in
+descending order (i.e., from highest to lowest):</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/tologresults.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 18. Results of the sample tolog query</b>
+</p>
+
+
+<p>Tolog is a structured query language for topic maps developed by
+Ontopia. Its role with respect to topic maps is the same as SQL&rsquo;s role
+with respect to relational databases: It both simplifies application
+development and offers much more efficient data retrieval. Tolog has
+been proposed as a candidate for Topic Maps Query Language, the standard
+query language being developed by the ISO Topic Maps working group. For
+a more detailed description, refer to the <a href="../query/tutorial.html">Query Language Tutorial</a>.</p>
+
+
+
+
+<h4>
+<a name="validate-plug-in">3.6.7. The Validate plug-in</a>
+</h4>
+
+
+
+<p>The Validate plug-in lets you check the validity of your topic map
+against an OSL <em>(Ontopia Schema Language)</em> schema. If
+you have such a schema for your topic map, clicking on the
+<strong>Validate</strong> button will cause the topic map to be
+validated and any constraint violations to be displayed on a new page.
+(If you don&rsquo;t already have a schema, you can generate a skeletal
+one from your topic map via the Export plug-in.)</p>
+
+
+<p>OSL is a constraint language for topic maps developed by Ontopia.
+It was created both to provide input to the process of developing a
+standard Topic Maps Constraint Language in the ISO Topic Maps working
+group and to fulfill urgent customer needs. (In addition to validation,
+a schema makes it possible to optimize applications and build more
+intuitive user interfaces.) The Omnigator distribution includes complete
+schema for the Scripts and Languages topic map
+(<tt>i18n.ltm.osl</tt>) and a partial schema for the Italian
+Opera Topic Map (<tt>opera.ltm.osl</tt>), both of which
+reside in the
+<tt>{Ontopia}/topicmaps</tt>
+directory. (Note that the Opera topic map schema may cause some errors
+to be reported during validation depending on the current state of
+experimentation. If so, regard it as being intentional!)</p>
+
+
+<p>For a more detailed description of OSL, refer to the <a href="../schema/tutorial.html">Schema Language Tutorial</a>.</p>
+
+
+
+
+<h4>
+<a name="fulltext">3.6.8. The Full-text Search Plug-in</a>
+</h4>
+
+
+
+<p> The Full-text Search Plug-in allows you to do simple full-text
+searches in your topic maps. Topic names and occurrences are searched
+using a pre-built full-text index. This index can be created using the
+Full-text indexing Plug-in (described in <a href="#fulltext-admin">section
+        3.4</a>.) When a full-text index has been created for
+a topic map, a search box will show up in the plug-ins line (seen to the
+right of the <strong>Search</strong> link in the screenshot in
+<a href="#tm-page">section
+        2.2</a>). If no index exists, the button will read
+<strong>Not indexed</strong> and will link to the Fulltext Index Administration
+page.</p>
+
+
+<p>Entering a search text here and pressing enter will get you to the
+page that displays the full-text search results. These are a list of
+links to the topics you found, as shown in the screenshot below.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/fulltext-result.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 19. Full-text search result</b>
+</p>
+
+
+<p> In this screenshot we have searched for &ldquo;Tosca&rdquo; in the
+<cite>Italian Opera Topic Map</cite>, and the plug-in is
+showing us all the matches it has found. In this case the matches were
+all in the base names of topics, and we have found the opera &ldquo;Tosca&rdquo;,
+the character &ldquo;Floria Tosca&rdquo;, the play &ldquo;La Tosca&rdquo;, the aria &ldquo;Va,
+Tosca!&rdquo;, and the topic &ldquo;The setting of Tosca in Rome&rdquo; (a reification of
+the association between Tosca and Rome). Clicking on any of these will
+take us to that particular topic. Note how the &ldquo;intelligence&rdquo; of the
+topic map shows through here: Even a simple thing like a full-text
+search becomes a dialog between the user and the system, where the user
+says &ldquo;Tosca&rdquo; and the system responds &ldquo;I know these Toscas, which one did
+you mean?&rdquo;</p>
+
+
+<p>Full-text search is very effective when you want to jump directly
+to a specific topic, or see if some concept is mentioned anywhere in the
+topic map. Combined with the browsing interface it makes the task of
+locating information much simpler.</p>
+
+
+
+<h4>
+<a name="N106A8">3.6.9. The Statistics plug-in</a>
+</h4>
+
+
+
+<p>This plug-in is a report generator for topic maps. It provides an
+overview of the map&rsquo;s &ldquo;vital statistics&rdquo; and a detailed breakdown of
+some of its structures. Surprisingly often this information can be used
+to reveal inconsistencies or other problems with the topic map.</p>
+
+
+<p align="center">
+
+
+<img align="center" src="graphics/StatisticsPage.png" width="75%">
+</p>
+<p align="center">
+<b>Figure 20. The Statistics Page</b>
+</p>
+
+
+<p>Most of the <dfn>Statistics Page</dfn> speaks for
+itself but it is worth pointing out some of the details. Under the
+heading <strong>Association structure summary</strong> is a list of association types
+broken down according to the roles that are played in those
+associations. Some association types only appear once (e.g., 'Born in',
+with the roles 'Person' and 'Place'). Others may appear more than once
+(e.g., 'Killed by'); when this happens it is due to different
+combinations of roles, which may either be perfectly legitimate (as in
+this case), or the result of an error in the topic map.</p>
+
+
+<p>Note also that there are links from the typing topics (e.g.
+'Aria') straight to the Topic Page for that topic, and also links from
+the numbers in the second column to more detailed statistics on the
+particular typing topic in question.</p>
+
+
+
+
+
+
+
+
+
+
+<h2>
+<a name="tutorial">4. Building Your Own Topic Map</a>
+</h2>
+
+
+
+<p>This section provides a simple step by step tutorial for creating
+a (small) topicmap in XTM (XML Topic Maps) syntax and loading it into
+your local copy of the Omnigator. You may be surprised just how easy it
+is. Since you will be typing in XML data, we assume some minimal
+familiarity with start-tags, end-tags, and attributes, as used in SGML,
+XML, and HTML, but that's about as hard as it gets.</p>
+
+
+<p>In following the tutorial, you can of course cheat by copying and
+pasting the markup examples instead of typing everything in by hand. Our
+advice, though, is to do it the hard way. Nothing beats laboriously
+typing in angle brackets if you really want to understand the syntax
+(and, by extension, the concepts themselves). You will make mistakes
+&ndash; but you will also learn from them!</p>
+
+
+<p>There are two alternatives to typing in angle brackets. One is
+to develop a custom editing environment based on the Ontopia Web
+Editor Framework. That way you can build a forms-based interface which
+completely hides the fact that you are creating a topic map. But since
+the whole point of this exercise is to gain a deeper understanding of
+topic maps, we suggest you save that option for later. The other
+alternative, if you need to create and maintain large topic maps
+manually, is to investigate the <em>Linear Topic Map notation
+(LTM)</em>, which is another of the input formats supported by
+the Ontopia Topic Map Engine. It is vastly more compact than XTM!
+(Documentation of LTM is included in all Ontopia distributions and can
+also be found at <a href="http://www.ontopia.net/download/ltm.html">http://www.ontopia.net/download/ltm.html</a>).</p>
+
+
+<h3>
+<a name="N106E3">4.1. Step 1: Determining scope and basic ontology</a>
+</h3>
+
+
+
+<p>Before you start, you need to have a rough idea of what it is that
+you want to represent in your topic map. There are two parts to this:
+delimiting the scope of the topic map &ndash; that is, deciding the
+extent of the domain it should cover; and designing the basic ontology.
+In Topic Maps terminology, an ontology is a precise description of the
+kinds of things which are found in the domain covered by the topic map:
+in other words, the set of topics that are used to define classes of
+topics, associations, roles, and occurrences. (The term "ontology" is
+also used in other fields, such as philosophy, where it has other
+meanings. You may also encounter it used to include constraints as well
+as a specification of classes.) In Topic Maps it is easy to extend the
+ontology, so you don't have to decide everything up front.</p>
+
+
+<p>To make things easy we have chosen a subject domain that ought
+to appeal to you. The subject is <em>you</em> and the
+company you work for (or may one day work for). The scope can easily
+be extended to cover your colleagues, the projects in which you are
+involved, the products your company builds or services it provides,
+etc. In the examples that follow, we will assume that your name is
+Jill Hacker, and that you are a developer working for Ontopia. The
+basic ontology therefore consists of the topic types 'Developer' and
+'Company', the association type 'Employed by', and the roles
+'Employee' and 'Employer'.</p>
+
+
+
+
+<h3>
+<a name="step2">4.2. Step 2: Getting the framework in place</a>
+</h3>
+
+
+
+<p>To start with, here is the simplest possible valid topic map in
+XTM syntax. It is empty, but it does at least declare itself to be a
+topic map in XTM syntax with a specific character encoding. (If you
+leave out the encoding attribute, UTF-8 will be assumed.)</p>
+
+
+<p align="center">
+<b>The simplest possible topic map</b>
+</p>
+
+
+<pre>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;topicMap xmlns="http://www.topicmaps.org/xtm/1.0/"
+          xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+&lt;/topicMap&gt;
+</pre>
+
+
+
+<p>To see this topic map in the Omnigator, type it in (no
+cheating!) using your favourite text editor (e.g., emacs, TextPad,
+Notepad, etc.), and save it under a name with the extension
+<tt>.xtm</tt> in the appropriate directory. (By default
+this is
+<tt>{Ontopia}/topicmaps/</tt>.</p>
+
+
+<p>Once the topic map file is in the correct place, start the
+Omnigator, go to the Manage Page, and there you will see your XTM
+document among the Registry Items. (If the Omnigator was already
+running you will need to click on "Refresh Sources" in order to get
+your topic map to appear in the list.) Now click on "Load". Assuming
+no parsing errors occur, the document will be loaded and its name will
+become a link.</p>
+
+
+<p>If you get parsing errors, you will need to go back and fix the
+document. Look for missing quotes, misspelt tag names, wrong use of
+case, etc. If you get the error message "No topic maps in document", it
+means you have made a mistake in the namespace declaration, or have a
+misspelling in the <tt>&lt;topicMap&gt;</tt> start-tag.</p>
+
+
+<p>Once your topic map has been successfully loaded, click on its
+name and you will be taken to the Index Page. Not surprisingly, you
+won't see very much, either in the "Ontology", the "Master Index", or
+the "Themes" view, but at least you have the topic map in the
+Omnigator! Now is the time to start adding topics.</p>
+
+
+
+<h3>
+<a name="N1071A">4.3. Step 3: Creating the first topic</a>
+</h3>
+
+
+
+<p>If you were going about the creation of this topic map in a
+methodical way, you would first create all the typing topics and then
+create instances of them. However, doing things in the wrong order can
+sometimes be quite instructive, so that is what we will do! Add a single
+topic &ndash; yourself &ndash; to the topic map:</p>
+
+<p align="center">
+<b>A one-topic topic map</b>
+</p>
+
+
+<pre>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;topicMap xmlns="http://www.topicmaps.org/xtm/1.0/"
+          xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+
+&lt;topic id="jill"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill Hacker&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;/topicMap&gt;
+</pre>
+
+
+
+<p>Pay careful attention to the case of your tag names (it is
+"baseName", not "basename"). Also note that the ID ("jill") is not
+significant; it can be any valid XML ID. Save the file, go to the
+Omnigator, and click on the <strong>Reload</strong>
+button. Assuming no errors, the topic map will be reloaded and you will
+be returned to the Index Page.</p>
+
+
+<p>Once again there is nothing in the ontology view. Don't be
+alarmed: An ontology consists of topics that represent classes or types
+and you don't have any yet. All you have is an individual (yourself).
+However, if you now choose "Master Index" from the pull-down list you
+will notice a difference. (You may have to use the browser's Reload
+command, normally <tt class="symbol">Ctrl-R</tt> or <tt class="symbol">F5</tt>, if
+your browser is doing caching. In fact, you might want to switch caching
+off while doing these exercises: Every time you modify your topic map
+you run the risk that the internal IDs will have changed, and this can
+cause confusion.)</p>
+
+
+<p>What you should see in the master index view is a single topic,
+Jill Hacker. If you click on it, you are taken to the Topic Page where
+you see that this topic has just one characteristic: its name.</p>
+
+
+
+<h3>
+<a name="N1073F">4.4. Step 4: Adding a topic type</a>
+</h3>
+
+
+
+<p>Now let's give this topic a type by adding an
+<tt>&lt;instanceOf&gt;</tt> subelement:</p>
+
+
+<p align="center">
+<b>A topic map with an (erroneously) typed topic</b>
+</p>
+
+
+<pre>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;topicMap xmlns="http://www.topicmaps.org/xtm/1.0/"
+          xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+
+&lt;topic id="jill"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#developer"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill Hacker&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;/topicMap&gt;
+</pre>
+
+
+
+<p>This example is incomplete, since it references a topic
+('Developer') that does not yet exist. But the Omnigator is quite
+forgiving in situations like this and simply instantiates an unnamed
+topic, as you will see if you reload your topic map. In the Ontology
+view you will now see that topic (with the name "[No name]" under the
+under the heading "Index of Topic Types". If you click on it, you are
+taken to a Topic Page for this topic type and you will see yourself in
+the list of "Topics of this Type". On the Index Page you will also see a
+link for "Unnamed Topics".</p>
+
+
+<p>Now let's create a real 'Developer' topic, and while we're at it,
+topics for the company 'Ontopia' and the topic type 'Company':</p>
+
+
+<p align="center">
+<b>A topic map with two correctly typed topics</b>
+</p>
+
+
+<pre>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;topicMap xmlns="http://www.topicmaps.org/xtm/1.0/"
+          xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+
+&lt;topic id="jill"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#developer"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill Hacker&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="developer"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Developer&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="ontopia"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#company"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Ontopia&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="company"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Company&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;/topicMap&gt;
+</pre>
+
+
+
+<p>When you reload your topic map you will see that the ontology now
+consists of two topics, and that there are four topics in the master
+index. There should now be no "Unnamed Topics". (If there are, you
+screwed up!) So far, so good. Now for the next step.</p>
+
+
+
+
+<h3>
+<a name="adding-occurrences">4.5. Step 5: Adding occurrences</a>
+</h3>
+
+
+
+<p>Adding occurrences is a simple matter, as the following examples
+show (look for the <tt>&lt;occurrence&gt;</tt> elements):</p>
+
+
+<p align="center">
+<b>Topics with occurrences</b>
+</p>
+
+
+<pre>&lt;topic id="ontopia"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#company"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Ontopia&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;topicRef xlink:href="#website"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceRef xlink:href="http://www.ontopia.net/"/&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+
+&lt;topic id="jill"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#developer"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill Hacker&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;topicRef xlink:href="#kudo"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceData&gt;Jill's a cool girl and a great hacker&lt;/resourceData&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+
+&lt;topic id="website"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Web site&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="kudo"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Kudo&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+</pre>
+
+
+
+<p>The occurrence for Ontopia <em>points to</em> an
+external resource (using a <tt>&lt;resourceRef&gt;</tt>
+element with a URL as the address), while the occurrence for you,
+'Jill', <em>contains</em> an internal resource (in the
+form of a <tt>&lt;resourceData&gt;</tt> element). Note also
+that we need to add topics for the occurrence types 'Website' and
+'Kudo' in order to avoid more "[No name]" topics.</p>
+
+
+
+
+<h3>
+<a name="using-PSIs">4.6. Step 6: Identification of subjects</a>
+</h3>
+
+
+
+<p>One of the unique features of Topic Maps is its identity model,
+which allows arbitrary topic maps to be merged without the problems
+usually occasioned by homonyms and synonyms. To take full advantage of
+this feature, you are encouraged to define identifiers for your topics.
+This can be done in one of two ways, both of which involve the use of
+URIs.</p>
+
+
+<p>The preferred approach is to define a URI (called a "subject
+identifier") that resolves to a resource (called a "subject indicator")
+that provides a human with a compelling <em>indication</em>
+of the subject's identity. For the topic 'Ontopia', that might look like
+this:
+</p>
+
+
+<p align="center">
+<b>A topic with a subject identifier</b>
+</p>
+
+
+<pre>&lt;topic id="ontopia"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#company"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/ontopia/#ontopia"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Ontopia&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+</pre>
+
+
+
+<p>Subject identifiers can be used for absolutely any kind of
+subject. However, if the subject that the topic represents is an
+<em>information resource</em> (such as a web page), the
+address of the resource can also be used as an identifier, in which case
+it is called a <em>subject locator</em>:</p>
+
+
+<p align="center">
+<b>A topic with a subject locator</b>
+</p>
+
+
+<pre>&lt;topic id="ontopias-website"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#website"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;subjectIdentity&gt;
+    &lt;resourceRef xlink:href="http://www.ontopia.net/"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Ontopia's Web Site&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+</pre>
+
+
+
+<p>Note, by the way, how adding this topic changes the way in which
+the web site occurrence is displayed on the page for the topic
+'Ontopia': Instead of the URL, the name "Ontopia's Web Site" is shown.
+This is because the Omnigator now has a name for the resource whose URL
+is "http://www.ontopia.net/".</p>
+
+
+
+
+<h3>
+<a name="adding-associations">4.7. Step 7: Adding associations</a>
+</h3>
+
+
+
+<p>Having by now become an expert on topics, occurrences, and
+identifiers, it is time to add an association asserting that you work
+for Ontopia. (You never know your luck!) The association will look like
+this:</p>
+
+
+<p align="center">
+<b>An association element</b>
+</p>
+
+
+<pre>&lt;association&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#employment"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;&lt;topicRef xlink:href="#employee"/&gt;&lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#jill"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;&lt;topicRef xlink:href="#employer"/&gt;&lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#ontopia"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+</pre>
+
+
+
+<p>This association element contains references to three topics that
+we don't yet have in our topic map: 'Employer' and 'Employee' (the
+association role types) and 'Employment' (the association type). If you
+insert it as is, without adding these three topics, you will get more
+"[no name]" topics in the Omnigator. Try it if you like and see.</p>
+
+
+<p>The three new topics you need to add could look like this:</p>
+
+
+<p align="center">
+<b>Association type and association role type topics</b>
+</p>
+
+
+<pre>&lt;topic id="employment"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Employment&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;baseName&gt;
+    &lt;scope&gt;&lt;topicRef xlink:href="#employer"/&gt;&lt;/scope&gt;
+    &lt;baseNameString&gt;Employs&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;baseName&gt;
+    &lt;scope&gt;&lt;topicRef xlink:href="#employee"/&gt;&lt;/scope&gt;
+    &lt;baseNameString&gt;Employed by&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="employer"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Employer&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="employee"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Employee&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+</pre>
+
+
+
+<p>Look carefully at the 'Employment' topic that defines the
+association type. We have given it three base names: one (a noun,
+"employment") in the unconstrained scope, which serves as the default
+name used to characterise the relationship type, and two others (the
+verb forms "Employs" and "Employed by") in the scope 'Employer' and
+'Employee' respectively.</p>
+
+
+<p>Is it necessary to do this? No. But the advantage is that it
+enables an application like the Omnigator to choose the most
+appropriate label for the association type depending on the
+context:</p>
+
+
+<ul>
+<li>
+
+<p>When the association type itself is the current topic, the name in
+the unconstrained scope ("employment") will be chosen.</p>
+
+</li>
+<li>
+
+<p>When associations of this type are being viewed from the vantage
+point of a topic playing the role 'Employer' (e.g., when Ontopia is the
+current topic), the name in the scope 'Employer' ("Employs") will be
+chosen.</p>
+
+</li>
+<li>
+
+<p>When associations of this type are being viewed from the vantage
+point of a topic playing the role 'Employee' (e.g., when the current
+topic is you), the name in the scope 'Employee' ("Employed by") will be
+chosen.</p>
+
+</li>
+</ul>
+
+
+<p>This is a simple but effective use of scope that helps overcome
+the conflict between the fact that relationships (as expressed by
+associations in topic maps) have no direction, and the fact that the
+serialisation syntax used to <em>talk about</em>
+relationships (natural language) often <em>does</em> have a
+direction (for example, subject-verb-object in most Western European
+languages). To test the intuitiveness of this technique, load the
+complete topic map into the Omnigator and go back and forth between the
+topics you ('Jill') and 'Ontopia', noting how the label for the
+relationship changes depending on the role played by the current
+topic.</p>
+
+
+
+
+<h3>
+<a name="reification">4.8. Step 8: Reification</a>
+</h3>
+
+
+
+<p>Before letting you loose on your own, there is one final, slightly
+tricky concept that you should try your hand at. It's called
+<dfn>reification</dfn>. Don't be put off by the name; the
+basic concept is really quite simple. Reification in general is about
+turning something into a "thing" ("re" in Latin); it could also be
+called "thingification".</p>
+
+
+<p>In Topic Maps, reification means taking a topic map construct,
+e.g., an association, occurrence, or even the topic map itself, and
+turning it into a topic, in order to be able to make assertions about
+it. How is it done in XTM? It's quite simple. There are two
+steps:</p>
+
+
+<ol>
+<li>
+
+<p>Give the element representing the topic map object you want to
+reify an ID.</p>
+
+</li>
+<li>
+
+<p>Create a topic whose subject identity has a subject indicator
+reference to that element.</p>
+
+</li>
+</ol>
+
+
+<p>Piece of cake, right? So let's try it. Start by reifying the topic
+map. Modify your <tt>&lt;topicMap&gt;</tt> start-tag by adding
+an ID, and create a topic that references the topic map element as its
+subject indicator:</p>
+
+
+<p align="center">
+<b>Reifying the topic map</b>
+</p>
+
+
+<pre>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;topicMap id="jillstm"
+          xmlns="http://www.topicmaps.org/xtm/1.0/"
+          xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+
+&lt;!-- other topics and associations omitted for brevity --&gt;
+
+&lt;topic id="jillstm-topic"&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="#jillstm"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill's First Topic Map&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;/topicMap&gt;
+</pre>
+
+
+
+<p>When you load this topic map into the Omnigator, you will see that
+the name of the topic that reifies the topic map ("Jill's First Topic
+Map") is used as the title of the Index Page, and also replaces the
+<strong>Index Page</strong> button. If you feel this
+text is a bit long to use as a button, you can give the same topic a
+second name, this time in a specific <em>scope</em> that
+will be preferred by the Omnigator:</p>
+
+
+<p align="center">
+<b>Giving the topic map a short name</b>
+</p>
+
+
+<pre>&lt;topic id="jillstm-topic"&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="#jillstm"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill's First Topic Map&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;baseName&gt;
+    &lt;scope&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/basename/#short-name"/&gt;
+    &lt;/scope&gt;
+    &lt;baseNameString&gt;Jill's 1st TM&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+</pre>
+
+
+
+<p>Now let's reify an association.</p>
+
+
+<p>Why would you want to do that? Well, you might want to say
+something more about the relationship asserted by an association, over
+and above its type and roles &ndash; and the only way to "say
+something" about <em>anything</em> in Topic Maps Land is by
+making that thing into a topic. For example, you might have information
+resources that pertain to your relationship with Ontopia, such as your
+contract, terms of employment, assessments, or whatever. By reifying the
+association, you obtain a topic on which to hang these resources as
+occurrences, like this:</p>
+
+
+<p align="center">
+<b>Reifying an association</b>
+</p>
+
+
+<pre>&lt;topic id="jill-ontopia-topic"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#employment"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="#jill-ontopia-association"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill's position with Ontopia&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;topicRef xlink:href="#contract"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceRef
+      xlink:href="http://www.ontopia.net/internal/employees/contracts/jill.htm"/&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+</pre>
+
+
+
+<p>We haven't shown how to add the ID
+(<tt class="symbol">jill-ontopia-association</tt>) to the association that we
+created in Step 7; we assume you can add that yourself. (If you can't,
+you are allowed to cheat by looking at the complete example at the end
+of this document) We also assume that by now you can create a topic for
+'Contract'.</p>
+
+
+<p>You'll see the result when you reload the topic map: The
+association between you and Ontopia now has a <em><strong>more...</strong></em> link which will take you to
+the topic that represents the association. That association has its own
+occurrence (your contract with Ontopia), and there is a section labelled
+"Reification Topics", under which you will see the topics (you and
+'Ontopia') that participate in the reified association.</p>
+
+
+<p>Since a reified association is also a topic, it can have its own
+characteristics. Yours already has a name and an occurrence. It could
+also play roles in associations with other topics, and those
+associations could themselves be reified. This leads to a multilayered
+topic map that can be browsed at varying levels of detail. A user can
+start at the topic level, and then "zoom in" on an association or other
+characteristic that is of particular interest and get a new level of
+detail.</p>
+
+
+<p>The Omnigator also supports reification of occurrences, base
+names, and variant names, but we'll leave it to you to experiment with
+these.</p>
+
+
+
+
+<h3>
+<a name="metadata">4.9. Step 9: Adding metadata to your topic map</a>
+</h3>
+
+
+
+<p>Now that you know how to reify the topic map it is easy to add
+metadata describing properties such as creator, date, description,
+publisher, etc. These properties will then be displayed on the Index
+Page in a box labelled "Topic Map Metadata". Most of the topic maps that
+are distributed with the Omnigator have examples of such metadata. We
+recommend using the Dublin Core vocabulary in the manner shown in the
+version of <tt>jill.xtm</tt> included in the
+distribution.</p>
+
+
+
+
+<h3>
+<a name="N10872">4.10. Step 10: Over to you</a>
+</h3>
+
+
+
+<p>From this point there are many directions in which you could take
+your topic map. For example, you could extend the ontology to include
+departments and projects, and the kinds of relationships that exist
+between them and your existing categories. Or you can add your
+colleagues, create new associations and occurrences, or provide more
+names in different scopes to those topics that already exist. Now you
+know the syntax you could also autogenerate topic maps from existing
+structured information (e.g., an LDAP database) and merge it with topic
+maps you have created by hand.</p>
+
+
+<p>If you are going to continue maintaining the topic map by hand for
+the time being, you should seriously consider using LTM syntax rather
+than XTM. It is vastly more compact and much easier to work with. (Don't
+worry about it not being a standard syntax because you can always
+convert it to XTM using the Export plug-in.)</p>
+
+
+<p>The possibilities are almost unlimited. We hope that this tutorial
+has been useful in getting you started with your own topic maps. If you
+decide that this paradigm is the way to go for you and your
+organisation, feel free to contact Ontopia for more advice, to book our
+training courses, license our software, or get in touch with our
+partners. Full details of our offerings are available via the web site
+at <a href="http://www.ontopia.net/">http://www.ontopia.net/</a>.
+Good luck!</p>
+
+
+
+
+<h3>
+<a name="N10885">4.11. Jill's First TM</a>
+</h3>
+
+
+
+<p>Here is the complete version of the topic map used for the tutorial,
+including comments. It is available as <tt>jill.xtm</tt> in the
+<tt>{Ontopia}/topicmaps/</tt> directory of the Omnigator distribution,
+and you can also view it as XML <a href="jill.xtm">in your browser</a>.</p>
+
+
+<p align="center">
+<b>Jill's First TM</b>
+</p>
+
+
+<pre>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;topicMap xmlns="http://www.topicmaps.org/xtm/1.0/"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          id="jillstm"&gt;
+
+&lt;!-- ...................... ONTOLOGY TOPICS ...................... --&gt;
+
+&lt;!-- .................... THE TOPIC MAP TOPIC .................... --&gt;
+
+&lt;topic id="jillstm-topic"&gt;
+  &lt;!-- Reifies the topic map and gives it a name --&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="#jillstm"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill's First Topic Map&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;baseName&gt;
+    &lt;scope&gt;
+      &lt;subjectIndicatorRef
+        xlink:href="http://psi.ontopia.net/basename/#short-name"/&gt;
+    &lt;/scope&gt;
+    &lt;baseNameString&gt;Jill's 1st TM&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;!-- ........................ THEMES (SCOPING TOPICS) ............ --&gt;
+
+&lt;topic id="short-name"&gt;
+  &lt;subjectIdentity&gt;
+      &lt;subjectIndicatorRef
+        xlink:href="http://psi.ontopia.net/basename/#short-name"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Short name&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;!-- ........................ TOPIC TYPES ........................ --&gt;
+
+&lt;topic id="developer"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Developer&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="company"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Company&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;!-- ..................... OCCURRENCE TYPES ...................... --&gt;
+
+&lt;topic id="description"&gt;
+  &lt;!-- Uses Ontopia's "description occurrence" PSI --&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef
+      xlink:href="http://psi.ontopia.net/xtm/occurrence-type/description"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Description&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="kudo"&gt;
+  &lt;!-- An instance of the "description occurrence" class --&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#description"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Kudo&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="website"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Web site&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="contract"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Contract&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;!-- ..................... ASSOCIATION TYPES ..................... --&gt;
+
+&lt;topic id="employment"&gt;
+  &lt;!-- Illustrates the use of names scoped by roles --&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Employment&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;baseName&gt;
+    &lt;scope&gt;&lt;topicRef xlink:href="#employer"/&gt;&lt;/scope&gt;
+    &lt;baseNameString&gt;Employs&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;baseName&gt;
+    &lt;scope&gt;&lt;topicRef xlink:href="#employee"/&gt;&lt;/scope&gt;
+    &lt;baseNameString&gt;Employed by&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;!-- .................. ASSOCIATION ROLE TYPES.................... --&gt;
+
+&lt;topic id="employer"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Employer&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;topic id="employee"&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Employee&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+
+&lt;!-- ..................... INDIVIDUAL TOPICS ..................... --&gt;
+
+
+&lt;topic id="ontopia"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#company"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/ontopia/#ontopia"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Ontopia&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;topicRef xlink:href="#website"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceRef xlink:href="http://www.ontopia.net/"/&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+
+&lt;topic id="jill"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#developer"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill Hacker&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;topicRef xlink:href="#kudo"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceData&gt;Jill's a cool girl and a great hacker&lt;/resourceData&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+
+&lt;!-- .................... ADDRESSABLE SUBJECT .................... --&gt;
+
+&lt;topic id="ontopias-website"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#website"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;subjectIdentity&gt;
+    &lt;resourceRef xlink:href="http://www.ontopia.net/"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Ontopia's Web Site&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+
+&lt;!-- ....................... ASSOCIATIONS ........................ --&gt;
+
+
+&lt;association id="jill-ontopia-association"&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#employment"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;&lt;topicRef xlink:href="#employee"/&gt;&lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#jill"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;&lt;topicRef xlink:href="#employer"/&gt;&lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#ontopia"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+
+
+&lt;!-- ................... REIFICATION EXAMPLES .................... --&gt;
+
+
+&lt;!-- ................... REIFIED ASSOCIATIONS .................... --&gt;
+
+&lt;topic id="jill-ontopia-topic"&gt;
+  &lt;!-- reifies the Jill/Ontopia association --&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#employment"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="#jill-ontopia-association"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill's position with Ontopia&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;occurrence id="jills-contract-occurrence"&gt;
+    &lt;instanceOf&gt;
+      &lt;topicRef xlink:href="#contract"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceRef
+      xlink:href="http://www.ontopia.net/internal/employees/contracts/jill.htm"/&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+
+&lt;!-- .................... REIFIED OCCURRENCES .................... --&gt;
+
+&lt;topic id="jills-contract-topic"&gt;
+  &lt;!-- Reifies the occurrence of the reified Jill/Ontopia association --&gt;
+  &lt;instanceOf&gt;
+    &lt;topicRef xlink:href="#contract"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="#jills-contract-occurrence"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Jill's contract with Ontopia&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;topicRef xlink:href="#contract"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceRef
+      xlink:href="http://www.ontopia.net/internal/employees/contracts/jill.htm"/&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+
+&lt;!-- .................... DUBLIN CORE METADATA ................... --&gt;
+
+&lt;!-- Merge DC ontology and related controlled vocabulary --&gt;
+
+&lt;mergeMap xlink:href="dc.xtmm"/&gt;
+
+&lt;!-- Another topic that reifies the topic map. This will be merged with the topic
+     whose ID is "jillstm-topic" because they have the same subject indicator. --&gt;
+
+&lt;topic id="tm-topic"&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="#jillstm"/&gt;
+  &lt;/subjectIdentity&gt;
+
+  &lt;!-- dc:Rights modelled as occurrence --&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/rights"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceData&gt;(C) Copyright 2003 Ontopia&lt;/resourceData&gt;
+  &lt;/occurrence&gt;
+
+  &lt;!-- dc:Date modelled as occurrence --&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/date"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceData&gt;$Date: 2008/05/29 07:01:12 $&lt;/resourceData&gt;
+  &lt;/occurrence&gt;
+
+  &lt;!-- dc:Description modelled as occurrence --&gt;
+  &lt;occurrence&gt;
+    &lt;instanceOf&gt;
+      &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/description"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;resourceData&gt;Example topic map from Omnigator User Guide.&lt;/resourceData&gt;
+  &lt;/occurrence&gt;
+&lt;/topic&gt;
+
+&lt;!-- dc:Creator modelled as an association --&gt;
+
+&lt;association&gt;
+  &lt;instanceOf&gt;
+    &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/creator"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#resource"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#tm-topic"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#value"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/ontopia/#pepper"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+
+&lt;!-- add topic for value of dc:Creator --&gt;
+
+&lt;topic id="pepper"&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/ontopia/#pepper"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;Steve Pepper&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;!-- dc:Publisher modelled as an association --&gt;
+
+&lt;association&gt;
+  &lt;instanceOf&gt;
+    &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/publisher"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#resource"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#tm-topic"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#value"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/ontopia/#ontopia"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+
+&lt;!-- Ontopia is already a topic in this topic map, so no need to add it again --&gt;
+
+&lt;!-- dc:Subject modelled as an association --&gt;
+
+&lt;association&gt;
+  &lt;instanceOf&gt;
+    &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/subject"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#resource"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#tm-topic"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#value"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/ontopia/#ontopia"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+
+&lt;!-- Ontopia is already a topic in this topic map, so no need to add it again --&gt;
+
+&lt;!-- dc:Type modelled as an association --&gt;
+
+&lt;association&gt;
+  &lt;instanceOf&gt;
+    &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/type"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#resource"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#tm-topic"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#value"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#topicmap"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+
+&lt;!-- dc:Format modelled as an association --&gt;
+
+&lt;association&gt;
+  &lt;instanceOf&gt;
+    &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/format"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#resource"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#tm-topic"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#value"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#XTM"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+
+&lt;!-- dc:Language modelled as an association --&gt;
+
+&lt;association&gt;
+  &lt;instanceOf&gt;
+    &lt;subjectIndicatorRef xlink:href="http://purl.org/dc/elements/1.1/language"/&gt;
+  &lt;/instanceOf&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#resource"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;topicRef xlink:href="#tm-topic"/&gt;
+  &lt;/member&gt;
+  &lt;member&gt;
+    &lt;roleSpec&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/metadata/#value"/&gt;
+    &lt;/roleSpec&gt;
+    &lt;subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/&gt;
+  &lt;/member&gt;
+&lt;/association&gt;
+
+&lt;!-- add topic for value of dc:Language --&gt;
+
+&lt;topic id="english"&gt;
+  &lt;subjectIdentity&gt;
+    &lt;subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/language.xtm#en"/&gt;
+  &lt;/subjectIdentity&gt;
+  &lt;baseName&gt;
+    &lt;baseNameString&gt;English&lt;/baseNameString&gt;
+  &lt;/baseName&gt;
+&lt;/topic&gt;
+
+&lt;/topicMap&gt;
+</pre>
+
+
+
+
+
+<h3>
+<a name="N108A1">4.12. Jill's First TM in LTM syntax</a>
+</h3>
+
+
+
+<p>Here is slightly abbreviated version of the topic map used for
+the tutorial, this time in LTM syntax. It is given here in order to
+convince you that LTM is worth considering if you intend to maintain
+your topic maps by hand. This topic map is exactly equivalent to the
+one given above in XTM syntax.</p>
+
+
+<p align="center">
+<b>Jill's First TM in LTM syntax</b>
+</p>
+
+
+<pre>
+#TOPICMAP ~jills-tm
+#INCLUDE "dc.ltmm"
+
+/* ONTOLOGY TOPICS */
+
+/* THE TOPIC MAP TOPIC */
+[jillstm = "Jill's First Topic Map"
+         = "Jill's 1st TM" /short]
+
+/* THEMES (SCOPING TOPICS) */
+[short = "short name" @"http://psi.ontopia.net/basename/#short-name"]
+
+/* TOPIC TYPES */
+[developer = "Developer"]
+[company = "Company"]
+
+/* OCCURRENCE TYPES */
+[description = "Description" @"http://psi.ontopia.net/xtm/occurrence-type/description"]
+[kudo : description = "Kudo"]
+[website = "Website"]
+[contract = "Contract"]
+
+/* ASSOCIATION TYPES */
+[employment = "Employment"
+            = "Employs" /employer
+            = "Employed by" /employee]
+
+/* ASSOCIATION ROLE TYPES */
+[employer = "Employer"]
+[employee = "Employee"]
+
+/* INDIVIDUAL TOPICS */
+[ontopia : company = "Ontopia" @"http://psi.ontopia.net/ontopia/#ontopia"]
+{ontopia, website, "http://psi.ontopia.net/"}
+
+[jill : developer = "Jill Hacker"]
+{jill, kudo, [[Jill's a cool girl and a great hacker]]}
+
+/* ADDRESSABLE SUBJECT */
+[ontopias-website : website = "Ontopia's Web Site" %"http://www.ontopia.net/"]
+
+/* ASSOCIATIONS */
+employment(jill : employee, ontopia : employer) ~ jill-ontopia
+
+/* REIFICATION EXAMPLES */
+
+/* REIFIED ASSOCIATIONS */
+[jill-ontopia : employment = "Jill's position with Ontopia"]
+{jill-ontopia, contract,
+ "http://www.ontopia.net/internal/employees/contracts/jill.htm"}
+ ~ jills-contract
+
+/* REIFIED OCCURRENCES */
+[jills-contract : contract = "Jill's contract with Ontopia"]
+{jills-contract, contract,
+ "http://www.ontopia.net/internal/employees/contracts/jill.htm"}
+
+/* DUBLIN CORE METADATA */
+{jillstm, Rights, [[(C) Copyright 2003 Ontopia]]}
+{jillstm, Date, [[$Date: 2008/05/29 07:01:12 $]]}
+{jillstm, Description, [[Example topic map from Omnigator User Guide.]]}
+Creator(jillstm : resource, pepper : value)
+  [pepper = "Steve Pepper" @"http://psi.ontopia.net/ontopia/#pepper"]
+Publisher(jillstm : resource, ontopia : value)
+Subject(jillstm : resource, ontopia : value)
+Type(jillstm : resource, topicmap-type : value)
+Format(jillstm : resource, LTM-format : value)
+Language(jillstm : resource, en : value)
+  [en = "English" @"http://www.topicmaps.org/xtm/1.0/language.xtm#en"]
+
+</pre>
+
+
+
+
+
+</body>
+</html>

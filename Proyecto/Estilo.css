@@ -1,0 +1,27 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13/04/2016, 04:28:33 PM
+    Author     : lelguea
+*/
+
+node {
+	size: 10px, 15px;
+	shape: diamond;
+	fill-color: green;
+	stroke-mode: plain;
+	stroke-color: yellow;
+        text-size: 22;
+}
+
+node:clicked { 
+    size: 75px, 75px; 
+    shape: circle; 
+    fill-color: blue; 
+    text-size: 75; 
+    text-style: bold;    
+    text-size: 42;
+}

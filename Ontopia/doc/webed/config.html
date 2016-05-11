@@ -1,0 +1,1142 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Ontopia Web Editor Framework</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Ontopia Web Editor Framework</h1>
+<h2 class="subtitle">Configuration Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+  
+<p>
+    This document is a guide to configuring the 
+    Ontopia's Web Editor Framework. 
+    It describes how to use <tt>actions.xml</tt>
+    to make actions available to the JSP pages
+    and to specify other characteristics of the forms,
+    such as parameters, forwarding behavior and formatting of the
+    action elements.
+  </p>
+<p>
+    Since the Web Editor Framework is an extension of the 
+    Navigator Framework it is assumed that you are already 
+    familiar with the Navigator Framework. If you are not, 
+    you are recommended to start with the Navigator 
+    Framework Developer's Guide before continuing with this document.  
+  </p>
+<p>
+    This document is useful reading either before or after reading
+    The Ontopia Web Editor Framework &mdash; Developer's Guide,
+    since it defines the actions, buttons and fields that are used in the
+    Developer's Guide. However, both documents are self-contained, and can
+    be read individually.
+  </p>
+  
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10028">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10040">2. &lt;actionConfig&gt; - the root element</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1004F">3. &lt;classMap&gt;</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1006D">4. &lt;buttonMap&gt;</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N100A3">5. &lt;fieldMap&gt;</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N100CD">6. &lt;globalForwards&gt;</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N100EE">7. &lt;actionGroup&gt;</a>
+</li>
+<ul>
+<li>
+<a href="#N100FF">7.1. &lt;inputField&gt;</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10110">7.2. &lt;action&gt;</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10139">7.3. &lt;forwardRules&gt;</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10160">8. Working example</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10197">9. Complete DTD for actions.xml</a>
+</li>
+<ul></ul>
+</ul>
+  
+  
+  
+  
+  
+  
+<h2>
+<a name="N10028">1. Introduction</a>
+</h2>
+  
+  
+  
+<p>
+    The actions available to Ontopia's Web Editor Framework are
+    configured by <tt>actions.xml</tt>, which should be
+    located in the <tt>WEB-INF/config</tt>
+    directory. The 'action_config' parameter in 'web.xml'
+    actually specifies the location; this is just the default.
+  </p>
+  
+<p>
+    The configuration is divided into five different parts.
+    One of them - the actionGroup is the interface from the JSP
+    pages to the actions. There may be multiple actionGroups
+    with different configurations. Each &lt;webed:form&gt; tag
+    uses one actionGroup, which specifies a set of actions and forward rules.
+    These actions can be used by the fields and buttens on that form.
+  </p>
+  
+<p>
+    The other five parts, some of which are optional,
+    all of which can be used at most once,
+    contain configuring information to be used by the actionGroups
+    or formatting information for the form elements 
+    (e.g. the size of an input field  or the alignment of a button).
+  </p>
+  
+<p>
+    This document describes the different parts of the configuration
+    with examples and shows how the configured actions can be used from
+    the JSP pages.
+  </p>
+  
+  
+  
+<h2>
+<a name="N10040">2. &lt;actionConfig&gt; - the root element</a>
+</h2>
+    
+    
+    
+<p>
+      This is the root element of actions.xml, and contains five sub-elements,
+      which handle the different parts of the configuration.
+    </p>
+    
+
+<pre>
+  &lt;!ELEMENT actionConfig (classMap, buttonMap?, fieldMap?,
+                          globalForwards?, actionGroup+)&gt;
+</pre>
+  
+    
+<p>
+      The following sections describe the sub-elements of
+      &lt;actionConfig&gt;.
+    </p>
+  
+    
+  
+<h2>
+<a name="N1004F">3. &lt;classMap&gt;</a>
+</h2>
+    
+    
+    
+<p>
+      Maps shortcut names for actions to the fully qualified Java
+      class names of the classes.  The actions can then be referred to
+      by their shortcut names within <tt>actions.xml</tt>.
+    </p>
+  
+
+<pre>
+    &lt;!ELEMENT classMap (class+)&gt;
+      &lt;!ELEMENT class EMPTY&gt;
+      &lt;!ATTLIST class shortcut ID    #REQUIRED&gt;
+      &lt;!ATTLIST class fullname CDATA #REQUIRED&gt;
+</pre>
+    
+    
+<p>
+      The &lt;classMap&gt; element must contain one or more 
+      &lt;class&gt; elements. Each &lt;class&gt; element maps one
+      shortcut name to the fully qualified Java class name of an action class. 
+    </p>
+  
+    
+<p align="center">
+<b>Example configuration</b>
+</p>
+      
+
+
+<pre>
+  &lt;classMap&gt;
+    &lt;class shortcut="Delete"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.tmobject.Delete"/&gt;
+    &lt;class shortcut="EvaluateLTM"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.tmobject.EvaluateLTM"/&gt;
+    &lt;class shortcut="AddBasename"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.basename.AddBasename"/&gt;
+    &lt;class shortcut="SetValue"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.basename.SetValue"/&gt;
+    &lt;class shortcut="DefaultAction"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.DefaultAction"/&gt;
+  &lt;/classMap&gt;
+</pre>
+    
+    
+    
+<p>
+      This example makes 5 action classes available to the action groups, 
+      which in turn can make them available to the JSP pages
+      and configure specific forward behavior (within each actionGroup).
+      Details of the &lt;actionGroup&gt; element is given below.
+    </p>
+    
+  
+  
+  
+<h2>
+<a name="N1006D">4. &lt;buttonMap&gt;</a>
+</h2>
+    
+    
+    
+<p>
+      Global mapping between image short names and image properties
+      like location and size used by action buttons.
+    </p>
+    
+
+<pre>
+    &lt;!ELEMENT buttonMap (image+)&gt;
+      &lt;!ELEMENT image EMPTY&gt;
+      &lt;!ATTLIST image name        ID    #REQUIRED&gt;
+      &lt;!ATTLIST image src         CDATA #IMPLIED&gt;
+      &lt;!ATTLIST image absolutesrc CDATA #IMPLIED&gt;
+      &lt;!ATTLIST image width       CDATA #IMPLIED&gt;
+      &lt;!ATTLIST image height      CDATA #IMPLIED&gt;
+      &lt;!ATTLIST image border      CDATA #IMPLIED&gt;
+      &lt;!ATTLIST image align       CDATA #IMPLIED&gt;
+</pre>
+    
+    
+<p>
+      The &lt;buttonMap&gt; element must contain one or more 
+      &lt;image&gt; elements. Each &lt;image&gt; element maps
+      an image short name to an image source and other formatting information,
+      i.e. width, height, border and alignment.
+    </p>
+    
+    
+<p>
+      The attributes 'src' and 'absolutesrc' specify the source by a
+      relative and an absolute path respectively.
+      To avoid confusion, only one of these should be specified.
+      If both are specified then the absolute path will be used.
+      <span class="remark">[<b>Remark: </b>This should be turned into a list of all the attributes,
+      their meaning, and the rules for using them. Kind of like in the
+      tag library reference.]</span>
+    
+</p>
+      
+    
+<p align="center">
+<b>Example configuration</b>
+</p>
+      
+
+
+<pre>
+  &lt;buttonMap&gt;
+    &lt;image name="delete" border="2" align="right"
+           absolutesrc="http://localhost:8080/myapp/images/delete.gif"/&gt;
+    &lt;image name="submit" width="50" height="20"
+           src="/images/submit.gif"/&gt;
+  &lt;/buttonMap&gt;
+</pre>
+    
+
+    
+<p>
+      This example configuration makes the images
+      <tt>delete.gif</tt>
+      and <tt>submit.gif</tt> accessible
+      from the JSP pages by the short names 'delete' and 'submit'.
+      Both files are located in the directory <tt>images</tt>,
+      but 'delete' is specified by an absolute path and 'submit' by
+      a relative path.
+    </p>
+    
+    
+<p align="center">
+<b>Example JSP</b>
+</p>
+      
+
+
+<pre>
+      &lt;webed:button action="delete" image="delete-image" params="NAME"/&gt;&lt;br&gt;
+      &lt;webed:button action="submit" image="submit" params="TOPIC"/&gt;&lt;br&gt;
+</pre>
+    
+    
+    
+<p>
+      In this example JSP, the delete button will be aligned to the
+      right with a border of width 2.
+      The submit button will have width 50 and height 20.
+      Some of the formatting may not show up in the internet browser,
+      depending on which browser you use.
+      This is because different browsers interpret the generated HTML
+      differently, e.g. some browsers will not take width and height
+      into account (but use the original size of the image).
+      The action names 'delete' and 'submit' are defined in the
+      &lt;actionGroup&gt; which will be described below.
+    </p>
+    
+  
+  
+  
+<h2>
+<a name="N100A3">5. &lt;fieldMap&gt;</a>
+</h2>
+    
+    
+    
+<p>
+      Global mapping between field type short names and field properties
+      such as size and input type.
+    </p>
+    
+
+<pre>
+    &lt;!ELEMENT fieldMap (field+)&gt;
+      &lt;!ELEMENT field EMPTY&gt;
+      &lt;!ATTLIST field name      ID    #REQUIRED&gt;
+      &lt;!ATTLIST field type      CDATA #REQUIRED&gt;
+      &lt;!ATTLIST field maxlength CDATA #IMPLIED&gt;
+      &lt;!ATTLIST field columns   CDATA #IMPLIED&gt;
+      &lt;!ATTLIST field rows      CDATA #IMPLIED&gt;
+</pre>
+
+    
+<p>
+      The &lt;fieldMap&gt; element must contain one or more
+      &lt;field&gt; elements. 
+      Each &lt;field&gt; maps a field type short name to a
+      a field type and other formatting information.
+      Note that some attributes only apply to certain fields,
+      e.g. a textarea can have multiple rows, but a text field can only
+      have one row, and so the 'rows' attribute has no effect.
+      <span class="remark">[<b>Remark: </b>Full list needed here also.]</span>
+    
+</p>
+  
+    
+<p align="center">
+<b>Example configuration</b>
+</p>
+      
+
+
+<pre>
+  &lt;fieldMap&gt;
+    &lt;field name="long"     type="textarea" columns="20" rows="2"/&gt;
+    &lt;field name="password" type="password" maxlength="20"/&gt;
+  &lt;/fieldMap&gt;
+</pre>
+    
+    
+    
+<p>
+      This example configuration makes the field 
+      types 'textarea and 'password' available to
+      the JSP pages by the short names 'long' and 'password'.
+      Fields of type 'long' will show up as 
+      textareas of 2 rows by 20 colums.
+      Fields of type 'password' will show up as 
+      password fields (input typically shown as asterisks ('*') 
+      and accept maximum 20 characters.
+    </p>
+  
+    
+<p align="center">
+<b>Example JSP</b>
+</p>
+      
+
+
+<pre>
+  &lt;webed:field action="set-name" type="long" params="NAME"&gt;
+    &lt;tolog:out var="NAME"/&gt;
+  &lt;/webed:field&gt;
+  
+  &lt;webed:field action="add-basename" type="password" params="TOPIC"&gt;
+  &lt;/webed:field&gt;
+</pre>
+    
+    
+    
+<p>
+      This example in the context of the configuration example above,
+      generates two fields, one of type long, i.e. a textarea of 2 rows
+      by 20 columns and one of type password, i.e. a password of maximum
+      20 characters.
+      The actions 'set-name' and 'add-basename' will be defined in the
+      &lt;actionGroup&gt; elements (details below).
+    </p>
+
+  
+  
+  
+<h2>
+<a name="N100CD">6. &lt;globalForwards&gt;</a>
+</h2>
+    
+    
+    
+<p>
+      Specifies reusable forward elements that should be available to
+      all &lt;actionGroup&gt; elements.
+    </p>
+    
+
+<pre>
+    &lt;!ELEMENT globalForwards (forward+)&gt;
+      &lt;!ELEMENT forward (reqParam*)&gt;
+      &lt;!ATTLIST forward name  ID                    #REQUIRED&gt;
+      &lt;!ATTLIST forward path  CDATA                 #REQUIRED&gt;
+      &lt;!ATTLIST forward type  (success|failure|all) 'all'&gt;
+        &lt;!ELEMENT reqParam EMPTY&gt;
+        &lt;!ATTLIST reqParam name  CDATA #REQUIRED&gt;
+        &lt;!ATTLIST reqParam value CDATA #IMPLIED&gt;
+</pre>
+
+    
+<p>
+      The &lt;globalForwards&gt; element must contain one or more
+      &lt;forward&gt; elements. 
+      Each &lt;forward&gt; element maps a forward short name to a
+      forward path and (optionally) a number for request parameters.
+      The forward path is the path of the next request, which the
+      browser should go to after the action has been executed.
+      The 'type' attribute determines whether the forward should always
+      happen ('all') or only in certain cases (e.g. 'success').
+      <span class="remark">[<b>Remark: </b>List again.]</span>
+    
+</p>
+    
+    
+<p>
+      The &lt;reqParam&gt; sub-elements specify which request parameters
+      should be included in the forward request.
+    </p>
+
+    
+<p align="center">
+<b>Example configuration</b>
+</p>
+      
+
+
+<pre>
+  &lt;globalForwards&gt;
+    &lt;forward name="add-occurrence" path="occurrence.jsp"  type="success"&gt;
+      &lt;reqParam name="is-new"/&gt;
+    &lt;/forward&gt;
+  &lt;/globalForwards&gt;
+</pre>
+    
+
+    
+<p>
+      This example configures one different forward element of type success.
+      If an action succeeds, it will be forwarded to occurrence.jsp.
+      Otherwise it will be forwarded to the path defined in the required
+      defaultForward element (details below). 
+      An action that uses this forward element will take the request parameter
+      'is-new', which can be given on the form.
+    </p>
+  
+  
+  
+  
+<h2>
+<a name="N100EE">7. &lt;actionGroup&gt;</a>
+</h2>
+    
+    
+    
+<p>
+      Specifies and configures the actions that should be available within a 
+      single &lt;webed:form&gt; tag in the JSP files. 
+      Each &lt;webed:form&gt; tag must specify the name of exactly one 
+      action group, which names and configures the actions available
+      within that form.
+      There may be multiple actionGroups 
+      specifying different configurations for different forms
+      and each actionGroup can be used by multiple forms.
+    </p>
+    
+
+<pre>
+    &lt;!ELEMENT actionGroup ((inputField | action)*, forward*, forwardRules)&gt;
+    &lt;!ATTLIST actionGroup name ID #REQUIRED&gt;
+</pre>
+
+    
+<p>
+      The sub-elements &lt;inputField&gt; and
+      &lt;action&gt; are triggered from the input fields and
+      actions elements (e.g. buttons) on the JSP page.
+      The &lt;forward&gt; elements configure forwarding only 
+      applicable to this particular actionGroup
+      and the &lt;forwardRules&gt; element maps the different
+      actions to forward elements.
+      The &lt;inputField&gt;, &lt;action&gt;
+      and &lt;forwardRules&gt; sub-elements will 
+      be described in detail in the following sub-sections.
+      The &lt;forward&gt; was described in the
+      &lt;globalForwards&gt; section above.
+      <span class="remark">[<b>Remark: </b>List and define attributes, even if there is only one.]</span>
+    
+</p>
+
+    
+<h3>
+<a name="N100FF">7.1. &lt;inputField&gt;</a>
+</h3>
+      
+      
+      
+<p>
+        Makes an action available to the forms as an input field by mapping an
+        external name to an internal action shortcut name.
+      </p>
+      
+
+<pre>
+      &lt;!ELEMENT inputField EMPTY&gt;
+      &lt;!ATTLIST inputField name  CDATA #REQUIRED&gt;
+      &lt;!ATTLIST inputField class IDREF #REQUIRED&gt;
+</pre>
+    
+      
+<p>
+        Each &lt;inputField&gt; must specify a name and a class, i.e. the
+        name by which the input field should be referred to from the forms and
+        the shortcut name of the action to be triggered.
+        <span class="remark">[<b>Remark: </b>List!]</span> See XREF! for an example of use.
+      </p>
+    
+<h3>
+<a name="N10110">7.2. &lt;action&gt;</a>
+</h3>
+      
+      
+      
+<p>
+        Makes an action available to the forms by mapping 
+        an external name to an internal action shortcut 
+        name (defined in &lt;classMap&gt;).
+      </p>
+      
+
+<pre>
+      &lt;!ELEMENT action EMPTY&gt;
+      &lt;!ATTLIST action name      NMTOKEN        #REQUIRED&gt;
+      &lt;!ATTLIST action class     IDREF          #REQUIRED&gt;
+      &lt;!ATTLIST action exclusive (true | false) #IMPLIED&gt;
+</pre>
+
+      
+<p>
+        Each &lt;action&gt; must specify a name and a class,
+        i.e. the name by which the action should be 
+        referenced from the forms and the shortcut name
+        (as given in the &lt;classMap&gt; section) 
+        of the action to be triggered.
+        An action can be configured to be exclusive, in which case
+        no other actions will be executed along with it.
+        Actions are inclusive (exclusive="false") by default.
+        <span class="remark">[<b>Remark: </b>List! Also note that actions within an actionGroup are
+        executed in the order they are given.]</span>
+      
+</p>
+    
+      
+<p align="center">
+<b>Example configuration</b>
+</p>
+        
+
+
+<pre>
+    &lt;inputField name="set-name"       class="SetValue"/&gt;
+    &lt;action     name="add-occurrence" class="EvaluateLTM" exclusive="true"/&gt;
+    &lt;action     name="delete"         class="Delete"/&gt;
+    &lt;action     name="submit"         class="DefaultAction"/&gt;
+</pre>
+      
+    
+      
+<p>
+        This example configuration makes the Delete and DefaultAction
+        and EvaluateLTM
+        action classes acessible to the form by the names
+        'delete', 'submit' and 'add-occurrence'.
+        'delete' and 'submit' are inclusive. 'add-occurrence' is exclusive.
+      </p>
+      
+      
+<p align="center">
+<b>Example JSP</b>
+</p>
+        
+
+
+<pre>
+      &lt;webed:field action="set-name" type="long" params="NAME"&gt;
+        &lt;tolog:out var="NAME"/&gt;
+      &lt;/webed:field&gt;&lt;br&gt;
+      &lt;webed:button action="add-occurrence" text="Add Occurrence"
+                    params="TOPICMAP OCCURRENCE-LTM"/&gt;
+      &lt;webed:button action="submit" image="submit" params="TOPIC"/&gt;&lt;br&gt;
+</pre>
+      
+    
+      
+<p>
+        This example generates one input field ('set-name') and two submit
+        buttons ('add-occurrence' and 'submit').
+        If the contents of the 'set-name' action changes and the 'submit'
+        button is clicked, then the 'set-name' action will also be triggered
+        and the name change will take effect.
+        If, on the other hand, the 'add-occurrence' button is clicked,
+        the 'set-name' action will not be triggered, since
+        'add-occurrence' is exclusive.
+      </p>
+      
+    
+<h3>
+<a name="N10139">7.3. &lt;forwardRules&gt;</a>
+</h3>
+      
+      
+      
+<p>
+        Specifies which forward elements should define the forwarding
+        for the different actions.
+      </p>
+      
+
+<pre>
+      &lt;!ELEMENT forwardRules (forwardDefault, forwardLocked?, forwardRule*)&gt;
+
+        &lt;!ELEMENT forwardDefault (reqParam*)&gt;
+        &lt;!ATTLIST forwardDefault forward IDREF #IMPLIED&gt;
+        &lt;!ATTLIST forwardDefault path    CDATA #IMPLIED&gt;
+        
+        &lt;!ELEMENT forwardLocked EMPTY&gt;
+        &lt;!ATTLIST forwardLocked path  CDATA         #REQUIRED&gt;
+        
+        &lt;!ELEMENT forwardRule EMPTY&gt;
+        &lt;!ATTLIST forwardRule action  NMTOKEN #REQUIRED&gt;
+        &lt;!ATTLIST forwardRule forward IDREF   #REQUIRED&gt;
+</pre>
+    
+      
+<p>
+        When an action is executed, a forward element will be selected
+        as follows:
+        If the &lt;forwardRules&gt; element of that actionGroup
+        contains a &lt;forwardRule&gt; for that action,
+        then the &lt;forward&gt; will be selected 
+        based on that &lt;forwardRule&gt;.
+        Otherwise, the &lt;forwardDefault&gt; 
+        default element will be used.
+      </p>
+      
+      
+<p>
+        Note that &lt;forward&gt; elements are of type 'all'
+        by default (details in the &lt;forward&gt; section).
+        If the &lt;forward&gt; is instead of type 'success'/'failure'
+        then it will only apply to actions that succeed/fail.
+        If the relevant &lt;forward&gt; element is of type
+        'success' and the action fails then it will, if possible, first use
+        a &lt;forward&gt; with the same name, but of type 'failure'.
+        If no such &lt;forward&gt; element exists, then the
+        &lt;forwardDefault&gt; will be used.
+      </p>
+      
+      
+<p>
+        The &lt;forwardDefault&gt; either specifies a forward path
+        and a set of request parameters directly or gives reference to
+        a &lt;forward&gt; element that handles the forwarding.
+      </p>
+      
+      
+<p>
+        The &lt;forwardLocked&gt; element specifies a forward path that
+        will be used if the current page tries to access a locked object.
+      </p>
+      
+      
+<p>
+        Each &lt;forwardRule&gt; element maps an action to a
+        forward element.
+      </p>
+      
+      
+<p align="center">
+<b>Example configuration</b>
+</p>
+        
+
+<pre>
+    &lt;forward name="index"    path="index.jsp"&gt;&lt;/forward&gt;
+    &lt;forwardRules&gt;
+      &lt;forwardDefault path="default-page.html"&gt;
+      &lt;/forwardDefault&gt;
+      &lt;forwardRule action="delete"         forward="index"/&gt;
+    &lt;/forwardRules&gt;
+</pre>
+      
+      
+      
+<p>
+        In this example the the delete action will be
+        forwarded to "index.jsp".
+        All other actions will be forwarded to "default-page.html".
+        The complete example below will illustrate 
+        better how the forwarding works.
+      </p>      
+      
+    
+  
+<h2>
+<a name="N10160">8. Working example</a>
+</h2>
+    
+  
+    
+<p>
+      The sections above have described how the different parts of
+      <tt>actions.xml</tt> work, and have given
+      fragmented examples.
+      This section will pull the differents parts together into a complete
+      example.
+    </p>
+    
+    
+<p align="center">
+<b>Example configuration</b>
+</p>
+      
+
+
+<pre>
+&lt;actionConfig&gt;
+  &lt;!-- Make five different actions available to all the actionGroups. --&gt;
+  &lt;classMap&gt;
+    &lt;class shortcut="Delete"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.tmobject.Delete"/&gt;
+    &lt;class shortcut="EvaluateLTM"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.tmobject.EvaluateLTM"/&gt;
+    &lt;class shortcut="AddBasename"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.basename.AddBasename"/&gt;
+    &lt;class shortcut="SetValue"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.basename.SetValue"/&gt;
+    &lt;class shortcut="DefaultAction"
+           fullname="net.ontopia.topicmaps.webed.impl.actions.DefaultAction"/&gt;
+  &lt;/classMap&gt;
+  
+  &lt;!-- Make two images available to the JSP pages. --&gt;
+  &lt;buttonMap&gt;
+    &lt;!-- The delete-image with a border of width 2, aligned to the 
+         right and given by an abolute path. --&gt;
+    &lt;image name="delete-image" border="2" align="right"
+           absolutesrc="http://localhost:8080/myapp/images/delete.gif"/&gt;
+    &lt;!-- The submit-image of size 20x and given by a relative path. --&gt;
+    &lt;image name="submit-image" width="50" height="20"
+           src="/images/submit.gif"/&gt;
+  &lt;/buttonMap&gt;
+
+  &lt;!-- Make two field types available to the JSP pages. --&gt;
+  &lt;fieldMap&gt;
+    &lt;field name="long"     type="textarea" columns="20" rows="2"/&gt;
+    &lt;field name="password" type="password" maxlength="20"/&gt;
+  &lt;/fieldMap&gt;
+  
+  &lt;!-- Make two forward elements available to all actionGroups. --&gt;
+  &lt;globalForwards&gt;
+    &lt;!-- Handles the forwardRule 'add-occurrence' when an action succeeds. --&gt;
+    &lt;!-- Forwards a single request parameter. --&gt;
+    &lt;forward name="add-occurrence" path="occurrence.jsp"  type="success"&gt;
+      &lt;reqParam name="is-new"/&gt;
+    &lt;/forward&gt;
+  &lt;/globalForwards&gt;
+
+  &lt;!-- Make one actionGroup available to the &lt;webed:form&gt; tags. --&gt;
+  &lt;actionGroup name="index"&gt;
+    &lt;!-- Make actions and input fields available. --&gt;
+    &lt;!-- 'add-occurrence' should always run on its own. --&gt;
+    &lt;action     name="add-occurrence" class="EvaluateLTM" exclusive="true"/&gt;
+    &lt;action     name="new-topic"      class="EvaluateLTM"/&gt;
+    &lt;action     name="delete"         class="Delete"/&gt;
+    &lt;inputField name="set-name"       class="SetValue"/&gt;
+    &lt;action     name="submit"         class="DefaultAction"/&gt;
+    &lt;inputField name="add-basename"   class="AddBasename"/&gt;
+    
+    &lt;forward name="index"    path="index.jsp"&gt;&lt;/forward&gt;
+    &lt;forwardRules&gt;
+      &lt;!-- Where to go when no forward path is specified --&gt;
+      &lt;forwardDefault path="default-page.html"/&gt;
+      &lt;!-- Where to go if failing to access an object because it is locked. --&gt;
+      &lt;forwardLocked path="forward-locked.html"/&gt;
+      
+      &lt;!-- The 'delete' and 'new-topic' actions use local forward elements. --&gt;
+      &lt;forwardRule action="delete"         forward="index"/&gt;
+      &lt;forwardRule action="new-topic"      forward="index"/&gt;
+      
+      &lt;!-- 'add-occurrence' uses global forward elements (success/failure). --&gt;
+      &lt;forwardRule action="add-occurrence" forward="add-occurrence"/&gt;
+    &lt;/forwardRules&gt;
+  &lt;/actionGroup&gt;
+&lt;/actionConfig&gt;
+</pre>
+    
+    
+    
+<p>
+      The above is a complete working example <tt>actions.xml</tt>.
+      Please read the &lt;!-- comments --&gt; between the lines for explanation
+      of what the different parts do.
+    </p>
+    
+    
+<p align="center">
+<b>Example JSP</b>
+</p>
+      
+
+
+<pre>
+&lt;%@ include file="../fragment/common-header.jsp" %&gt;
+&lt;tolog:context topicmap="foo.ltm"&gt;
+  &lt;tolog:set query="topicmap($TOPICMAP)?"/&gt;
+  &lt;!-- lock="TOPICMAP" ensures that noone else will modify TOPICMAP --&gt;
+  &lt;!-- locking lasts for 60 seconds (may become adjustable later). --&gt;
+  &lt;!-- If someone else has already locked TOPICMAP then this page will 
+  &lt;!-- automatically redirect to forward-locked.html --&gt;
+  &lt;!-- (as specified in actions.xml above) --&gt;
+  &lt;webed:form actiongroup="index" lock="TOPICMAP"&gt;
+    &lt;tolog:if query="topic-name($TOPIC, $NAME) order by $TOPIC, $NAME?"&gt;
+      
+      Topic: &lt;tolog:out var="TOPIC"/&gt;&lt;br&gt;
+      
+      &lt;!-- Create field that changes the topic 'NAME'. --&gt;
+      &lt;webed:field action="set-name" type="long" params="NAME"&gt;
+        &lt;tolog:out var="NAME"/&gt;
+      &lt;/webed:field&gt;&lt;br&gt;
+      
+      &lt;!-- Create a field that adds a given basename to the "TOPIC". --&gt;
+      &lt;!-- Take entry as a password (entered characters shown as asterisks. --&gt;
+      &lt;webed:field action="add-basename" type="password" params="TOPIC"&gt;
+      &lt;/webed:field&gt;&lt;br&gt;
+      
+      &lt;!-- Create a button that deletes the topic 'NAME'. --&gt;
+      &lt;!-- Use the image that's been configured in actions.xml. --&gt;
+      &lt;webed:button action="delete" image="delete-image" params="NAME"/&gt;&lt;br&gt;
+      
+      &lt;!-- Use a hidden input field to set the boolean is-new variable. --&gt;
+      &lt;!-- Notice how 'is-new' is forwarded as a request parameter inside
+           &lt;globalForwards&gt; in actions.xml. --&gt;
+      &lt;input type="hidden" name="is-new" value="true"/&gt;
+      
+      &lt;!-- Make a button that creates a new topic called 'bar'. --&gt;
+      &lt;tolog:set var="TOPIC-LTM"&gt;
+        [bar]
+      &lt;/tolog:set&gt;
+      &lt;tolog:set var="TOPIC-CREATOR"&gt;
+        &lt;webed:actionid action="new-topic" params="TOPICMAP TOPIC-LTM"/&gt;
+      &lt;/tolog:set&gt;
+      
+      &lt;!-- Create a button that adds an occurrence. --&gt;
+      &lt;tolog:set var="OCCURRENCE-LTM"&gt;
+        {&lt;tolog:id var="TOPIC"/&gt;, foo, [[Occurrence 1]]}
+      &lt;/tolog:set&gt;
+      &lt;webed:button action="add-occurrence" text="Add Occurrence"
+                    params="TOPICMAP OCCURRENCE-LTM"/&gt;
+      
+      &lt;!-- Create a button that submits the form. --&gt;
+      &lt;!-- Note that all all the buttons on this form are submit buttons,
+           but the other also perform other actions.
+           This button submits the form, and no other actions. --&gt;
+      &lt;webed:button action="submit" image="submit-image"/&gt;&lt;br&gt;
+    &lt;/tolog:if&gt;
+  &lt;/webed:form&gt;
+&lt;/tolog:context&gt;
+</pre>
+    
+
+    
+<p>
+      The above is an example JSP webpage that uses the <tt>actions.xml</tt> example configuration above. 
+      For explanations, please read the &lt;!-- comments --&gt; between the lines.
+    </p>
+    
+    
+<p align="center">
+<b>Example internet browser output.</b>
+</p>
+      
+      
+<img align="center" src="example-form.gif">
+    
+    
+    <p>
+      This example shows the output of the last JSP example as it would be displayed
+      in the Mozilla internet browser. Please look at the comments in the Example JSP
+      and Example Configuration for implementation details.
+    </p>
+  
+
+  
+<h2>
+<a name="N10197">9. Complete DTD for actions.xml</a>
+</h2>
+    
+
+    
+<p>
+<span class="remark">[<b>Remark: </b>Break the lines in the comments for better
+    formatting.]</span>
+</p>
+
+
+<pre>
+
+&lt;!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     This is the DTD defining the Action Configuration
+     file syntax for Ontopia's Web Editor Framework.
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ --&gt;
+
+&lt;!ELEMENT actionConfig (classMap, buttonMap?, fieldMap?,
+                        globalForwards?, globalProperties?, actionGroup+)&gt;
+
+  &lt;!-- 
+    The actionConfig tag element must have a classMap then 0/1 buttonMaps then 0/1 fieldMap then 0/1 globalForwards then 0/1 globalProperties then 1/more actionGroups.
+  --&gt;  
+  
+&lt;!-- ...................................................................
+     Global Mapping between class short name and fully
+     qualified java class path. --&gt;
+
+&lt;!ELEMENT classMap (class+)&gt;
+  
+  &lt;!ELEMENT class EMPTY&gt;
+  &lt;!ATTLIST class shortcut ID    #REQUIRED&gt;
+  &lt;!ATTLIST class fullname CDATA #REQUIRED&gt;
+
+  &lt;!--
+    The classMap element must have 1/more class-es.
+    Each class has a shortname (ID) and a fullname (CDATA), each is required.
+  --&gt;
+  
+&lt;!-- ...................................................................
+     Global Mapping between image short name and image properties
+     like location and dimension used by action buttons. --&gt;
+
+&lt;!ELEMENT buttonMap (image+)&gt;
+
+  &lt;!ELEMENT image EMPTY&gt;
+  &lt;!-- name: under which the image can be retrieved --&gt;
+  &lt;!ATTLIST image name     ID    #REQUIRED&gt;
+  &lt;!-- src: Relative URL of the image location --&gt;
+  &lt;!ATTLIST image src      CDATA #IMPLIED&gt;
+  &lt;!ATTLIST image absolutesrc      CDATA #IMPLIED&gt;
+  &lt;!-- width: image width in pixels --&gt;
+  &lt;!ATTLIST image width    CDATA #IMPLIED&gt;
+  &lt;!-- height: image height in pixels --&gt;
+  &lt;!ATTLIST image height   CDATA #IMPLIED&gt;
+  &lt;!-- border: image border in pixels (default: 0) --&gt;
+  &lt;!ATTLIST image border   CDATA #IMPLIED&gt;
+  &lt;!-- align: image align mode (default: 'middle') --&gt;
+  &lt;!ATTLIST image align    CDATA #IMPLIED&gt;
+
+  &lt;!--
+    The buttonMap element must have 1/more image-s.
+    Each image has a required ID called 'name' and implied CDATA called src, absolutesrc, width, height, border and align.
+  --&gt;
+
+&lt;!-- ...................................................................
+     Global Mapping between field short name and field properties
+     like type and dimension used by action fields. --&gt;
+
+&lt;!ELEMENT fieldMap (field+)&gt;
+
+  &lt;!ELEMENT field EMPTY&gt;
+  &lt;!-- name: under which the field can be retrieved --&gt;
+  &lt;!ATTLIST field name      ID    #REQUIRED&gt;
+  &lt;!-- type: the type of this input field (text|textarea) --&gt;
+  &lt;!ATTLIST field type      CDATA #REQUIRED&gt;
+  &lt;!-- maxlength: maxium length of this field (only if rows==1) --&gt;
+  &lt;!ATTLIST field maxlength CDATA #IMPLIED&gt;
+  &lt;!-- columns: number of field columns --&gt;
+  &lt;!ATTLIST field columns   CDATA #IMPLIED&gt;
+  &lt;!-- rows: number of field rows (default: 1) --&gt;
+  &lt;!ATTLIST field rows      CDATA #IMPLIED&gt;
+
+  &lt;!--
+    The fieldMap element must have 1/more fields.
+    Each field has a required ID called 'name' and implied CDATA called type, maxlength, columns and rows.
+  --&gt;
+
+&lt;!-- ...................................................................
+     Global Forward Definitions
+     used for an action if not explicitly defined forward exists. --&gt;
+
+&lt;!ELEMENT globalForwards (forward+)&gt;
+
+  &lt;!ELEMENT forward (reqParam*)&gt;
+  &lt;!ATTLIST forward name ID #REQUIRED&gt;
+  &lt;!-- path: relative URI to forward to --&gt;
+  &lt;!ATTLIST forward path CDATA #REQUIRED&gt;
+  &lt;!-- type: Action response type this forward page belongs to --&gt;
+  &lt;!ATTLIST forward type (success|failure|all) 'all'&gt;
+  &lt;!-- frame: the response of the forward should appear --&gt;
+  &lt;!ATTLIST forward frame (edit|search) #IMPLIED&gt;
+  &lt;!-- nextAction: must be a valid action 'name' entry
+       the action name pattern is used as a template which
+       is processed by the specified parameter rule. --&gt;
+  &lt;!ATTLIST forward nextAction IDREF #IMPLIED&gt;
+  &lt;!-- paramRule: Shortcut of parameter rule class (optional). --&gt;
+  &lt;!ATTLIST forward paramRule IDREF #IMPLIED&gt;
+
+  &lt;!--
+    The globalForwards element must have 1/more forwards.
+    Each forward has a required ID called 'name', etc..
+  --&gt;
+
+  
+    &lt;!ELEMENT reqParam EMPTY&gt;
+    &lt;!ATTLIST reqParam name  CDATA #REQUIRED&gt;
+    &lt;!-- value: if no fix value is given it will be taken from the request --&gt;
+    &lt;!ATTLIST reqParam value CDATA #IMPLIED&gt;
+
+&lt;!-- ...................................................................
+     Global Property Definitions for Actions and InputFields
+     that are method names and the related values. --&gt;
+
+&lt;!ELEMENT globalProperties (actionType+)&gt;
+
+  &lt;!ELEMENT actionType (actionProp+)&gt;
+  &lt;!-- class: must be a valid  class 'shortcut' entry --&gt;
+  &lt;!ATTLIST actionType class IDREF #REQUIRED&gt;  
+  
+    &lt;!ELEMENT actionProp EMPTY&gt;
+    &lt;!-- name: correlates to java bean method-name in the specified
+               class/interface --&gt;
+    &lt;!ATTLIST actionProp name  CDATA #REQUIRED&gt;
+    &lt;!-- value: the value with which the method will be invoked --&gt;
+    &lt;!ATTLIST actionProp value CDATA #REQUIRED&gt;
+    
+&lt;!-- ...................................................................
+     Action Group for covering the modification actions on topic map
+     objects (like for example changing the topic type or removing
+     a subject indicator from a topic object).
+
+     Note that actions/inputFields will be executed in the order they
+     are given in the file.  --&gt;
+
+&lt;!ELEMENT actionGroup ((inputField | action)*, forward*, forwardRules)&gt;
+&lt;!ATTLIST actionGroup name ID #REQUIRED&gt;
+
+  &lt;!ELEMENT inputField EMPTY&gt;
+  &lt;!-- name: under which this input element can be used by the tags,
+             must be unique inside the same action group --&gt;
+  &lt;!ATTLIST inputField name  CDATA #REQUIRED&gt;
+  &lt;!-- class: must be a valid class 'shortcut' entry --&gt;
+  &lt;!ATTLIST inputField class IDREF #REQUIRED&gt;
+
+  
+  &lt;!ELEMENT action EMPTY&gt;
+  &lt;!-- name: under which this action can be triggered by forms,
+             must be unique inside the same action group --&gt;
+  &lt;!ATTLIST action name      NMTOKEN        #REQUIRED&gt;
+  &lt;!-- class: must be a valid class 'shortcut' entry --&gt;
+  &lt;!ATTLIST action class   IDREF #REQUIRED&gt;
+  &lt;!-- exclusive: whether the action is exclusive or not --&gt;
+  &lt;!ATTLIST action exclusive (true | false) #IMPLIED&gt;
+  
+  
+  &lt;!ELEMENT forwardRules (forwardDefault, forwardLocked?, forwardRule*)&gt;
+  
+    &lt;!ELEMENT forwardDefault (reqParam*)&gt;
+    &lt;!-- There are two ways of specifying the default forward
+         either by referencing to an existing forward definition
+         or directly by giving the path by an URI --&gt;
+    &lt;!-- forward: must be a valid  forward 'name' entry --&gt;
+    &lt;!ATTLIST forwardDefault forward IDREF #IMPLIED&gt;
+    &lt;!-- path: relative URI to forward to, because this is a convenience-
+         shortcut, so no differentiation between success and failure page
+         can be made --&gt;
+    &lt;!ATTLIST forwardDefault path CDATA #IMPLIED&gt;
+    
+    &lt;!ELEMENT forwardLocked EMPTY&gt;
+    &lt;!-- path: relative URI to forward to in case a lock is encountered --&gt;
+    &lt;!ATTLIST forwardLocked path CDATA #REQUIRED&gt;
+    &lt;!-- frame: the response of the forward should appear --&gt;
+    &lt;!ATTLIST forwardLocked frame (edit|search) #IMPLIED&gt;
+
+    &lt;!ELEMENT forwardRule EMPTY&gt;
+    &lt;!-- action: must be a valid action 'name' entry --&gt;
+    &lt;!ATTLIST forwardRule action  NMTOKEN #REQUIRED&gt;
+    &lt;!-- forward: must be a valid forward 'name' entry --&gt;
+    &lt;!ATTLIST forwardRule forward IDREF #REQUIRED&gt;
+</pre>
+  
+
+</body>
+</html>

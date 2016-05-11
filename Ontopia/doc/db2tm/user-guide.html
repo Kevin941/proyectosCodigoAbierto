@@ -1,0 +1,1700 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DB2TM</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>DB2TM</h1>
+<h2 class="subtitle">User's Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>
+This document introduces the DB2TM module and explains how to use it
+to convert relational data, whether in CSV files or a relational
+database, into a topic map. It explains the XML configuration file
+format, the command-line tool, and the public API of the converter.
+</p>
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10022">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-tutorial">2. Tutorial</a>
+</li>
+<ul>
+<li>
+<a href="#sect-basics">2.1. Basics</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-associations">2.2. Associations</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N1010D">3. Advanced topics</a>
+</li>
+<ul>
+<li>
+<a href="#N10115">3.1. Other mapping functionality</a>
+</li>
+<ul>
+<li>
+<a href="#N10124">3.1.1. Scope support</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-relation2association">3.1.2. Mapping relations to associations</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10177">3.2. Virtual columns</a>
+</li>
+<ul>
+<li>
+<a href="#N1017F">3.2.1. Mapping tables</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-function-column">3.2.2. Functional columns</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N101E1">3.3. Supported data sources</a>
+</li>
+<ul>
+<li>
+<a href="#N101E9">3.3.1. CSV data sources</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10255">3.3.2. JDBC data sources</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#sect-api">3.4. Using the API</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102B4">3.5. Using the command-line tool with RDBMS topic maps</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N102DD">4. Synchronization</a>
+</li>
+<ul>
+<li>
+<a href="#N102E5">4.1. Basics</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-changelog">4.2. Changelog tables</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10336">4.3. Handling a single changelog for multiple tables</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10386">4.4. Secondary relations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1039E">4.5. Incomplete mappings</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N103BB">4.6. Synchronization in web applications</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#sect-logging">5. Logging</a>
+</li>
+<ul>
+<li>
+<a href="#sect-logging-operations-relation">5.1. Relation operations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-logging-operations-tuple">5.2. Tuple operations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-logging-operations-entity">5.3. Entity and characteristics operations</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#sect-tutorial">6. Frequently Asked Questions (FAQ)</a>
+</li>
+<ul>
+<li>
+<a href="#N10568">6.1. How do I add a new column to an existing relation?</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N105BA">6.2. How to delete objects that were added to the topic map by DB2TM?</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N105C9">6.3. How do I remove data in the topic map that originates from an old column?</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N105D2">6.4. Oops, I made a mistake in the DB2TM mapping. How do I repair the topic map?</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+
+
+
+
+
+
+
+<h2>
+<a name="N10022">1. Introduction</a>
+</h2>
+
+
+
+<p>
+The DB2TM module can be used to convert relational data into a topic
+map. It supports both CSV and JDBC data sources, and uses an XML
+configuration file to define the mapping from the relational source
+into the Topic Maps ontology you use. It can be accessed using either
+a Java API or a command-line tool.
+</p>
+
+
+<p>
+The basic approach of the DB2TM module is that it takes an existing
+topic map (possibly empty), a configuration, and a set of relations
+(ie: tables), and converts the rows in the relations into data in the
+topic map. The mapping from the relations to the topic map is
+described by the configuration.
+</p>
+
+
+<p>
+The configuration file contains a set of data sources (often just
+one), which can be either a database or a directory containing CSV
+files, and a set of relation declarations. The relation declarations
+define the mapping from each relation to the topic map ontology used.
+In addition, URI prefixes similar to those of LTM and tolog can be
+defined at the top of the configuration file for convenience.
+</p>
+
+
+
+
+<h2>
+<a name="sect-tutorial">2. Tutorial</a>
+</h2>
+
+
+
+<p>
+This section explains how to use DB2TM by walking through how to set
+up the conversion process for an example conversion.
+</p>
+
+
+<h3>
+<a name="sect-basics">2.1. Basics</a>
+</h3>
+
+
+<p>
+Let's say we have a file called <tt class="symbol">organizations.csv</tt>,
+which contains the following:
+</p>
+
+
+<pre>ID;NAME;WEBSITE
+1;Ontopia;http://www.ontopia.net
+2;United Nations;http://www.un.org
+3;Bouvet;http://www.bouvet.no</pre>
+
+
+<p>
+We can easily create a topic map of the data in this file with DB2TM,
+but to get a nice result in Omnigator we need a seed topic map
+containing the ontology. Since the CSV file only contains topics of a
+single type, with a name, and occurrences of a single type, the
+following LTM would work fine:
+</p>
+
+
+<pre>#PREFIX ex @"http://psi.example.org/"
+[ex:organization = "Organization"]
+[ex:homepage = "Homepage"]</pre>
+
+
+<p>
+The next thing we will need is an XML configuration file that
+describes the mapping from the CSV file into our ontology. A
+configuration file that only defines our data source would look as
+follows:
+</p>
+
+
+<pre>&lt;db2tm name="demo"&gt;
+  &lt;sources&gt;
+    &lt;csv path="./" ignoreFirstLines="1"/&gt;
+  &lt;/sources&gt;
+&lt;/db2tm&gt;</pre>
+
+
+<p>
+This defines a CSV data source named 'files' for CSV files contained
+in the current directory (that's what './' means), and where the first
+line of every file will be ignored. Note that the
+<tt class="symbol">path</tt> attribute is always evaluated relative to the
+location of the XML configuration file. The next step is to define the
+mapping from the <tt class="symbol">organizations.csv</tt> file to the
+ontology shown above. However, to do that we need to add a prefix
+declaration at the top of the file, as follows:
+</p>
+
+
+<pre>  &lt;using prefix="ex" subject-identifier="http://psi.example.org/"/&gt;</pre>
+
+
+<p>
+This one element says that the prefix 'ex' is a subject identifier
+prefix referring to topics whose PSIs begin with
+<tt class="symbol">http://psi.example.org/</tt>. With this in hand we can move
+on to the mapping of our one relation, which is done as follows:
+</p>
+
+
+<pre>  &lt;relation name="organizations.csv" columns="id name url"&gt;
+    &lt;topic type="ex:organization"&gt;
+      &lt;item-identifier&gt;#org${id}&lt;/item-identifier&gt;
+      &lt;topic-name&gt;${name}&lt;/topic-name&gt;
+      &lt;occurrence type="ex:homepage"&gt;${url}&lt;/occurrence&gt;
+    &lt;/topic&gt;
+  &lt;/relation&gt;</pre>
+
+
+<p>
+This is the key part, so let's walk through this slowly. The
+<tt class="symbol">name</tt> attribute on the <tt class="symbol">relation</tt>
+element gives the name of the CSV file. The <tt class="symbol">columns</tt>
+attribute contains the names we will use for the columns in the CSV
+file in order. The next line has the <tt class="symbol">topic</tt> element,
+which means that every row in the relation will map to a topic. The
+<tt class="symbol">type</tt> attribute gives the type of the topics (in this
+case: <tt class="symbol">organization</tt>).
+</p>
+
+
+<p>
+The <tt class="symbol">item-identifier</tt> element is used to create an item
+identifier for the topic, and in this case it's created from the first
+column in the file. (We do this to make it possible to refer to these
+topics in <a href="#sect-associations">section
+        2.2</a>.) The
+<tt class="symbol">topic-name</tt> element creates a topic name from the
+second column. The <tt class="symbol">occurrence</tt> element creates an
+occurrence of type <tt class="symbol">ex:homepage</tt> from the third column.
+</p>
+
+
+<p>
+There is one problem with the mapping above, however. It doesn't say
+that <tt class="symbol">ex:homepage</tt> is an external occurrence, and so
+the URL is just treated as a string. To solve this we need to declare
+the datatype to be a URI. The easiest way to do this is to define a
+subject identifier prefix for the XML Schema data types, like this:
+</p>
+
+
+<pre>  &lt;using prefix="xsd" subject-identifier="http://www.w3.org/2001/XMLSchema#"/&gt;</pre>
+
+
+<p>
+Once this is in place we can add
+<tt class="symbol">datatype="xsd:anyURI"</tt> on the
+<tt class="symbol">occurrence</tt> element, and DB2TM will create external
+occurrences instead.
+</p>
+
+
+<p>
+Now that we have assembled all the pieces, the next step is to run the
+conversion, and this is done by issuing the following command on the
+command-line:
+</p>
+
+
+<pre>java net.ontopia.topicmaps.db2tm.Execute --tm=ontology.ltm --out=tm.ltm add organizations.xml</pre>
+
+
+<p>
+The result is the following LTM:
+</p>
+
+
+<pre>[org1 : id1 = "Ontopia"]
+   {org1, id2, "http://www.ontopia.net"}
+[org2 : id1 = "United Nations"]
+   {org2, id2, "http://www.un.org"}
+[org3 : id1 = "Bouvet"]
+   {org3, id2, "http://www.bouvet.no"}</pre>
+
+
+<p>
+The <tt class="symbol">id1</tt> and <tt class="symbol">id2</tt> references are found
+in the LTM because the LTM exporter doesn't have any IDs for these
+topics, just the PSIs, and it always refers to topics using ID.
+</p>
+
+
+
+<h3>
+<a name="sect-associations">2.2. Associations</a>
+</h3>
+
+
+
+<p>
+So far we've mapped only one relation, and to get an interesting topic
+map we really need to handle more relations. The next one up is 
+<tt class="symbol">people.csv</tt>, which looks as follows:
+</p>
+
+
+<pre>ID;GIVEN;FAMILY;EMPLOYER;PHONE
+1;Lars Marius;Garshol;1;+47 90215550
+2;Geir Ove;Gr&oslash;nmo;1;
+3;Kofi;Annan;2;</pre>
+
+
+<p>
+The third column here is a foreign key reference to the
+<tt class="symbol">organizations.csv</tt> file. To handle this relation we
+need to extend the LTM seed ontology as follows:
+</p>
+
+
+<pre>[ex:person = "Person"]
+[ex:employed-by = "Employed by"
+                = "Employs" / ex:employer]
+  [ex:employer = "Employer"]
+  [ex:employee = "Employee"]
+[ex:phone = "Phone"]</pre>
+
+
+<p>
+Having done this we are ready to extend the configuration file with a
+new relation as follows:
+</p>
+
+
+<pre>  &lt;relation name="people.csv" columns="id given family employer phone"&gt;
+    &lt;topic id="employer"&gt;
+      &lt;item-identifier&gt;#org${employer}&lt;/item-identifier&gt;
+    &lt;/topic&gt;
+    &lt;topic type="ex:person"&gt;
+      &lt;item-identifier&gt;#person${id}&lt;/item-identifier&gt;
+      &lt;topic-name&gt;${given} ${family}&lt;/topic-name&gt;
+      &lt;occurrence type="ex:phone"&gt;${phone}&lt;/occurrence&gt;
+      &lt;player atype="ex:employed-by" rtype="ex:employee"&gt;
+        &lt;other rtype="ex:employer" player="#employer"/&gt;
+      &lt;/player&gt;
+    &lt;/topic&gt;
+  &lt;/relation&gt;</pre>
+
+
+<p>
+The first new thing to notice here is that we have two
+<tt class="symbol">topic</tt> elements inside the <tt class="symbol">relation</tt>
+element. The first is used to create the topic playing the employer
+role in the employed-by association with the person topic. It has an
+<tt class="symbol">id</tt> so we can refer to it, and an
+<tt class="symbol">item-identifier</tt> element so we know its identity.
+(Note that the content of the <tt class="symbol">item-identifier</tt> element
+is designed to match up with that in the mapping for organizations.)
+</p>
+
+
+<p>
+The second <tt class="symbol">topic</tt> element is mostly straightforward.
+Notice how we combined two columns into a single topic name. Also note
+how we don't need to specify a datatype for the phone occurrence type
+since it's just a string. The <tt class="symbol">player</tt> element is used
+to create an association from this topic (of type
+<tt class="symbol">employed-by</tt>, where the person topic plays the role
+<tt class="symbol">employee</tt>). The <tt class="symbol">other</tt> element
+specifies the other role in the association (of type
+<tt class="symbol">employer</tt>), played by the topic we defined earlier
+with the id <tt class="symbol">employer</tt>. 
+</p>
+
+
+<p>
+And that's it. The result is that we get the following extra LTM:
+</p>
+
+
+<pre>[person1 : person = "Lars Marius Garshol"]
+   {person1, phone, [[+47 90215550]]}
+[person2 : person = "Geir Ove Gr&oslash;nmo"]
+[person3 : person = "Kofi Annan"]
+
+employed-by( org1 : employer, person1 : employee )
+employed-by( org1 : employer, person2 : employee )
+employed-by( org2 : employer, person3 : employee )
+</pre>
+
+
+
+
+
+<h2>
+<a name="N1010D">3. Advanced topics</a>
+</h2>
+
+
+
+<p>
+This section covers more advanced topics in DB2TM.
+</p>
+
+
+<h3>
+<a name="N10115">3.1. Other mapping functionality</a>
+</h3>
+
+
+
+<p>
+Some functionality of the DB2TM mapping was not covered in <a href="#sect-tutorial">section
+        6</a>, and so it will be briefly described here.
+For a full definition of the syntax of the mapping file, see the
+<a href="db2tm.rnc">DB2TM RELAX-NG schema</a>.
+</p>
+
+
+<h4>
+<a name="N10124">3.1.1. Scope support</a>
+</h4>
+
+
+
+<p>
+Scope is supported through the <tt class="symbol">scope</tt> attribute which
+can be used on the <tt class="symbol">topic-name</tt>,
+<tt class="symbol">occurrence</tt>, <tt class="symbol">player</tt>, and 
+<tt class="symbol">association</tt> (see 
+<a href="#sect-relation2association">section
+        3.1.2</a>) elements. An example of
+using the <tt class="symbol">scope</tt> attribute might be:
+</p>
+
+
+<pre>  &lt;relation name="nicknames.csv" columns="id nick"&gt;
+    &lt;topic&gt;
+      &lt;item-identifier&gt;#person${id}&lt;/item-identifier&gt;
+      &lt;topic-name scope="ex:nick"&gt;${nick}&lt;/topic-name&gt;
+    &lt;/topic&gt;
+  &lt;/relation&gt;</pre>
+
+
+<p>
+Here we use the <tt class="symbol">item-identifier</tt> to match up with the
+topics from the <tt class="symbol">people.csv</tt> file, and the
+<tt class="symbol">scope</tt> attribute as explained above. Note that the
+<tt class="symbol">scope</tt> attribute supports multiple topic references
+separated by whitespace.
+</p>
+
+
+
+<h4>
+<a name="sect-relation2association">3.1.2. Mapping relations to associations</a>
+</h4>
+
+
+
+<p>
+In some cases a relation does not map to topics of a particular type,
+but instead maps to associations of a particular type. An example of
+such a relation might be the <tt class="symbol">offices-in.csv</tt> file,
+which lists which countries the various organizations have offices in.
+The contents of this file are given below:
+</p>
+
+
+<pre>ORGANIZATION;COUNTRY
+1;578
+1;826
+2;840
+2;756
+3;578</pre>
+
+
+<p>
+To map this file into the topic map we would use the following
+<tt class="symbol">relation</tt> mapping:
+</p>
+
+
+<pre>  &lt;relation name="offices-in.csv" columns="organization country"&gt;
+    &lt;topic id="organization"&gt;
+      &lt;item-identifier&gt;#org${organization}&lt;/item-identifier&gt;
+    &lt;/topic&gt;
+
+    &lt;topic id="country"&gt;
+      &lt;subject-identifier
+       &gt;http://psi.oasis-open.org/iso/3166/#${country}&lt;/subject-identifier&gt;
+    &lt;/topic&gt;
+
+    &lt;association type="ex:has-offices-in"&gt;
+      &lt;role type="ex:organization" player="#organization"/&gt;
+      &lt;role type="ex:country" player="#country"/&gt;
+    &lt;/association&gt;
+  &lt;/relation&gt;</pre>
+
+
+<p>
+Note that it's possible to use the same child elements inside
+<tt class="symbol">association</tt> as inside <tt class="symbol">topic</tt>. If
+these elements occur a topic reifying the association will be created,
+and the topic characteristics assigned to the reifying topic.
+</p>
+
+
+
+
+<h3>
+<a name="N10177">3.2. Virtual columns</a>
+</h3>
+
+
+
+<p>
+Sometimes the values in the database are not exactly as one would like
+them to be in the topic map, and for these cases DB2TM offers what we
+call "virtual columns". These are essentially new columns created by
+mapping the values from an existing column either using a mapping
+table or a function.
+</p>
+
+
+<h4>
+<a name="N1017F">3.2.1. Mapping tables</a>
+</h4>
+
+
+
+<p>
+The simplest way to map values is to use a mapping table, which is
+useful for handling special codes and IDs which you do not want in
+your database. Let's say that the <tt class="symbol">organizations.csv</tt>
+file contained an extra column, like this:
+</p>
+
+
+<pre>ID;NAME;WEBSITE;TYPE
+1;Ontopia;http://www.ontopia.net;C
+2;United Nations;http://www.un.org;O
+3;Bouvet;http://www.bouvet.no;C</pre>
+
+
+<p>
+The <tt class="symbol">TYPE</tt> column here tells us what type of
+organization we are dealing with, and the choices are
+<tt class="symbol">O</tt> (meaning organization) and <tt class="symbol">C</tt>
+(meaning company). However, these codes do not occur in the topic map,
+where these topic types are identified with the PSIs
+<tt class="symbol">http://example.org/organization</tt> and
+<tt class="symbol">http://example.org/company</tt>. So how to do the mapping?
+The solution is to use a mapping table that translates the codes into
+the correct typing topics, as shown below.
+</p>
+
+
+<pre>
+&lt;relation name="organizations.csv" columns="id name url type"&gt;
+  &lt;mapping-column column='type' name='typepsi'&gt;
+    &lt;map from='C' to='company'/&gt;
+    &lt;map from='O' to='organization'/&gt;
+  &lt;/mapping-column&gt;
+
+  &lt;topic id='type'&gt;
+    &lt;subject-identifier&gt;http://example.org/${typepsi}&lt;/subject-identifier&gt;
+  &lt;/topic&gt;
+
+  &lt;topic type="#type"&gt;
+    &lt;item-identifier&gt;#org${id}&lt;/item-identifier&gt;
+    &lt;topic-name&gt;${name}&lt;/topic-name&gt;
+    &lt;occurrence type="ex:homepage"&gt;${url}&lt;/occurrence&gt;
+  &lt;/topic&gt;
+&lt;/relation&gt;
+</pre>
+
+
+<p>
+This creates a new virtual column with the name
+<tt class="symbol">typepsi</tt>, which will contain
+<tt class="literal">company</tt> if the value in <tt class="symbol">type</tt> is
+<tt class="literal">C</tt> and <tt class="literal">organization</tt> if it is
+<tt class="literal">O</tt>. The mapping of the <tt class="symbol">type</tt> topic
+then converts this into the correct topic type, and the reference from
+the next <tt class="symbol">topic</tt> element makes a topic of the correct
+type.
+</p>
+
+
+
+<h4>
+<a name="sect-function-column">3.2.2. Functional columns</a>
+</h4>
+
+
+
+<p>
+Sometimes the mapping from the values you have to the values you want
+is more complicated, and in these cases you can use a Java method to
+do the mapping. Let's imagine, for example, that the people
+maintaining the database of organizations don't always bother to put
+in correct URLs, so that some of the rows are incorrect, as shown in
+the example below.
+</p>
+
+
+<pre>ID;NAME;WEBSITE
+1;Ontopia;http://www.ontopia.net
+2;United Nations;http://www.un.org
+3;Bouvet;http://www.bouvet.no
+4;OfficeNet;www.officenet.no</pre>
+
+
+<p>
+In this case, a mapping table is not going to help, but we can easily
+implement the correction we need in Java. All that's needed is
+something like this:
+</p>
+
+
+<pre>package net.ontopia.utils;
+
+// WARNING: this class does not actually exist in Ontopia!
+public class ExampleUtils {
+
+  public static String correctURI(String baduri) {
+    if (!baduri.startsWith("http://"))
+      return "http://" + baduri;
+    else
+      return baduri; // not so bad, after all
+  }
+  
+}</pre>
+
+
+<p>
+We can now use this method (note that it is static) from the DB2TM
+configuration as follows:
+</p>
+
+
+<pre>
+&lt;relation name="organizations.csv" columns="id name url"&gt;
+  &lt;function-column name='goodurl' 
+     method='net.ontopia.utils.ExampleUtils.correctURI'&gt;
+    &lt;param&gt;${url}&lt;/param&gt;
+  &lt;/function-column&gt;
+
+  &lt;topic id='type'&gt;
+    &lt;subject-identifier&gt;http://example.org/${typepsi}&lt;/subject-identifier&gt;
+  &lt;/topic&gt;
+
+  &lt;topic type="#type"&gt;
+    &lt;item-identifier&gt;#org${id}&lt;/item-identifier&gt;
+    &lt;topic-name&gt;${name}&lt;/topic-name&gt;
+    &lt;occurrence type="ex:homepage"&gt;${goodurl}&lt;/occurrence&gt;
+  &lt;/topic&gt;
+&lt;/relation&gt;
+</pre>
+
+
+<p>
+This will produce a topic map where the topic for OfficeNet will
+have the URI <tt class="symbol">http://www.officenet.no</tt>. Note that it is
+possible to pass static parameters to the methods by simply giving
+the parameter values in the <tt class="symbol">param</tt> element instead of
+a column reference.
+</p>
+
+
+
+
+<h3>
+<a name="N101E1">3.3. Supported data sources</a>
+</h3>
+
+
+
+<p>
+DB2TM currently supports two kinds of data sources: CSV files and JDBC
+connections. This section describes both in more detail.
+</p>
+
+
+<h4>
+<a name="N101E9">3.3.1. CSV data sources</a>
+</h4>
+
+
+
+<p>
+CSV data sources are configured with the <tt class="symbol">csv</tt> element,
+which represents a <em>directory</em> containing a set of
+CSV files. The attributes accepted by this element are listed in the
+table below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Attribute</th><th class="dbTableHeaderEntry">Meaning</th><th class="dbTableHeaderEntry">Required?</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">path</td><td class="dbTableEntry">The path to the directory containing the CSV files. The
+    path is relative to the location of the XML file.</td><td class="dbTableEntry">Yes</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">encoding</td><td class="dbTableEntry">The character encoding of the CSV files. If not specified
+    it defaults to the platform default.</td><td class="dbTableEntry">No</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">separator</td><td class="dbTableEntry">The character separating entries in a line in a CSV file.
+    Default is semicolon (;).</td><td class="dbTableEntry">No</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">quoting</td><td class="dbTableEntry">The character used to quote text strings in the CSV files.
+    Default is doublequote (").</td><td class="dbTableEntry">No</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">ignoreFirstLines</td><td class="dbTableEntry">The number of lines to ignore at the beginning of the file.
+    Defaults to 0.</td><td class="dbTableEntry">No</td>
+</tr>
+</table>
+
+
+<p>Note that quoting characters in text strings are escaped by
+repeating them. In other words, if you use (") to quote your strings,
+and you want to put a " in a string, write it as "". Below is an
+example:</p>
+
+
+<pre>
+40;"Foo";"This is a ""real"" example"
+</pre>
+
+
+
+<h4>
+<a name="N10255">3.3.2. JDBC data sources</a>
+</h4>
+
+
+
+<p>
+JDBC data sources are configured with the <tt class="symbol">jdbc</tt>
+element, which represents a database containing a set of tables.  The
+attributes accepted by this element are listed in the table below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Attribute</th><th class="dbTableHeaderEntry">Meaning</th><th class="dbTableHeaderEntry">Required?</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">propfile</td><td class="dbTableEntry">The path to the RDBMS properties file that tells DB2TM how
+    to connect to the database. This property file uses the same set
+    of properties as the Ontopia RDBMS backend does (except that it
+    doesn't make use of all the properties that tune the backend cache
+    etc). The path is relative to the location of the XML file. (If no
+    file is found, DB2TM tries to load it from the classpath.)</td><td class="dbTableEntry">Yes</td>
+</tr>
+</table>
+
+
+<p>
+Note that the JDBC source requires a number of things in order to
+work. The JDBC drivers you wish to use have to be on the classpath,
+the database server has to be running, the username/password has to be
+correct, etc.
+</p>
+ 
+
+
+
+<h3>
+<a name="sect-api">3.4. Using the API</a>
+</h3>
+
+
+
+<p> 
+In addition to the command-line interface DB2TM also has an API
+that can be used to run conversions and synchronizations in other
+contexts than on the command-line. This API is very simple and
+consists of the single class
+<tt class="classname">net.ontopia.topicmaps.db2tm.DB2TM</tt>, which has two
+methods: <tt class="methodname">add</tt> and
+<tt class="methodname">sync</tt>. The <tt class="methodname">add</tt> method
+can run conversions given a string reference to a configuration file
+and a topic map. The <tt class="methodname">sync</tt> method can perform
+synchronizations given a string reference to a configuration file and
+a topic map to synchronize against.  
+</p>
+
+
+<p>
+A command-line Java program that runs the same conversion that we saw
+in <a href="#sect-basics">section
+        2.1</a> could be written as follows:
+</p>
+
+
+<pre>import net.ontopia.topicmaps.core.TopicMapIF;
+import net.ontopia.topicmaps.utils.ImportExportUtils;
+import net.ontopia.topicmaps.db2tm.DB2TM;
+
+public class Convert {
+
+  public static void main(String argv[]) throws java.io.IOException {
+    TopicMapIF topicmap = ImportExportUtils.getReader("ontology.ltm").read();
+    DB2TM.add("organizations.xml", topicmap);
+    ImportExportUtils.getWriter("tm.ltm").write(topicmap);
+  }
+}</pre>
+
+
+
+<p>
+Here is a simple command-line Java program that performs synchronization:
+</p>
+
+
+<pre>import net.ontopia.topicmaps.core.TopicMapIF;
+import net.ontopia.topicmaps.utils.ImportExportUtils;
+import net.ontopia.topicmaps.db2tm.DB2TM;
+
+public class Synchronize {
+
+  public static void main(String argv[]) throws java.io.IOException {
+    TopicMapIF topicmap = ImportExportUtils.getReader("ontology.ltm").read();
+    DB2TM.sync("organizations.xml", topicmap);
+    ImportExportUtils.getWriter("tm.ltm").write(topicmap);
+  }
+}</pre>
+
+
+
+
+<h3>
+<a name="N102B4">3.5. Using the command-line tool with RDBMS topic maps</a>
+</h3>
+
+
+
+<p>
+So far, the examples have shown only running DB2TM against topic maps
+stored in files. In practice, most topic maps will be stored using the
+RDBMS backend, and so we will here show how to use it with such topic
+maps. When using the RDBMS backend, there are two pieces of
+information that the command-line tool needs:
+</p>
+
+
+<ul>
+<li>
+    
+<p>The RDBMS properties file, which tells DB2TM how to connect
+    to the database.</p>
+  
+</li>
+<li>
+    
+<p>The ID of the within the database topic map to
+    update.</p>
+  
+</li>
+</ul>
+
+
+<p>
+There is a special URI syntax that can be used in place of a file
+reference to provide the topic map ID, and a system property which can
+be used to reference the RDBMS properties file. Using both would look
+like this:
+</p>
+
+
+<pre>java -Xmx512M -Dnet.ontopia.topicmaps.impl.rdbms.PropertyFile=<em>rdbms.props</em> net.ontopia.topicmaps.db2tm.Execute --tm=x-ontopia:tm-rdbms:<em>id</em> sync <em>mapping-file.xml</em>
+</pre>
+
+
+
+
+
+<h2>
+<a name="N102DD">4. Synchronization</a>
+</h2>
+
+
+
+<p>
+So far, we have only discussed how to use DB2TM for conversion, but if
+the data source you are converting from is going to continue to be
+updated, then this is not very interesting. However, after the initial
+conversion DB2TM can also update your topic map so that it remains in
+sync with the data source.
+</p>
+
+
+<h3>
+<a name="N102E5">4.1. Basics</a>
+</h3>
+
+
+
+<p>
+Let's say that we change the LTM topic map we produced in <a href="#sect-basics">section
+        2.1</a> to the following:
+</p>
+
+
+<pre>[org1 : id1 = "Ontopia"]
+   {org1, id2, "http://www.ontopia.net"}
+located-in(ontopia : located, oslo : location)   
+[org2 : id1 = "United Nations"]
+   {org2, id2, "http://www.un.org"}
+[org3 : id1 = "Bouvet"]
+   {org3, id2, "http://www.bouvet.no"}</pre>
+
+
+<p>
+The change here is that we added an association for Ontopia. At the
+same time, we've changed the CSV file as follows:
+</p>
+
+
+<pre>ID;NAME;WEBSITE
+1;Ontopia AS;http://www.ontopia.net
+3;Bouvet;http://www.bouvet.no
+4;OfficeNet;http://www.officenet.no</pre>
+
+
+<p>
+Here we have deleted the United Nations, added OfficeNet, and changed
+Ontopia's name to end in "AS". We now run DB2TM with this command:
+</p>
+
+
+<pre>java net.ontopia.topicmaps.db2tm.Execute --tm=tm.ltm --out=sync.ltm sync organizations.xml</pre>
+
+
+<p>
+The result is the LTM fragment below:
+</p>
+
+
+
+
+<pre>[org1 : id1 = "Ontopia AS"]
+   {org1, id2, [[http://www.ontopia.net]]}
+located-in(org1 : located, oslo : location )   
+[org3 : id1 = "Bouvet"]
+   {org3, id2, [[http://www.bouvet.no]]}
+[org4 : id1 = "OfficeNet"]
+   {org4, id2, [[http://www.officenet.no]]}</pre>
+
+
+<p>
+As you can see, we have gotten all the changes in the CSV file into
+the topic map without losing any of the changes we made in the LTM.
+This is because DB2TM only synchronizes the topics and characteristics
+it has mappings for, and it leaves everything else alone. There is one
+problem, however, which we'll discuss in the next section.
+</p>
+
+
+
+<h3>
+<a name="sect-changelog">4.2. Changelog tables</a>
+</h3>
+
+
+
+<p>
+A problem with the approach taken in the previous section is that it
+requires reading the entire table when synchronizing. Of course, when
+there are only 3 rows, this isn't much of a problem, but when there
+are, say, 50,000 rows, things are rather different. Rescanning the
+entire table gets costly in this case, and so DB2TM provides an
+alternative approach, which is to use a changelog table.
+</p>
+
+
+<p>
+A changelog table is basically a table that contains an entry for
+every change made to the master table. For DB2TM to be able to make
+use of the table it has to contain a primary key reference to the
+changed row in the master table, and a column by which the changes can
+be ordered. It can contain other information as well, but DB2TM will
+ignore it.
+</p>
+
+
+<p>
+Let's assume that we want to repeat what we did in the previous
+section, but this time using a changelog table. To do that we need to
+make a new CSV file which describes the changes. This file might look
+as follows:
+</p>
+
+
+<pre>ID;CHANGE;ORDER
+2;D;1
+1;C;2
+4;A;3
+</pre>
+
+
+<p>
+The first row here refers to the row with ID 2 from <a href="#sect-basics">section
+        2.1</a> (that is, to the United Nations row), and the
+second column says it was deleted. The last column is there to tell us
+in what order the changes happen. We are using numbers here, but
+timestamps would work just as well, as long as we can sort on the
+values. The second row refers to Ontopia, and says the row was changed
+somehow. (The name changed.) Finally, the third row says that a new
+row with ID 4 has been added. This gives DB2TM the information it
+needs to do the updates correctly without reading the entire table.
+(Note that the <tt class="symbol">CHANGE</tt> column is ignored, since
+version 5.2.0.)
+</p>
+
+
+<p>
+So what would we need to do to make use of this? The only thing we
+need to change is that we have to add the following inside the
+<tt class="symbol">relation</tt> element, at the very end:
+</p>
+
+
+<pre>
+&lt;changelog table="organization-changes.csv"
+           primary-key="ID"
+           order-column="ORDER"/&gt;
+</pre>
+
+
+<p>
+This element tells DB2TM where the changelog is, which column contains
+the primary key reference, and what column to order the changes by.
+</p>
+
+
+<p>
+Running the sync again would give the same result as in the previous
+section, except that changelog tables are not supported for the CSV
+data source. We have used CSV to explain it here for simplicity, but
+currently you need to use a database for this to work. (The rationale
+is that the speedup for a CSV file is very limited, since one has to
+read the entire CSV file even if only a few rows have changed.)
+</p>
+
+
+
+<h3>
+<a name="N10336">4.3. Handling a single changelog for multiple tables</a>
+</h3>
+
+
+
+<p>
+Some systems use a single changelog table for all tables, which causes
+difficulties, because it means that not all rows are relevant for each
+table. Further, it often means that primary key values are encoded in
+a single column and need to be parsed.
+</p>
+
+
+<p>
+Let's assume that we have a changelog table with the following columns:  
+</p>
+
+
+<dl>
+<dt>table</dt>
+<dd>
+      
+      
+<p>Which table the change occurred in.</p>
+    
+</dd>
+<dt>keys</dt>
+<dd>
+      
+      
+<p>The primary key, encoded as a single string value. The
+      scheme used is <tt class="symbol">colname1=value|colname2=value|...</tt>
+</p>
+    
+</dd>
+<dt>timestamp</dt>
+<dd>
+      
+      
+<p>The time the change was made.</p>
+    
+</dd>
+<dt>changetype</dt>
+<dd>
+      
+      
+<p>Describes the kind of change: 'I' for insert of new row,
+      'U' for update, and 'D' for delete. This is not needed by
+      DB2TM.</p>
+    
+</dd>
+</dl>
+
+
+<p>
+To be able to set up a changelog for the organization table we need to
+fix both issues. This can be done as follows:
+</p>
+
+
+<pre>
+&lt;changelog table="organization-changes.csv"
+           primary-key="PARSED_ID"
+           order-column="TIMESTAMP"
+           condition="table='organization'"&gt;
+  &lt;expression-column name="PARSED_ID"&gt;
+    &lt;!-- turns 'columnname=value' into 'value' --&gt; 
+    substring(KEYS, position('=', KEYS) + 1)
+  &lt;/expression-column&gt;
+&lt;/changelog&gt;
+</pre>
+
+
+<p>
+The <tt class="symbol">condition</tt> attribute filters out changes to tables
+other than the one we're interested in. The
+<tt class="symbol">expression-column</tt> takes care of the parsing of the
+primary key values so that DB2TM can join the changelog table with the
+data table.
+</p>
+
+
+
+<h3>
+<a name="N10386">4.4. Secondary relations</a>
+</h3>
+
+
+
+<p>
+Let's say we had another table with information about our
+organizations, for example references to external web sites that have
+articles about them. Each row in this table would map to an
+<tt class="symbol">article-about</tt> occurrence, and the table might look
+like this:
+</p>
+
+
+<pre>ID;URL
+1;http://www.ligent.net/company.jsp?id=107&amp;bundle=162
+1;http://www.techquila.com/topicmaps/tmworld/11770.html
+1;http://www.knowledge-synergy.com/partner/partner.html#ontopia
+2;http://en.wikipedia.org/wiki/United_Nations
+2;http://topics.nytimes.com/top/reference/timestopics/organizations/u/united_nations/index.html?inline=nyt-org</pre>
+
+
+<p>
+Doing a conversion from this would be straightforward, but on doing a
+sync we would run into problems. There are no articles about Bouvet in
+the table, and so DB2TM would delete Bouvet from the topic map, since
+the row for Bouvet is gone. Of course, this is wrong, but DB2TM does
+not know that the main organization table is where organizations are
+stored, and not here. So we need to tell it, and this is what the
+<tt class="symbol">primary</tt> attribute is for. Using that, the mapping
+would look as follows:
+</p>
+
+
+<pre>
+  &lt;relation name="articles.csv" columns="id url"&gt;
+    &lt;topic primary="false"&gt;
+      &lt;item-identifier&gt;#org${id}&lt;/item-identifier&gt;
+      &lt;occurrence type="ex:article-about"&gt;${url}&lt;/occurrence&gt;
+    &lt;/topic&gt;
+  &lt;/relation&gt;
+</pre>
+
+
+
+<h3>
+<a name="N1039E">4.5. Incomplete mappings</a>
+</h3>
+
+
+
+<p>
+In some cases the table you are mapping may not contain all topics of
+the type they map to, and in this case the rescanning strategy can get
+it wrong. Let's say that, for whatever reason, in addition to the
+organizations coming from the CSV file we need to add some manually.
+If we did this, the first sync would delete all the manually added
+organizations, because they are not found in the CSV file, and so the
+rescan assumes they have been deleted.
+</p>
+
+
+<p>
+To solve this, you need to tell DB2TM which topics in the topic map
+were created from the CSV file. One way to do this is to include a
+unary association in the mapping that says the organization comes from
+the database. This would mean that every topic created from the CSV
+file would look like this:
+</p>
+
+
+<pre>[ontopia : organization = "Ontopia"]
+stored-in-db(ontopia : stored)</pre>
+
+
+<p>
+This is enough that we could distinguish these topics from the
+manually added ones, if we write the mapping like this:
+</p>
+
+
+<pre>
+    &lt;topic type="ex:organization"&gt;
+      &lt;extent query="direct-instance-of($T, ex:organization),
+                     ex:stored-in-db($T : ex:stored)?"/&gt;
+      &lt;item-identifier&gt;#org${id}&lt;/item-identifier&gt;
+      &lt;topic-name&gt;${name}&lt;/topic-name&gt;
+      &lt;occurrence type="ex:homepage"&gt;${url}&lt;/occurrence&gt;
+
+      &lt;!-- static unary marker association --&gt;
+      &lt;player atype="ex:stored-in-db" rtype="ex:stored"/&gt;      
+    &lt;/topic&gt;
+</pre>
+
+
+<p>
+The <tt class="symbol">extent</tt> element defines a query that produces all
+topics in the topic map created from this table mapping. This enables
+DB2TM to recognize manually created organization topics, and not
+delete them.
+</p>
+
+
+
+
+
+<h3>
+<a name="N103BB">4.6. Synchronization in web applications</a>
+</h3>
+
+
+
+<p>
+In general it is not recommended to use the command-line tool to
+synchronize topic maps while a web application is running, since
+Ontopia's object cache inside the web application will not notice
+changes made by the command-line tool. (This will change once
+clustering support arrives.) Instead, the synchronization should be
+run from inside the web server. There are three ways to do this:
+</p>
+
+
+<ul>
+<li>
+    
+<p>Set up the synchronization servlet to run the
+    synchronization at regular intervals. The servlet is documented in
+    the javadoc for the DB2TM package.</p>
+  
+</li>
+<li>
+    
+<p>Use the Ontopoly plug-in to run the synchronization
+    manually.  This plug-in is not yet part of Ontopia, but is
+    available on request.</p>
+  
+</li>
+<li>
+    
+<p>Write your own code to run the synchronization using the
+    DB2TM API. For more information, see <a href="#sect-api">section
+        3.4</a>.</p>
+  
+</li>
+</ul>
+
+
+
+
+
+
+<h2>
+<a name="sect-logging">5. Logging</a>
+</h2>
+
+
+
+<p>DB2TM can produce a lot of logging information if you tell it to
+do so. Set the <tt class="symbol">net.ontopia.topicmaps.db2tm</tt> logging
+category to the <tt class="symbol">DEBUG</tt> logging level. Most of the
+logging messages is produced by the
+<tt class="symbol">net.ontopia.topicmaps.db2tm.Processor</tt> class. A lot of
+logging is made at this level can be vast because of the huge number
+of modications typically made to the topic map during processing.</p>
+
+
+<p>The information logged is a little terse and can be a little hard
+to interpret. The table below is an attempt at explaining what each of
+the messages mean.</p>
+
+
+<h3>
+<a name="sect-logging-operations-relation">5.1. Relation operations</a>
+</h3>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Log message</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Adding tuples from data source &lt;datasource&gt;</td><td class="dbTableEntry">Relations and their tuples are being read from the given data source.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">ignoring relation: &lt;relation&gt;</td><td class="dbTableEntry">Ignored relation as there was no &lt;relation&gt; definition for it.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">adding relation: &lt;relation&gt;</td><td class="dbTableEntry">Reading tuples from the given relation and adding them according to its &lt;relation&gt; definition.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">removing relation: &lt;relation&gt;</td><td class="dbTableEntry">Reading tuples from the given relation and removing them according to its &lt;relation&gt; definition.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">synchronizing relation: &lt;relation&gt; type: &lt;synchronization-type&gt;</td><td class="dbTableEntry">Reading tuples from the given relation and synchronizing them according to its &lt;relation&gt; definition. The synchronization type can be either <tt class="symbol">2</tt> (rescan) or <tt class="symbol">4</tt> (changelog).</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">&lt;number-of-tuples&gt; tuples, &lt;elapsed-time&gt; ms.</td><td class="dbTableEntry">Processed the given number of tuples in the given number of milliseconds.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">done: &lt;number-of-tuples&gt;, &lt;elapsed-time&gt; ms.</td><td class="dbTableEntry">Processed the given number of tuples from all relations in the data source in the given number of milliseconds.</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="sect-logging-operations-tuple">5.2. Tuple operations</a>
+</h3>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Log message</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">a(1|2|3)</td><td class="dbTableEntry">Adds a table row containing three values into the topic map. The tuple will be processed according to the rules of the current &lt;relation&gt; definition.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">r(1|2|3)</td><td class="dbTableEntry">Removes a table row containing three values into the topic map. The tuple will be processed according to the rules of the current &lt;relation&gt; definition.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">u(1|2|3)</td><td class="dbTableEntry">Updating a table row containing three values against the topic map. The tuple will be processed according to the rules of the current &lt;relation&gt; definition.</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="sect-logging-operations-entity">5.3. Entity and characteristics operations</a>
+</h3>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Log message</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">-T &lt;topic&gt;</td><td class="dbTableEntry">Removing a topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">&gt;T &lt;topic&gt;</td><td class="dbTableEntry">Removing characteristics defined in this &lt;relation&gt; definition from a non-primary topic entity. This will leave any other characteristics alone.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">+A &lt;association&gt; &lt;association-type&gt;</td><td class="dbTableEntry">Added the association of the given type.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">=A &lt;association&gt;</td><td class="dbTableEntry">The association already existed, so instead of creating a new one this one was reused.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">-A &lt;association&gt; &lt;association-type&gt;</td><td class="dbTableEntry">Removing an association.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">+P &lt;association&gt; &lt;association-type&gt;</td><td class="dbTableEntry">Added the association of the given type (via &lt;player&gt; defintion).</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">=P &lt;association&gt;</td><td class="dbTableEntry">The association already existed, so instead of creating a new one this one was reused (via &lt;player&gt; defintion).</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">-P &lt;association&gt; : &lt;association-type&gt;</td><td class="dbTableEntry">Removing an association (via &lt;player&gt; defintion).</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">&gt;A &lt;association&gt;</td><td class="dbTableEntry">Association is not primary entity, so we can't remove it here.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">+R &lt;role-player&gt; : &lt;role-type&gt;</td><td class="dbTableEntry">Added an association role with the given role player and role type.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">=R &lt;role-player&gt; : &lt;role-type&gt;</td><td class="dbTableEntry">The association role already existed, so instead of creating a new one this one was reused.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">-R &lt;role-player&gt; : &lt;role-type&gt;</td><td class="dbTableEntry">Removed an association role with the given role player and role type. The association role belongs to the association logged a little earlier.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">?R &lt;role-player&gt; : &lt;role-type&gt;</td><td class="dbTableEntry">Could not add role because role player retrieved from tuple was null.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">-A-reified &lt;topic&gt; -&gt; &lt;association&gt; &lt;association-type&gt;</td><td class="dbTableEntry">Removed the given association and its reifier topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">+N &lt;topic&gt; &lt;topic-name&gt;</td><td class="dbTableEntry">Added the topic name.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">=N &lt;topic&gt; : &lt;topic-name&gt;</td><td class="dbTableEntry">The topic name already existed, so instead of creating a new one this one was reused.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">-N &lt;topic&gt; : &lt;topic-name&gt;</td><td class="dbTableEntry">Removing a topic name.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">+O &lt;topic&gt; &lt;occurrence&gt;</td><td class="dbTableEntry">Added the occurrence.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">=O &lt;topic&gt; : &lt;occurrence&gt;</td><td class="dbTableEntry">The occurrence already existed, so instead of creating a new one this one was reused.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">-O &lt;topic&gt; : &lt;occurrence&gt;</td><td class="dbTableEntry">Removing an occurrence.</td>
+</tr>
+</table>
+
+
+
+
+
+
+<h2>
+<a name="sect-tutorial">6. Frequently Asked Questions (FAQ)</a>
+</h2>
+
+
+
+<h3>
+<a name="N10568">6.1. How do I add a new column to an existing relation?</a>
+</h3>
+
+
+
+<p>Lets say that we have a table called
+<tt class="symbol">organizations</tt>, with the mapping below, and that we
+have already added the contents of this relation into the topic
+map.</p>
+
+
+<pre>  &lt;relation name="organizations" columns="id name url"&gt;
+    &lt;topic type="ex:organization"&gt;
+      &lt;subject-identifier&gt;http://example.org/organization/${id}&lt;/subject-identifier&gt;
+      &lt;topic-name&gt;${name}&lt;/topic-name&gt;
+      &lt;occurrence type="ex:homepage"&gt;${url}&lt;/occurrence&gt;
+    &lt;/topic&gt;
+  &lt;/relation&gt;</pre>
+
+
+<p>This means that all the data in the relation have already been
+mapped to topics and characteristics in the topic map. The problem is
+now that we cannot just add a new column to the mapping as DB2TM
+would not be able to detect that a new column had been added. DB2TM
+will not detect the new column and the data in the column will not be
+added to the topic map before the individual rows in gets updated and
+the row contents is reread through synchronization.</p>
+
+
+<p>Fortunately there is a way to get DB2TM to read the content of
+the new column. To do this we need to create a new temporary mapping
+file with just this single relation. We'll use this new mapping file
+just for the purpose of adding the characteristic(s) mapped to the new
+column.</p>
+
+
+<p>Lets say that the <tt class="symbol">organizations</tt> table has a new
+column called <tt class="symbol">phone</tt> and that we want to map this
+column to an internal occurrence of type
+<tt class="symbol">ex:phone</tt>. The <tt class="symbol">organizations</tt> table
+has one row per organization, so there is a <tt class="symbol">topic</tt>
+element mapping these organizations to topics in the topic map. The
+temporary mapping file also needs this element, but this time with
+only two fields: one field to identify the topic and one field to add
+the new characteristic. In our case the relation mapping should look
+like this:</p>
+
+
+<pre>  &lt;relation name="organizations" columns="id name url phone"&gt;
+    &lt;topic&gt;
+      &lt;subject-identifier&gt;http://example.org/organization/${id}&lt;/subject-identifier&gt;
+      &lt;occurrence type="ex:phone"&gt;${phone}&lt;/occurrence&gt;
+    &lt;/topic&gt;
+  &lt;/relation&gt;</pre>
+
+
+<p>Note that the new <tt class="symbol">phone</tt> is now in the list of
+table columns. We now also have a <tt class="symbol">subject-identifier</tt>
+field so that we can look up the existing topic, and finally the
+<tt class="symbol">occurrence</tt> field to add the new internal
+occurrence.</p>
+
+
+<p>The prefix declarations and the data sources can be the same as
+in the original mapping file, so just copy and paste those from the
+original mapping file.</p>
+
+
+<dl>
+<dt class="warning">Warning</dt>
+<dd>
+<p>Before we proceed make sure that you shut down your
+application so that cache inconsistency issues do not
+arise.</p>
+</dd>
+</dl>
+
+
+<p>We can now have DB2TM add the contents of the new column to the
+topic map by running the following command.</p>
+
+
+<pre>  java net.ontopia.topicmaps.db2tm.Execute --relations=organizations add temporary.xml</pre>
+
+
+<p>The organizations in the topic map should now have their
+respective phone numbers added. The next thing we need to do is update
+the original mapping file. Add the new <tt class="symbol">phone</tt> column
+to the list of table columns and the new <tt class="symbol">occurrence</tt>
+field to the relation mapping.</p>
+
+
+<pre>  &lt;relation name="organizations" columns="id name url phone"&gt;
+    &lt;topic type="ex:organization"&gt;
+      &lt;subject-identifier&gt;http://example.org/organization/${id}&lt;/subject-identifier&gt;
+      &lt;topic-name&gt;${name}&lt;/topic-name&gt;
+      &lt;occurrence type="ex:homepage"&gt;${url}&lt;/occurrence&gt;
+      &lt;occurrence type="ex:phone"&gt;${phone}&lt;/occurrence&gt;
+    &lt;/topic&gt;
+  &lt;/relation&gt;</pre>
+
+
+<p>We are now done with the temporary mapping file and it can be
+discarded. The application can now be restarted.</p>
+
+
+
+
+<h3>
+<a name="N105BA">6.2. How to delete objects that were added to the topic map by DB2TM?</a>
+</h3>
+
+
+
+<p>The <tt class="symbol">net.ontopia.topicmaps.cmdlineutils.TologDelete</tt>
+command-line utility is very useful for this purpose. Just hand it a
+tolog query and it will delete the objects returned by the
+query.</p>
+
+
+<p>Alternatively, you can use tolog updates in the query plug-in in
+Omnigator, where you just run a DELETE statement to remove whatever
+you want to remove.</p>
+
+
+
+<h3>
+<a name="N105C9">6.3. How do I remove data in the topic map that originates from an old column?</a>
+</h3>
+
+
+
+<p>Use the tolog delete utility described above.</p>
+
+
+
+
+<h3>
+<a name="N105D2">6.4. Oops, I made a mistake in the DB2TM mapping. How do I repair the topic map?</a>
+</h3>
+
+
+
+<p>Doing a <tt class="symbol">rescan</tt> or <tt class="symbol">add</tt> on the
+relation together with the tolog delete utility mentioned above will
+allow you to repair most mistakes. Note that you can override the
+synchronization type without modifying the mapping file by passing the
+<tt class="symbol">--force-rescan</tt> option to the
+<tt class="symbol">net.ontopia.topicmaps.db2tm.Execute</tt> command line
+utility.</p>
+
+
+
+
+
+
+</body>
+</html>

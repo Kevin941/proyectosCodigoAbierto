@@ -1,0 +1,2924 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>tolog</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>tolog</h1>
+<h2 class="subtitle">Language tutorial</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>
+This document is a tutorial introduction to the tolog topic map query
+language. It explains how to use all the features of the language, as
+defined in version 1.2.
+</p>
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10021">1. Introduction</a>
+</li>
+<ul>
+<li>
+<a href="#N1002C">1.1. Predicates and variables</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1011D">1.2. Dynamic association predicates</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10181">1.3. AND</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101AC">1.4. Projection</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101CA">1.5. Counting</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101E5">1.6. Sorting</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N101FE">2. Advanced features</a>
+</li>
+<ul>
+<li>
+<a href="#N10206">2.1. Dynamic occurrence predicates</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10292">2.2. OR</a>
+</li>
+<ul>
+<li>
+<a href="#sect-nonfailing-clause">2.2.1. Non-failing clauses</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N1034D">2.3. Using negation</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N103B8">2.4. Comparison predicates</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N103F1">2.5. Inference rules</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10468">2.6. The built-in predicates</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1062B">2.7. Paging</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N1066E">3. Identifiers</a>
+</li>
+<ul>
+<li>
+<a href="#sect-topic-ref">3.1. Referring to topics</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N106CE">3.2. URI prefixes</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N106F8">3.3. Modules</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10722">3.4. Scoping rules</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10747">4. Running tolog queries</a>
+</li>
+<ul>
+<li>
+<a href="#sect-plugin">4.1. The tolog plug-in</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10759">4.2. The 'tolog' tag library</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-api">4.3. Using the query processor API</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10796">4.4. Parameters</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#sect-updates">5. tolog updates</a>
+</li>
+<ul>
+<li>
+<a href="#N107DC">5.1. The DELETE statement</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10885">5.2. The INSERT statement</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N108BC">5.3. The UPDATE statement</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1091A">5.4. The MERGE statement</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10948">6. Further reading</a>
+</li>
+<ul></ul>
+</ul>
+
+
+
+
+
+
+
+<h2>
+<a name="N10021">1. Introduction</a>
+</h2>
+
+
+
+<p>
+tolog is a language for querying and updating topic maps, inspired by
+Datalog (a subset of Prolog) and SQL. Using tolog one can query a
+topic map in much the same way as a relational database can be queried
+with SQL.  It is possible to ask for all topics of a particular types,
+the names of all topics of a particular type in a particular scope,
+for all topics used as association role types, for all associations
+with more than two roles, and so on.
+</p>
+
+
+<p>
+This tutorial will walk the reader through the use of tolog step by
+step, and by the end of it all of tolog will have been covered.
+</p>
+
+
+<h3>
+<a name="N1002C">1.1. Predicates and variables</a>
+</h3>
+
+
+
+<p>
+tolog is a logic-based query language, which means that the basic
+operation is for the user to ask tolog in which cases a certain
+assertion holds true, and tolog will then respond with all the sets of
+values that make the assertion true.
+</p>
+
+
+<p>
+Assertions in tolog consist of <dfn>predicates</dfn>,
+which are relationships between sets of values. A predicate can be
+thought of as a table of all the sets of values that make it true, and
+querying is done by matching the query against the table, returning
+all sets of values that match.
+</p>
+
+
+<p>
+One tolog predicate is the one known as <tt class="symbol">instance-of</tt>,
+which is used to query the topic instance-topic type relationship. One
+query using this predicate might be:
+</p>
+
+
+<code>
+<pre>
+instance-of($TOPIC, $TYPE)?
+</pre>
+</code>
+
+
+<p>
+In this query there is only one predicate, and that has variables
+being passed as both of its parameters. This means that we want
+<em>all</em> combinations of values for these variables
+that make the assertion true. That is, we want all combinations of
+(topic, topic type) that are found in the topic map. If we ran this
+query against <tt>opera.ltm</tt>
+we might get a result like the following.
+</p>
+
+
+<p align="center">
+<b>Table 1.1. All topics and types</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">TOPIC</th><th class="dbTableHeaderEntry">TYPE</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">RAI</td><td class="dbTableEntry">organization</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">RAI</td><td class="dbTableEntry">TV company</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro Nuovo</td><td class="dbTableEntry">organization</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Casin&ograve; di San Remo</td><td class="dbTableEntry">organization</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Imperial Opera</td><td class="dbTableEntry">organization</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro La Pariola</td><td class="dbTableEntry">organization</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td><td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<p>
+This shows all topics that have a type, and for each topic, all of its
+types (which is why RAI appears twice; it is an instance of two
+types).  The actual table of results is several hundred lines long.
+</p>
+
+
+<p>
+Now, let's say we want to find all instances of the type
+<tt class="symbol">theatre</tt>. Recall that the previous query was as shown
+below.
+</p>
+
+
+<code>
+<pre>
+instance-of($TOPIC, $TYPE)?
+</pre>
+</code>
+
+
+<p>
+This gave us all (topic, type) combinations because we had variables
+as both parameters. In this case we don't want all possible types, we
+just want the <tt class="symbol">theatre</tt>, so we replace the variable by
+that particular type. This gives us the query below.
+</p>
+
+
+<code>
+<pre>
+instance-of($TOPIC, theatre)?
+</pre>
+</code>
+
+
+<p>
+Now we are asking for all values of <tt class="symbol">TOPIC</tt> that would
+make the above true; that is, we are asking for all instances of
+<tt class="symbol">theatre</tt>.
+</p>
+
+
+<p align="center">
+<b>Table 1.2. All theatres</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">TOPIC</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro Massimo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro Bellini</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro San Carlo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro La Pariola</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Acad&eacute;mie Royale de Musique</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro Pagliano</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<p>
+Similarly, should we want to know all types of which a topic is an
+instance we can replace the <tt class="symbol">TOPIC</tt> variable with a
+topic reference, and put in a variable as the second parameter, as
+shown below.
+</p>
+
+
+<code>
+<pre>
+instance-of(teatro-massimo, $TYPE)?
+</pre>
+</code>
+
+
+<p>
+When run, this query gives the following results.
+</p>
+
+
+<p align="center">
+<b>Table 1.3. All types of which Teatro Massimo is an instance</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">TYPE</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Theatre</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Organization</td>
+</tr>
+</table>
+
+
+<p>
+We get 'Theatre', as expected, but also 'Organization', which may be
+somewhat surprising. In the topic map the only type given for Teatro
+Massimo is <tt class="symbol">theatre</tt>, so what is
+<tt class="symbol">organization</tt> doing here? The answer is that
+<tt class="symbol">organization</tt> is defined as a supertype of
+<tt class="symbol">theatre</tt> in the topic map. This means that any
+instance of <tt class="symbol">theatre</tt> is also an instance of
+<tt class="symbol">organization</tt>. tolog knows this and makes use of the
+information to make Teatro Massimo an instance of both types.
+</p>
+
+
+<p>
+You should now be familiar with what a predicate is and what a
+variables. From this point on we'll look at how to combine predicates
+in more complex ways, more types of predicates, and also some ways of
+processing the results of query.
+</p>
+
+
+
+<h3>
+<a name="N1011D">1.2. Dynamic association predicates</a>
+</h3>
+
+
+
+<p>
+As we said above, a predicate represents a relationship, and because
+of this tolog allows topic map associations to be treated as
+predicates. In this case the name of the predicate is the name of the
+association type, and the values are the topics playing roles in
+associations of this type. Given this we might expect to be able to
+write the following query to find all operas composed by Puccini.
+</p>
+
+
+<code>
+<pre>
+composed-by(puccini, $OPERA)?
+</pre>
+</code>
+
+
+<p>
+However, this results in an error, because the tolog engine is not
+able to work out which association role is played by
+<tt class="symbol">puccini</tt> and which by the <tt class="symbol">OPERA</tt>.
+This must be given explicitly in the query as shown below.
+</p>
+
+
+<code>
+<pre>
+composed-by(puccini : composer, $OPERA : opera)?
+</pre>
+</code>
+
+
+<p>
+Here it is made explicit that we want to find out when
+<tt class="symbol">puccini</tt> plays the role <tt class="symbol">composer</tt> and
+when the <tt class="symbol">OPERA</tt> plays the role <tt class="symbol">opera</tt>.
+This syntax is <em>only</em> used for association
+predicates, not for any other type of predicate. The result is as
+shown below.
+</p>
+
+
+<p align="center">
+<b>Table 1.1. All operas composed by Puccini</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">OPERA</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Le Villi</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Madame Butterfly</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Tosca</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Turandot</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Manon Lescaut</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">La Boh&egrave;me</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<p>
+We can play around with the variables here in the same way as we did
+for the <tt class="symbol">instance-of</tt> predicate, and get all
+combinations of opera and composer, and all composers for a specific
+opera (say <tt class="symbol">tosca</tt>). This is done in exactly the same
+way, so we won't explain how here, but leave it as an exercise for the
+reader. See <a href="#sect-plugin">section
+        4.1</a> to learn how to run tolog
+queries in the Omnigator.
+</p>
+
+
+
+<h3>
+<a name="N10181">1.3. AND</a>
+</h3>
+
+
+
+<p>
+If we want to find all cities located in Italy we know that this is
+easy: we can just query the <tt class="symbol">located-in</tt> association
+type to find the city topics that have this association with the Italy
+topic. Similarly, if we want to find everyone born in a particular
+just query the <tt class="symbol">born-in</tt> association type. 
+</p>
+
+
+<p>
+But what if we want to find everyone born in a city located in Italy?
+What we want in this case is something like what is shown below.
+</p>
+
+
+<code>
+<pre>
+born-in($PERSON : person, $PLACE : place) 
+AND 
+located-in($CITY : containee, italy : container)?
+</pre>
+</code>
+
+
+<p>
+This query is quite close to the correct one, but there are two
+problems with it. First of all, the way to chain predicates together
+with an AND condition is simply to put a comma between them. (You can
+say that AND is the default boolean operator in tolog.) The second
+problem is that we want to make sure that the <tt class="symbol">CITY</tt>
+located in Italy is the same as the <tt class="symbol">PLACE</tt> where the
+person is born. If we use the same variable in both places tolog will
+take this to mean that the same values have to be used both places.
+So what we want is the query below.
+</p>
+
+
+<code>
+<pre>
+born-in($PERSON : person, $CITY : place),
+located-in($CITY : containee, italy : container)?
+</pre>
+</code>
+
+
+<p>
+When this query is run the first predicate will produce a table of all
+(person, city) combinations where the person is born in the city. This
+is then passed to the second predicate, which takes out all rows where
+the city is not located in Italy
+
+<sup><a href="#footnote1">[1]</a></sup>.
+</p>
+
+
+<p>
+We can chain together as many predicates as we want in order to
+express our query; there's nothing unusual in having 4-5 predicates
+chained together to form a query.
+</p>
+
+
+
+<h3>
+<a name="N101AC">1.4. Projection</a>
+</h3>
+
+
+
+<p>
+In the above example we have the problem that the query returns both
+the people and the city, while we are only interested in the people.
+This can be solved by using projection, as follows:
+</p>
+
+
+<code>
+<pre>
+select $PERSON from
+  born-in($PERSON : person, $CITY : place),
+  located-in($CITY : containee, italy : container)?
+</pre>
+</code>
+
+
+<p>
+This tells the query engine that we're only interested in the
+<tt class="symbol">PERSON</tt> variable, and so it will produce a query
+result that only consists of bindings of the <tt class="symbol">PERSON</tt>
+variable.  In this case, this is not so important, as we could just as
+well have just ignored the bindings to the <tt class="symbol">CITY</tt>
+variable.  In some cases, however, ignoring one variable means
+reducing the size of the query result (and avoiding duplicates), and
+sometimes reducing the query result size quite dramatically. One
+example is given below.
+</p>
+
+
+<code>
+<pre>
+select $B from
+  instance-of($A, $B)?
+</pre>
+</code>
+
+
+<p>
+This query returns all the topic types used in the topic map, instead
+of all class-instance pairs. The difference in the query result size
+(not to mention performance) can be enormous, which is what makes this
+useful.
+</p>
+
+
+
+<h3>
+<a name="N101CA">1.5. Counting</a>
+</h3>
+
+
+
+<p>
+Quite often, one uses queries to produce statistics about the data
+contained in a topic map. If one wants to find out which Italian
+opera composer was the most prolific, for example, one will want to
+count the number of query results. tolog supports this, as the query
+below shows.
+</p>
+
+
+<code>
+<pre>
+select $A, count($B) from
+  composed-by($A : composer, $B : opera)?
+</pre>
+</code>
+
+
+<p>
+This query produces the full <tt class="symbol">A, B</tt> table, then
+replaces all rows that have the same value in the <tt class="symbol">A</tt>
+column by the number of such rows. The result is to count the number
+of <tt class="symbol">B</tt> matches per <tt class="symbol">A</tt> match.
+</p>
+
+
+
+<h3>
+<a name="N101E5">1.6. Sorting</a>
+</h3>
+
+
+
+<p>
+While the query above does return the number of operas composed by
+each composer, it does so in an order that is effectively random.
+What we really want is to see the composers ordered by decreasing
+number of composed operas. This can be achieved by writing the query
+as shown below.
+</p>
+
+
+<code>
+<pre>
+  select $A, count($B) from
+    composed-by($A : composer, $B : opera)
+  order by $B desc?
+</pre>
+</code>
+
+
+<p>
+If the <tt class="symbol">desc</tt> keyword is removed, the query results
+will be ordered by ascending opera count instead of descending count.
+The 'order by' clause can contain any number of variables, separated
+by commas.
+</p>
+
+
+<p>
+The <tt class="symbol">asc</tt> keyword specifies that columns be ordered in
+ascending order. This is also the default order.
+</p>
+
+
+
+
+<h2>
+<a name="N101FE">2. Advanced features</a>
+</h2>
+
+
+
+<p>
+What has been presented so far are only the simplest parts of tolog;
+what one could call "basic tolog". tolog is much more powerful than
+this, however, and that additional power is explored in this section.
+</p>
+
+
+<h3>
+<a name="N10206">2.1. Dynamic occurrence predicates</a>
+</h3>
+
+
+
+<p>
+So far we have only looked at how to query on associations, but
+occurrences also contain useful information, and in many cases we want
+to retrieve or query on this information. This can be done in a manner
+very similar to how associations are queried: the occurrence type is
+used as the predicate. However, occurrences have a much simpler
+structure, so for these we only need two positional parameters: first
+the topic, then the occurrence value.
+</p>
+
+
+<p>
+Finding the date of birth of every composer can be done as follows.
+</p>
+
+
+<code>
+<pre>
+instance-of($COMPOSER, composer), 
+date-of-birth($COMPOSER, $DATE)?
+</pre>
+</code>
+
+
+<p>
+This query gives the following result.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. All composers and their dates of birth</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">COMPOSER</th><th class="dbTableHeaderEntry">DATE</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Verdi, Giuseppe</td><td class="dbTableEntry">1813 (10 Oct)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Ponchielli, Amilcar</td><td class="dbTableEntry">1834 (31 Aug)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Cilea, Francisco</td><td class="dbTableEntry">1866 (23 Jul)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Bo&iuml;to, Arrigo</td><td class="dbTableEntry">1842 (24 Feb)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Catalani, Alfredo</td><td class="dbTableEntry">1854 (19 Jun)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Puccini, Giacomo</td><td class="dbTableEntry">1858 (22 Dec)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td><td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<p>
+As with association predicates it is also possible to find the date of
+birth of a specific composer, or to find all composers born on a
+particular date. To do the latter we write:
+</p>
+
+
+<code>
+<pre>
+date-of-birth($PERSON, "1867 (24 Mar)")?
+</pre>
+</code>
+
+
+<p>
+This will find all topics which have this particular value for this
+particular occurrence type (though of course only people have dates of
+birth in this topic map), regardless of whether they are composers or
+not. As it turns out, only Guido Menasci has this value, and he's a
+<tt class="symbol">librettist</tt>.
+</p>
+
+
+<p>
+Note that locators are treated the same way as ordinary strings, which
+means that to find all topics whose home pages are
+<tt class="symbol">http://www.puccini.it</tt>, you can use the following query.
+</p>
+
+
+<code>
+<pre>
+homepage($TOPIC, "http://www.puccini.it")?
+</pre>
+</code>
+
+
+<p>
+This finds all topics with a <tt class="symbol">homepage</tt> occurrence
+whose locator is the URI <tt class="symbol">http://www.puccini.it</tt>. This
+turns out to produce the results shown below.
+</p>
+
+
+<p align="center">
+<b>Table 2.2. All topics with http://www.puccini.it homepage</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">TOPIC</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Centro studi Giacomo Puccini</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N10292">2.2. OR</a>
+</h3>
+
+
+
+<p>
+Quite often one may want to include information that matches either
+one condition OR another condition. If, for example, we want to find
+all operas which had their premiere in a particular city there are two
+ways to do that. Usually we know which theatre the opera had its
+premiere in, and in these cases the premiere is connected to that
+theatre, and the theatre is connected with the city. In some cases,
+however, all we know is the city, and in these cases the premiere is
+directly connected with the city. Therefore, if we want to find all
+operas which premiered in Milano<sup><a href="#footnote2">[2]</a></sup>, we have to
+do as shown below.
+</p>
+
+
+<code>
+<pre>
+select $OPERA from
+  { premiere($OPERA : opera, milano : place) | 
+    premiere($OPERA : opera, $THEATRE : place), 
+    located-in($THEATRE : containee, milano : container) }?
+</pre>
+</code>
+
+
+<p>
+Here matches will be accepted so long as they satisfy
+<em>one</em> of the branches inside the curly braces,
+where the branches are separated by <tt class="symbol">|</tt> characters.
+Other predicates can be used in front of and after the curly braces,
+and the braces can be nested arbitrarily deep. The result is shown
+below.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. Operas premiered in Milano</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">OPERA</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Il sindaco babbeo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Melenis</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">La Falce</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">I Cavalieri di Ekeb&ugrave;</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Turandot</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Marcella</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<p>
+This capability is essentially the same as the boolean operator
+<tt class="symbol">OR</tt> in other languages, as it allows tolog to return
+results where the criteria are true if <tt class="symbol">{ A | B }</tt>.
+</p>
+
+
+<h4>
+<a name="sect-nonfailing-clause">2.2.1. Non-failing clauses</a>
+</h4>
+
+
+
+<p>
+A closely related function is what is known as <dfn>non-failing
+clauses</dfn>; that is, a clause that will produce a value for a
+variable if it can, but if it cannot still won't cause the query to
+fail. This is useful when selecting optional values which are intended
+to be used for display purposes.
+</p>
+
+
+<p>
+One example might be if we want to all operas and for each the theatre
+in which it had its premiere. If we don't know where it had its
+premiere we still want to show the opera, but we'll leave out the
+theatre. This is easily done as follows, by including the optional
+part of the query in curly braces, without any alternative branches.
+</p>
+
+
+<code>
+<pre>
+instance-of($OPERA, opera),
+{ premiere($OPERA : opera, $THEATRE : place) }?
+</pre>
+</code>
+
+
+<p>
+As you'll see if you try it, this query also returns matches where
+<tt class="symbol">THEATRE</tt> is bound to a city, since nothing in the
+query says that it has to be bound to a theatre (tolog completely
+ignores the meaning of variable names), and operas also have this
+association with cities. So we have to add a condition that the
+<tt class="symbol">THEATRE</tt> actually be an instance of the type
+<tt class="symbol">theatre</tt>, as shown below.
+</p>
+
+
+<code>
+<pre>
+instance-of($OPERA, opera),
+{ premiere($OPERA : opera, $THEATRE : place), 
+  instance-of($THEATRE, theatre) }?
+</pre>
+</code>
+
+
+<p>
+This query gives the desired result, which is shown below.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. Operas and premiere theatres</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">THEATRE</th><th class="dbTableHeaderEntry">OPERA</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro Argentina</td><td class="dbTableEntry">I due foscari</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro Sociale di Lecco</td><td class="dbTableEntry">Il parlatore eterno</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro La Fenice</td><td class="dbTableEntry">Attila</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Teatro alla Scala</td><td class="dbTableEntry">Madame Butterfly</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">null</td><td class="dbTableEntry">Marina</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">null</td><td class="dbTableEntry">Il sindaco babbeo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td><td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+
+
+<h3>
+<a name="N1034D">2.3. Using negation</a>
+</h3>
+
+
+
+<p>
+tolog supports negation, even though negation in logical querying is
+not at all straightforward. To take an example imagine running the
+query below.
+</p>
+
+
+<code>
+<pre>
+not(born-in(milano : place, $A : person))?
+</pre>
+</code>
+
+
+<p>
+What is this query going to return? All topics that have no born-in
+association with Milano?  All person topics? An infinite number of
+topics, representing everything that wasn't born in Milano? What about
+the persons which have no born-in association yet, but which were
+actually born in Milano? And so on.
+</p>
+
+
+<p>
+The approach taken in tolog is that the <tt class="symbol">not</tt> operator
+is used as a filter. You must specify a start set, and the query
+processor will then eliminate the members of the start set which match
+the condition specified in the <tt class="symbol">not</tt> clause. The
+example below shows the people in the topic map that were not born in
+Italy.
+</p>
+
+
+<code>
+<pre>
+instance-of($PERSON, person),
+not(born-in($PLACE : place, $PERSON : person),
+    located-in($PLACE : containee, italy : container))?
+</pre>
+</code>
+
+
+<p>
+This gives the results shown below.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. Non-Italian people</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">PERSON</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Guglielmo Ratcliff</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Manzoni, Alessandro</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Comtessa di Coigny</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Sardou, Victorien</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<p>
+One thing that stands out here is that Alessandro Manzoni actually
+<em>is</em> Italian. So why was he included? Well, this
+query is subtly different from asking for the composers born somewhere
+not in Italy. This query will also find composers which have no
+<tt class="symbol">born-in</tt> association, or who are born somewhere that
+has no <tt class="symbol">located-in</tt> association. It turns out that
+Alessandro Manzoni has no <tt class="symbol">born-in</tt> association, and so
+he is "not born in Italy". To eliminate this type of match we would
+have had to pick out the country where the person is born and use
+<tt class="symbol">/=</tt> to make sure that it was not Italy. On the other
+hand, that would have left out Victorien Sardou, who is a person (with
+no <tt class="symbol">born-in</tt> association) and not Italian. (So why do
+we say all this? Simply to emphasise that <tt class="symbol">not</tt> is
+subtly different from true negation. It might not mean what you think
+it means.)
+</p>
+
+
+<p>
+Another thing to note is that although this query uses the
+<tt class="symbol">PLACE</tt> variable that variable is not actually bound in
+the query. That is because every <tt class="symbol">COMPOSER</tt> that
+creates a match for <tt class="symbol">PLACE</tt> is eliminated, leaving only
+those which don't. So while the query result will contain a
+<tt class="symbol">PLACE</tt> column, that column will be empty.
+</p>
+
+
+
+<h3>
+<a name="N103B8">2.4. Comparison predicates</a>
+</h3>
+
+
+
+<p>
+tolog also supports the comparison operators familiar from many other
+languages. We have already seen <tt class="symbol">/=</tt>, but there are
+many more. For example, there is also <tt class="symbol">=</tt>, which means
+the opposite of what <tt class="symbol">/=</tt> does. That is, it is true
+when the values on both sides are equal. This means that we can do a
+query to find operas which premiered on a particular day, as in:
+</p>
+
+
+<code>
+<pre>
+premiere-date($OPERA, $DATE),
+$DATE = "1870 (22 Feb)"?
+</pre>
+</code>
+
+
+<p>
+This will give us the (single) opera premiered on this date, according
+to the Opera topic map. It should be noted that in most cases the
+<tt class="symbol">=</tt> comparator is not necessary, since if a variable is
+equal to another variable or a literal we can just replace all
+occurrences of the variable with what it is supposed to be equal to.
+This gives us simpler queries, like the one below.
+</p>
+
+
+<code>
+<pre>
+premiere-date($OPERA, "1870 (22 Feb)")?
+</pre>
+</code>
+
+
+<p>
+However, this comparator <em>does</em> have its uses,
+such as when defining an inference rule (see following section) that
+will connect a topic to all topics matching some condition as well as
+the topic itself. To put it another way: it's useful to know that this
+predicate exists, but be aware that you rarely need it.
+</p>
+
+
+<p>
+There are also four other comparison predicates
+(<tt class="symbol">&lt;</tt>, <tt class="symbol">&gt;</tt>, <tt class="symbol">&lt;=</tt>,
+<tt class="symbol">&gt;=</tt>) which only compare strings, and, at the
+moment, compare strings as strings. This makes it possible to do a
+query to find all operas premiered in the 19th century, as follows:
+</p>
+
+
+<code>
+<pre>
+premiere-date($OPERA, $DATE),
+$DATE &lt; "1900"?
+</pre>
+</code>
+
+
+<p>
+This will do a string comparison on the dates, and filter out
+everything premiered in the 20th century. Note that these four
+predicates do not compare anything other than strings (such as
+topics), and that they require both values they are comparing to be
+bound.
+</p>
+
+
+
+<h3>
+<a name="N103F1">2.5. Inference rules</a>
+</h3>
+
+
+
+<p>
+In many cases there are implicit relationships in the topic map not
+stated as associations, but which can be deduced from more basic
+relationships that are given explicitly as associations. Inference
+rules provide a way to capture these implicit relationships through
+the declaration of a simple rule. The rule can then be used throughout
+an application to simplify queries.
+</p>
+
+
+<p>
+We can say that if an opera composer was a pupil of another composer,
+or if the composer wrote operas based on the work of another person,
+that other person or composer influenced the composer. We can of
+course query for this, but if we want to use the influenced-by
+relationship in several larger queries this quickly gets awkward.
+Instead, we can capture the relationship in an inference rule, as
+shown below.
+</p>
+
+
+<code>
+<pre>
+influenced-by($A, $B) :- {
+  pupil-of($A : pupil, $B : teacher) |
+  composed-by($OPERA : opera, $A : composer),
+  based-on($OPERA : result, $WORK : source),
+  written-by($WORK : work, $B : writer)
+}.
+</pre>
+</code>
+
+
+<p>
+This rule has now created a new predicate called
+<tt class="symbol">influenced-by</tt>, which can be used in queries. Let's
+say that we want to find every case where an Italian opera composer
+was influenced by someone who was not himself Italian. We can now do
+this as shown below.
+</p>
+
+
+<code>
+<pre>
+instance-of($COMPOSER, composer),
+influenced-by($COMPOSER, $INFLUENCE),
+born-in($INFLUENCE : person, $PLACE : place),
+not(located-in($PLACE : containee, italy : container))?
+</pre>
+</code>
+
+
+<p>
+We skip verifying that the composer was born in Italy, since all
+composers in this topic map are born in Italy. This gives the result
+shown below.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. Foreign influences on Italian opera</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">COMPOSER</th><th class="dbTableHeaderEntry">INFLUENCE</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Verdi, Giuseppe</td><td class="dbTableEntry">M&eacute;ry, Joseph</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Ponchielli, Amilcar</td><td class="dbTableEntry">Scribe, Eug&egrave;ne</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Cilea, Francesco</td><td class="dbTableEntry">Daudet, Alphonse</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Cilea, Francesco</td><td class="dbTableEntry">Scribe, Eug&egrave;ne</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Cilea, Francesco</td><td class="dbTableEntry">M&eacute;l&eacute;sville</td>
+</tr>
+</table>
+
+
+<p>
+Inference rules can also use other influence rules, which means that
+one can build large reasoning structures by layering the inference
+rules on top of each other. Inference rules can also use themselves,
+which makes it possible to define recursive inference rules, for
+example for traversing hierarchical association structures.
+</p>
+
+
+<p>
+Note that tolog has the same comment syntax as LTM (that is, comments
+begin with <tt class="symbol">/*</tt> and end with <tt class="symbol">*/</tt>). This
+can be used for example to document inference rules, as shown below.
+</p>
+
+
+<code>
+<pre>
+
+/* connects opera composers (A) with the people who influenced them
+   (B), either by being their teachers or by writing works on which
+   the composer based operas */
+
+influenced-by($A, $B) :- {
+  pupil-of($A : pupil, $B : teacher) |
+  composed-by($OPERA : opera, $A : composer),
+  based-on($OPERA : result, $WORK : source),
+  written-by($WORK : work, $B : writer)
+}.
+</pre>
+</code>
+
+
+<p>
+In the example above it may look as though the bodies of inference
+rules should be wrapped in curly braces, like blocks in Java or C, but
+the curlies are there because the entire rule is one big OR clause. If
+we drop the <tt class="symbol">pupil-of</tt> part the rule would look as
+shown below. If we had wrapped this in curly braces we would have
+turned the body of the rule into a non-failing clause (<a href="#sect-nonfailing-clause">section
+        2.2.1</a>), allowing it to match topics which
+don't actually satisfy the rule. So beware of this.
+</p>
+
+
+<code>
+<pre>
+influenced-by($A, $B) :-
+  composed-by($OPERA : opera, $A : composer),
+  based-on($OPERA : result, $WORK : source),
+  written-by($WORK : work, $B : writer).      
+</pre>
+</code>
+
+
+<p>
+As said above, tolog supports recursive inference rules, which are
+typically used to traverse hierarchies, or to query transitive
+association types. An example of such an inference rule, for a generic
+parent-child relationship, might look as follows:
+</p>
+
+
+<code>
+<pre>
+descendant-of($ANC, $DES) :- {
+  parent-child($ANC : parent, $DES : child) |
+  parent-child($ANC : parent, $MID : child), descendant-of($MID, $DES)
+}.
+</pre>
+</code>
+
+
+<p>
+Notice how the rule is essentially a formalization of what it means to
+be a descendant. That is, either the ancestor is the parent of the
+descendant, or the ancestor is the parent of some middle topic of
+which the descendant is a descendant. This explanation may sound a
+little strange, and that's because of the recursion in the last step.
+</p>
+
+
+
+<h3>
+<a name="N10468">2.6. The built-in predicates</a>
+</h3>
+
+
+
+<p>
+The parts of tolog shown thus far only support querying on
+type-instance relationships, associations with a specific structure,
+and occurrences of specific types. It is impossible to do queries like
+"find all association types", "find all associations between topics X
+and Y", "find all occurrences of topic Z", and so on with the parts of
+tolog that have been explained thus far.
+</p>
+
+
+<p>
+tolog has a number of built-in predicates like
+<tt class="symbol">instance-of</tt> that make it possible to do this kind of
+query. These predicates are listed below, and more fully documented
+in <a href="predicate-reference.html">The Built-in tolog Predicates
+&mdash; Reference Documentation</a>.
+</p>
+
+
+<dl>
+<dt>association($ASSOC)</dt>
+<dd>
+
+
+<p>This predicate takes only one parameter and finds all
+associations. Can be used to test whether a value is an association,
+and to find all associations.</p>
+
+</dd>
+<dt>association-role($ASSOC, $ROLE)</dt>
+<dd>
+
+
+<p>This predicate connects associations with their association
+roles.</p>
+
+</dd>
+<dt>base-locator($LOC)</dt>
+<dd>
+
+
+<p>Finds the base locator of the topic map.</p>
+
+</dd>
+<dt>direct-instance-of($INSTANCE, $TYPE)</dt>
+<dd>
+
+
+<p>A variant of <tt class="symbol">instance-of</tt> which connects a topic
+with the topics it is explicitly said to be an instance of. In other
+words, just like <tt class="symbol">instance-of</tt>, except that it ignores
+the superclass-subclass association.</p>
+
+</dd>
+<dt>instance-of($INSTANCE, $TYPE)</dt>
+<dd>
+
+
+<p>This predicate connects a topic (INSTANCE) with every topic it
+is an instance of (TYPE). A topic is considered to be an instance of
+another if the other is explicitly set as the type, or if it is a
+superclass of a topic that is set as the type.</p>
+
+</dd>
+<dt>occurrence($TOPIC, $OCCURRENCE)</dt>
+<dd>
+
+
+<p>Connects occurrences with the topics they belong to.</p>
+
+</dd>
+<dt>reifies($REIFIER, $REIFIED)</dt>
+<dd>
+
+
+<p>Connects topics (<tt class="symbol">REIFIER</tt>) with the topic map
+constructs (<tt class="symbol">REIFIED</tt>) they reify.</p>
+
+</dd>
+<dt>resource($OBJECT, $LOCATOR)</dt>
+<dd>
+
+
+<p>For any variant name or occurrence that has a locator
+(<tt class="symbol">OBJECT</tt>), finds that locator.</p>
+
+</dd>
+<dt>role-player($ROLE, $PLAYER)</dt>
+<dd>
+
+
+<p>Connects association roles with the topic that plays the
+role.</p>
+
+</dd>
+<dt>scope($SCOPED, $THEME)</dt>
+<dd>
+
+
+<p>Connects topic names, occurrences, and associations with the
+topics that make up the scope.</p>
+
+</dd>
+<dt>item-identifier($OBJECT, $LOCATOR)</dt>
+<dd>
+
+
+<p>Finds the item identifiers of a topic map construct.</p>
+
+</dd>
+<dt>subject-identifier($TOPIC, $LOCATOR)</dt>
+<dd>
+
+
+<p>Connects topics with their subject identifiers.</p>
+
+</dd>
+<dt>subject-locator($TOPIC, $LOCATOR)</dt>
+<dd>
+
+
+<p>Connects a topic with its subject locator,
+if it has one.</p>
+
+</dd>
+<dt>topic($TOPIC)</dt>
+<dd>
+
+
+<p>Finds all topics in the topic map.</p>
+
+</dd>
+<dt>topic-name($TOPIC, $NAME)</dt>
+<dd>
+
+
+<p>Connects topics with their topic names.</p>
+
+</dd>
+<dt>topicmap($TOPICMAP)</dt>
+<dd>
+
+
+<p>Finds the topic map itself.</p>
+
+</dd>
+<dt>type($TYPED, $TYPE)</dt>
+<dd>
+
+
+<p>Connects occurrences, associations, and association roles
+(<tt class="symbol">TYPED</tt>) with their type, if they have one.</p>
+
+</dd>
+<dt>value($OBJECT, $VALUE)</dt>
+<dd>
+
+
+<p>Finds the string value of topic names, variant names, and
+occurrences, if they have one.</p>
+
+</dd>
+<dt>value-like($OBJECT, $SEARCHSTRING)</dt>
+<dd>
+
+
+<p>This predicate <em>must</em> have a bound value for
+the <tt class="symbol">SEARCHSTRING</tt> argument, and will do a full-text
+search for topic map constructs that match the
+<tt class="symbol">SEARCHSTRING</tt>. This makes it possible to do full-text
+searches in tolog queries.</p>
+
+</dd>
+<dt>variant($BASENAME, $VARIANT)</dt>
+<dd>
+
+
+<p>Connects variants with the topic names they are contained in.</p>
+
+</dd>
+<dt>/=</dt>
+<dd>
+
+
+<p>Compares two values (both of which must be bound) to see if they
+are the different; fails if the two values are equal.</p>
+
+</dd>
+</dl>
+
+
+<p>
+We can't give examples of the use of all of these predicates, since
+there are so many of them, but at least we can show some. We can start
+with "find all association types", which is given below., "find all
+associations between topics X and Y", "find all occurrences of topic
+Z"
+</p>
+
+
+<code>
+<pre>
+select $TYPE from
+  association($ASSOC), type($ASSOC, $TYPE)?
+</pre>
+</code>
+
+
+<p>
+Finding all associations between topic 'x' and topic 'y' is quite
+easy, though a bit more involved.
+</p>
+
+
+<code>
+<pre>
+select $ASSOC from
+  role-player($ROLE1, x),
+  association-role($ASSOC, $ROLE1),
+  association-role($ASSOC, $ROLE2),
+  role-player($ROLE2, y)?
+</pre>
+</code>
+
+
+<p>
+We can also find all occurrences of topic z quite easily, as shown
+below.
+</p>
+
+
+<code>
+<pre>
+occurrence(z, $OCC)?
+</pre>
+</code>
+
+
+<p>
+The <tt class="symbol">/=</tt> predicate allows an interesting class of
+queries. We can control which values must be the same in a query,
+simply by using the same variable, but we cannot force different
+variables to have different values. This means that if we try to do a
+query like "find all people born on the same day" we run into a quite
+subtle problem. Below is the naive way to approach it.
+</p>
+
+
+<code>
+<pre>
+date-of-birth($PERSON1, $DATE),
+date-of-birth($PERSON2, $DATE)?
+</pre>
+</code>
+
+
+<p>
+This runs, but does not produce the result we want, as can be seen
+from the table below.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. People sharing birthdays</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">PERSON1</th><th class="dbTableHeaderEntry">DATE</th><th class="dbTableHeaderEntry">PERSON2</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Benelli, Sem</td><td class="dbTableEntry">1877 (10 Aug)</td><td class="dbTableEntry">Benelli, Sem</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Ghislanzoni, Antonio</td><td class="dbTableEntry">1824 (25 Nov)</td><td class="dbTableEntry">Ghislanzoni, Antonio</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Copp&eacute;e, Fran&ccedil;ois</td><td class="dbTableEntry">1842 (26 Jan)</td><td class="dbTableEntry">Copp&eacute;e, Fran&ccedil;ois</td>
+</tr>
+</table>
+
+
+<p>
+Here tolog has discovered that if <tt class="symbol">PERSON1</tt> is
+'Benelli, Sam', <tt class="symbol">DATE</tt> is '1877 (10 Aug)', and
+<tt class="symbol">PERSON2</tt> is 'Benelli, Sam', then our query criteria
+are satisfied. In other words, tolog has found, as we asked it to,
+that every person has the same birthdate as himself. We knew this all
+along, of course, and did not want it in our query results at all, so
+what we do now is to specify that we are not interested in matches
+where there is only one person. This is done as below.
+</p>
+
+
+<code>
+<pre>
+date-of-birth($PERSON1, $DATE),
+date-of-birth($PERSON2, $DATE),
+$PERSON1 /= $PERSON2?
+</pre>
+</code>
+
+
+<p>
+This gives the result we wanted, which is shown below.
+</p>
+
+
+<p align="center">
+<b>Table 2.2. People really sharing birthdays</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">PERSON1</th><th class="dbTableHeaderEntry">DATE</th><th class="dbTableHeaderEntry">PERSON2</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Bognasco, G. di</td><td class="dbTableEntry">(unknown)</td><td class="dbTableEntry">Lombardo, Carlo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Bognasco, G. di</td><td class="dbTableEntry">(unknown)</td><td class="dbTableEntry">Franci, Arturo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Bognasco, G. di</td><td class="dbTableEntry">(unknown)</td><td class="dbTableEntry">Vaucaire, Maurice</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Duveyrier, Charles</td><td class="dbTableEntry">1803</td><td class="dbTableEntry">Royer, Alphonse</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Royer, Alphonse</td><td class="dbTableEntry">1803</td><td class="dbTableEntry">Duveyrier, Charles</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td><td class="dbTableEntry">...</td><td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<p>
+Again the results are somewhat disappointing. We see that there are
+indeed two people who share the specified birth information, but in
+their case we only know the year. We also see that a number of people
+all have their birth date given as <tt class="symbol">"(unknown)"</tt> and
+since all these values are the same they are also returned as query
+matches, though they are of course not guaranteed to have the same
+birth date.
+</p>
+
+
+
+<h3>
+<a name="N1062B">2.7. Paging</a>
+</h3>
+
+
+
+<p>
+Sometimes we don't want all the results from a query, but only a
+limited set of results. For example, we may only want to know the
+answer to "who is the most prolific opera composer?" In this case, we
+only want the first row of the results, and not the rest, however many
+they may be. tolog supports this, through the <tt class="symbol">LIMIT</tt>
+keyword, as shown below.
+</p>
+
+
+<code>
+<pre>
+select $A, count($B) from
+  composed-by($A : composer, $B : opera)
+order by $B desc limit 1?
+</pre>
+</code>
+
+
+<p>
+This gives the result ("Verdi, Guiseppe", 28), but does not return any
+of the other rows. Note that the <tt class="symbol">order by</tt> is very
+important. Without this we would have produced the rows in random
+order, then only returned the first, which need not have been the row
+for the most prolific composer.
+</p>
+
+
+<p>
+The <tt class="symbol">LIMIT</tt> keyword is mainly used as a performance
+optimization in cases where a large number of results can be returned.
+<tt class="symbol">LIMIT</tt> allows the application to tell the query
+processor the limit the number of results to a manageable number, and
+this can have significant performance benefits in some cases.
+</p>
+
+
+<p>
+Another use for <tt class="symbol">LIMIT</tt> is when one wants to show a
+paged list. That is, a query is run to show first results 1-10, then,
+if the user wants to go further, 11-20, then, 21-30, and so on. tolog
+can do this with <tt class="symbol">LIMIT</tt> and <tt class="symbol">OFFSET</tt>
+together. Let's say we want to show operas, and we only want to show
+the first page. We can then do as below.
+</p>
+
+
+<code>
+<pre>
+instance-of($OPERA, opera)
+order by $OPERA limit 10?
+</pre>
+</code>
+
+
+<p>
+This gives us the first ten operas (note the <tt class="symbol">order by</tt>
+which guarantees a consistent ordering), and we can continue with the
+below to get operas 11-20.
+</p>
+
+
+<code>
+<pre>
+instance-of($OPERA, opera)
+order by $OPERA limit 10 offset 10?
+</pre>
+</code>
+
+
+<p>
+This query starts on row 10 (the first one did rows 0-9) according to
+<tt class="symbol">OFFSET</tt> and stops after 10 rows, according to
+<tt class="symbol">LIMIT</tt>. By increasing <tt class="symbol">OFFSET</tt> to 20,
+30, and so on we can continue stepping through the pages.
+</p>
+
+
+
+
+<h2>
+<a name="N1066E">3. Identifiers</a>
+</h2>
+
+
+
+<p>
+One thing that has been consistently glossed over so far is how topic
+identifiers like <tt class="symbol">composer</tt> actually refer to topics,
+and how to refer to topics by means such as their subject identifiers.
+Another issue we've ignored is how to actually make inference rule
+definitions available to the query processor. This section deals with
+both of those issues in more detail.
+</p>
+
+
+<h3>
+<a name="sect-topic-ref">3.1. Referring to topics</a>
+</h3>
+
+
+
+<p>
+There are several different ways of referring to topics (and other
+topic map constructs, such as topic names, occurrences etc) in tolog,
+although so far we have only seen topic IDs. Below is a complete list
+of the different syntaxes.
+</p>
+
+
+<dl>
+<dt>id</dt>
+<dd>This syntax is used to look up topics by their source locators.
+The given ID is expanded to a full source locator by prepending the
+base URI of the topic map being queried, followed by
+<tt class="literal">#</tt>. If the topic being looked up did not originate
+in the root document of the topic map (but instead came from a file
+that was merged into it), this lookup will fail.
+</dd>
+<dt>i"uri"</dt>
+<dd>Used to look up topics by their subject identifiers. The URI of
+the identifier is given between the quotes, and is resolved relative to
+the base URI of the topicmap.
+</dd>
+<dt>a"uri"</dt>
+<dd>Used to look up topics by their subject locator. The URI of
+the subject locator is given between the quotes, and is resolved relative to
+the base URI of the topicmap.
+</dd>
+<dt>s"uri"</dt>
+<dd>Used to look up topics by their source locators. The URI of
+the locator is given between the quotes, and is resolved relative to
+the base URI of the topicmap.
+</dd>
+<dt>@objid</dt>
+<dd>Used to look up topics by their object ids. This is the fastest
+method, and the one that is recommended when generating tolog
+statements automatically. It does not make for readable queries,
+however, and so should not be used for other purposes.
+</dd>
+</dl>
+
+
+<p>
+This allows us to for example write a query that in any topic map will
+find the topics at the top of the superclass-subclass hierarchy, as
+shown below.
+</p>
+
+
+<code>
+<pre>
+select $TOP from
+  i"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"(
+    $TOP : i"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass",
+    $SUB : i"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"),
+  not(i"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"(
+    $OTHER : i"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass",
+    $TOP : i"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"))?
+</pre>
+</code>
+
+
+<p>
+Since this query uses the subject identifiers for the association type
+and role types defined by XTM 1.0 this will work regardless of what
+the XML IDs given to the topics are in any particular topic map. This
+makes the query quite portable and robust. (Unfortunately, it also
+makes the query almost entirely unreadable, but more about that in the
+next section.)
+</p>
+
+
+
+<h3>
+<a name="N106CE">3.2. URI prefixes</a>
+</h3>
+
+
+
+<p>
+As noted above, giving URIs in full throughout a query quickly makes
+the query so verbose as to be virtually unreadable. In order to solve
+this, tolog has a feature called <dfn>URI prefixes</dfn>,
+which allows the definition of an identifier prefix that can be
+combined with a local name to create a full URI. Using this we can
+rewrite the query from the previous section as shown below.
+</p>
+
+
+<code>
+<pre>
+using xtm for i"http://www.topicmaps.org/xtm/1.0/core.xtm#"
+select $TOP from
+  xtm:superclass-subclass($TOP : xtm:superclass, $SUB : xtm:subclass),
+  not(xtm:superclass-subclass($OTHER : xtm:superclass,
+                              $TOP : xtm:subclass))?
+</pre>
+</code>
+
+
+<p>
+This query defines the prefix <tt class="symbol">xtm</tt> which is bound to
+the URI <tt class="symbol">"http://www.topicmaps.org/xtm/1.0/core.xtm#"</tt>,
+and which is defined to be interpreted as subject identifier reference
+(because of the <tt class="symbol">i</tt> before the URI). Thus,
+<tt class="symbol">xtm:subclass</tt> is interpreted as
+<tt class="symbol">i"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"</tt>.
+</p>
+
+
+<p>
+It is possible to define more than one prefix in a single query, and
+it is also possible to bind prefixes to <tt class="symbol">a"..."</tt> and
+<tt class="symbol">s"..."</tt> URIs.
+</p>
+
+
+
+<h3>
+<a name="N106F8">3.3. Modules</a>
+</h3>
+
+
+
+<p>
+Another thing we have glossed over so far is how to actually make an
+inference rule available for use in queries. As it turns out, there
+are several ways to do this, and we'll walk through them one by one.
+The easiest is simply to put the rule into the query that uses it,
+like shown below.
+</p>
+
+
+<code>
+<pre>
+influenced-by($A, $B) :- {
+  pupil-of($A : pupil, $B : teacher) |
+  composed-by($OPERA : opera, $A : composer),
+  based-on($OPERA : result, $WORK : source),
+  written-by($WORK : work, $B : writer)
+}.
+
+instance-of($COMPOSER, composer),
+influenced-by($COMPOSER, $INFLUENCE),
+born-in($INFLUENCE : person, $PLACE : place),
+not(located-in($PLACE : containee, italy : container))?
+</pre>
+</code>
+
+
+<p>
+However, having to repeat the rule for every query that uses it is not
+exactly a good code reuse strategy, so tolog also supports importing
+rule sets from files. If the <tt class="symbol">influenced-by</tt> rule is
+stored in the file <tt>opera.tl</tt> in the same directory
+as the <tt>opera.ltm</tt> topic map file the above query
+can also be written as shown below.
+</p>
+
+
+<code>
+<pre>
+import "opera.tl" as opera
+
+instance-of($COMPOSER, composer),
+opera:influenced-by($COMPOSER, $INFLUENCE),
+born-in($INFLUENCE : person, $PLACE : place),
+not(located-in($PLACE : containee, italy : container))?
+</pre>
+</code>
+
+
+<p>
+What happens here is that the <tt class="symbol">import</tt> statement
+imports the rule file, which is stored as a module bound to the
+<tt class="symbol">opera</tt> prefix. The inference rules in the file then
+turn into predicates in the module, and can be accessed through the
+<tt class="symbol">opera</tt> prefix.
+</p>
+
+
+<p> 
+References to module files are first attempted loaded from the
+CLASSPATH. If it was not found on the CLASSPATH then it is resolved
+relative to the URI of the topic map, except inside module files where
+it is resolved relative to the URI of the module file. (Module files
+can import other module files.)  
+</p>
+
+
+
+
+<h3>
+<a name="N10722">3.4. Scoping rules</a>
+</h3>
+
+
+
+<p>
+One thing we haven't looked at yet is what are known as
+<dfn>scoping rules</dfn>; that is, the rules for which
+declarations are visible where. Declarations in tolog are of two
+types: inference rule declarations, and prefix declarations (whether
+URI prefixes or module imports). The rules for all declarations are
+the same, and they are as listed below.
+</p>
+
+
+<ul>
+<li>
+
+<p>Declarations included in a query only apply to that query.</p>
+
+</li>
+<li>
+
+<p>Declarations included in a module are only visible in that
+module, although rules defined in the module will be available through
+the module prefix.</p>
+
+</li>
+<li>
+
+<p>Declarations loaded into a query processor will be available
+throughout the life of that processor. (See <a href="#sect-api">section
+        4.3</a>
+for more information.)</p>
+
+</li>
+</ul>
+
+
+
+
+<h2>
+<a name="N10747">4. Running tolog queries</a>
+</h2>
+
+
+
+<p>
+This section explains how you can run tolog queries with Ontopia.
+</p>
+
+
+<h3>
+<a name="sect-plugin">4.1. The tolog plug-in</a>
+</h3>
+
+
+
+<p>
+The easiest way to get started with actually running tolog queries and
+seeing the query results is to use the tolog plug-in in the Omnigator.
+This plug-in appears as a "Query" link in the plug-in row of the
+Omnigator's pages. Clicking on this link takes you to a page where you
+can write tolog queries in a form and see them evaluated. The results
+display as a table where each topic is linked back into the Omnigator.
+</p>
+
+
+
+<h3>
+<a name="N10759">4.2. The 'tolog' tag library</a>
+</h3>
+
+
+
+<p>
+The Navigator Framework contains a tag library named 'tolog', which
+consists of JSP tags specially designed for creating HTML output from
+topic maps using tolog. The tag library allows queries to be run
+against the topic map, and makes the resulting variable bindings
+available as parameters for new queries or to be output, etc. For more
+information on this, please consult The Navigator Framework &mdash;
+Developer's Guide.
+</p>
+
+
+
+<h3>
+<a name="sect-api">4.3. Using the query processor API</a>
+</h3>
+
+
+
+<p>
+The tolog query processor also has a Java API, which can be used to
+evaluate queries and make use of the query results. The heart of this
+API is the <tt class="interfacename">QueryProcessorIF</tt> interface,
+which represents the query processor. Query processors can parse
+queries and return objects representing them, and also take queries
+and return query results (represented by
+<tt class="interfacename">QueryResultIF</tt> objects). These
+interfaces are all in the
+<tt class="symbol">net.ontopia.topicmaps.query.core</tt> package.
+</p>
+
+
+<p>
+There are two tolog implementations in Ontopia. One of these works
+directly against the API, and thus works for all the topic map engine
+backends. However, it does not perform optimally for very large topic
+maps stored in RDBMSs, and so there is a special implementation for
+this backend. The <tt class="classname">QueryUtils</tt> class in the
+<tt class="symbol">net.ontopia.topicmaps.query.utils</tt> package can be used
+to create query processors. It will automatically select the right
+processor for your topic map, and lets you write code that is
+independent of which backend you use.
+</p>
+
+
+<p>
+The example below shows the implementation of the tolog plug-in in the
+Omnigator, which is written using the API. The example has been
+simplified somewhat, in order to make it more clear.
+</p>
+
+
+<p align="center">
+<b>The tolog plug-in</b>
+</p>
+
+
+
+<pre>
+&lt;p&gt;Query:&lt;br&gt; &lt;%= query %&gt;&lt;/p&gt;
+
+&lt;%
+ String query = request.getParameter("query");
+ QueryProcessor proc = QueryUtils.getQueryProcessor(topicmap);
+ QueryResultIF result = proc.execute(query);
+ StringifierIF str = TopicStringifiers.getDefaultStringifier();
+%&gt;
+
+&lt;table class="text"&gt;
+&lt;tr&gt;&lt;%
+  String[] variables = result.getColumnNames();
+  for (int ix = 0; ix &lt; variables.length; ix++)
+    out.write("&lt;th&gt;" + variables[ix]);
+  }
+%&gt;&lt;/tr&gt;
+
+&lt;%
+  Object[] row = new Object[result.getWidth()];
+  while (result.next()) {
+    out.write("&lt;tr&gt;");
+    result.getValues(row);
+    for (int ix = 0; ix &lt; variables.length; ix++) {
+      if (row[ix] == null)
+        out.write("&lt;td&gt;null");
+      else if (row[ix] instanceof TopicIF)
+        out.write("&lt;td&gt;&lt;a href=\"../../models/topic_" + model + ".jsp?tm=" + tmid  + "&amp;id=" + ((TopicIF) row[ix]).getObjectId() + "\"&gt;" +
+                  str.toString(row[ix]) + "&lt;/a&gt;");
+      else
+        out.write("&lt;td&gt;" + row[ix]);
+      out.write("&amp;nbsp;&amp;nbsp;&amp;nbsp;\n");
+    }
+    out.write("&lt;/tr&gt;");
+  }
+  result.close();
+%&gt;
+&lt;/table&gt;
+</pre>
+
+
+
+<p>Note that in order to avoid resource leaks it is necessary to
+close all result sets when using the RDBMS backend.</p>
+
+
+<p>An easier interface for running queries in Ontopia is provided
+by the <tt class="classname">QueryWrapper</tt> class in the
+<tt class="symbol">net.ontopia.topicmaps.query.utils</tt> package. This
+provides methods for running a query and getting a single topic or
+string, or a list of objects, and also has methods for converting a
+query result into a list of custom objects and so on. This class
+automatically takes care of closing result sets.</p>
+
+
+
+
+<h3>
+<a name="N10796">4.4. Parameters</a>
+</h3>
+
+
+
+<p>
+The query processor API supports parsing a query once and then running
+the parsed query many times. This is supported through the
+<tt class="methodname">parse(String query)</tt> method of the
+<tt class="interfacename">QueryProcessorIF</tt>. This returns an
+object implementing <tt class="interfacename">ParsedQueryIF</tt>,
+which can be executed many times.
+</p>
+
+
+<p>
+Of course, executing the same query many times is not very
+interesting; one might as well just cache the results and achieve the
+same thing much more efficiently. However, tolog also supports
+parameters to parsed queries. These are written with the
+<tt class="symbol">%foo%</tt> syntax that we saw used with the
+<tt class="symbol">tm:tolog</tt> tag above.
+</p>
+
+
+<p>
+The <tt class="interfacename">ParsedQueryIF</tt> interface has two
+methods named <tt class="methodname">execute</tt>. One takes no arguments
+and effectively reruns the same query. The other takes a
+<tt class="interfacename">Map</tt> argument which maps parameter names
+to their values. Using this, the same query can be run over and over
+again with different parameters without having to pay the cost of
+parsing and optimizing the query more than once.
+</p>
+
+
+
+
+<h2>
+<a name="sect-updates">5. tolog updates</a>
+</h2>
+
+
+
+<p>
+In addition to querying the topic map to retrieve data tolog also
+supports making modifications to the topic map. This section explains
+how to use the <tt class="symbol">DELETE</tt>, <tt class="symbol">UPDATE</tt>,
+<tt class="symbol">INSERT</tt>, and <tt class="symbol">MERGE</tt> statements, in
+addition to the <tt class="symbol">SELECT</tt> statement covered so far.
+</p>
+
+
+<p>
+Note that in all of these statement types, topic references and prefix
+declarations have exactly the same syntax as in
+<tt class="symbol">SELECT</tt> statements.
+</p>
+
+
+<h3>
+<a name="N107DC">5.1. The DELETE statement</a>
+</h3>
+
+
+
+<p>
+This statement is used to delete objects from the topic map. The
+simplest form of delete statements is as follows:
+</p>
+
+
+<p align="center">
+<b>Deleting a topic</b>
+</p>
+
+
+<pre>delete foo</pre>
+
+
+
+<p>
+This would delete the topic map object with the ID
+<tt class="symbol">foo</tt>. If it is a topic map everything in the topic map
+will be deleted. If it is an association, the association and all its
+roles will be deleted. If it's a topic the topic and all its names,
+occurrences, and all the associations it plays roles in will be
+deleted. It will also be removed as a reifier, a topic type, and from
+scopes, and statements typed with the topic will also be deleted.
+</p>
+
+
+<p>
+It's possible to run a query to delete things, as follows:
+</p>
+
+
+<p align="center">
+<b>Deleting all person topics</b>
+</p>
+
+
+<pre>delete $PERSON from
+  instance-of($PERSON, person)
+</pre>
+
+
+
+<p>
+The <tt class="symbol">from</tt> part of the query is the same as for
+<tt class="symbol">SELECT</tt> statements, and so the above would find all
+topics of type <tt class="symbol">PERSON</tt> and delete them. Any number of
+variables and topic references are allowed in the
+<tt class="symbol">delete</tt> clause.
+</p>
+
+
+<p>
+Finally, there is a third form of <tt class="symbol">DELETE</tt> statements,
+which calls a function to remove a value from a property. Here is an
+example, removing all Wikipedia PSIs from all topics in the topic map:
+</p>
+
+
+<p align="center">
+<b>Removing Wikipedia PSIs</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+  delete subject-identifier($TOPIC, $PSI) from
+  subject-identifier($TOPIC, $PSI),
+  str:starts-with($PSI, "http://en.wikipedia.org/wiki/")
+</pre>
+
+
+
+<p>
+The deletion functions available in tolog are:
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Function</th><th class="dbTableHeaderEntry">Parameters</th><th class="dbTableHeaderEntry">Meaning</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">subject-identifier</td><td class="dbTableEntry">topic, locator</td><td class="dbTableEntry">Removes the locator as a subject identifier for the topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">subject-locator</td><td class="dbTableEntry">topic, locator</td><td class="dbTableEntry">Removes the locator as a subject locator for the topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">item-identifier</td><td class="dbTableEntry">object, locator</td><td class="dbTableEntry">Removes the locator as an item identifier for the object.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">direct-instance-of</td><td class="dbTableEntry">topic, topic</td><td class="dbTableEntry">Removes the second topic as an a topic type of the first topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">scope</td><td class="dbTableEntry">statement, topic</td><td class="dbTableEntry">Removes the topic from the scope of the statement.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">reifies</td><td class="dbTableEntry">statement, topic</td><td class="dbTableEntry">Removes the topic as a reifier of the statement.</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N10885">5.2. The INSERT statement</a>
+</h3>
+
+
+
+<p>
+The <tt class="symbol">INSERT</tt> statement is used to add new information
+to the topic map. In its simplest form it looks like this:
+</p>
+
+
+<p align="center">
+<b>Adding a new topic</b>
+</p>
+
+
+<pre>
+INSERT
+  tolog-updates isa update-language;
+    - "tolog updates".
+</pre>
+
+
+
+<p>
+Basically, after the <tt class="symbol">INSERT</tt> keyword follows topic map
+data in <a href="http://www.isotopicmaps.org/ctm/">CTM</a>
+syntax. Note that it is possible to use the CTM wildcard syntax to
+create new topics without giving them explicit IDs in the CTM
+fragment. Prefixes declared for the tolog query can also be used in
+the CTM fragment.
+</p>
+
+
+<p>
+There is another more powerful form of the <tt class="symbol">INSERT</tt>
+statement which runs a query and instantiates the CTM part once for
+each row in the query result. An example of this might be as follows:
+</p>
+
+
+<p align="center">
+<b>Adding Wikipedia PSIs</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+  insert $topic $psi . from
+  article-about($topic, $psi),
+  str:starts-with($psi, "http://en.wikipedia.org/wiki/")
+</pre>
+
+
+
+<p>
+For every <tt class="symbol">article-about</tt> occurrence which references a
+Wikipedia article this statement adds the URI of the article as a
+subject identifier of the topic.
+</p>
+
+
+
+<h3>
+<a name="N108BC">5.3. The UPDATE statement</a>
+</h3>
+
+
+
+<p>
+The <tt class="symbol">UPDATE</tt> statement makes it possible to change the
+values of some properties in the topic map. The statement has two
+forms, of which the simplest is this:
+</p>
+
+
+<p align="center">
+<b>Simple update</b>
+</p>
+
+
+<pre>update value(@2312, "Ontopia")</pre>
+
+
+
+<p>
+The above statement sets the string value of the object with ID
+<tt class="symbol">2312</tt> to <tt class="literal">"Ontopia"</tt>. It is also
+possible to run a query to find the objects to change (and their
+values), as follows:
+</p>
+
+
+<p align="center">
+<b>Query update</b>
+</p>
+
+
+<pre>update value($TN, "Ontopia") from
+  topic-name(oks, $TN)
+</pre>
+
+
+
+<p>
+The available update functions are:
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Function</th><th class="dbTableHeaderEntry">Parameters</th><th class="dbTableHeaderEntry">Meaning</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">value</td><td class="dbTableEntry">object, string</td><td class="dbTableEntry">Sets the string value of the object, which must be a topic
+  name, variant name, or occurrence.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">resource</td><td class="dbTableEntry">object, locator</td><td class="dbTableEntry">Sets the value of the object to the given locator (and also
+  changes the datatype to URI), where the object must be a variant
+  name or an occurrence.</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N1091A">5.4. The MERGE statement</a>
+</h3>
+
+
+
+<p>
+The <tt class="symbol">MERGE</tt> statement can be used to merge topics
+either by running a query or directly, as in the example below.
+</p>
+
+
+<p align="center">
+<b>Merging two topics</b>
+</p>
+
+
+<pre>merge topic1, topic2</pre>
+
+
+
+<p>
+It's also possible to find the topics to merge by running a query, as
+in the following:
+</p>
+
+
+<p align="center">
+<b>Merging by email</b>
+</p>
+
+
+<pre>merge $T1, $T2 from
+  email($T1, $EMAIL),
+  email($T2, $EMAIL)</pre>
+
+
+
+<p>
+Rows where <tt class="symbol">T1</tt> and <tt class="symbol">T2</tt> refer to the
+same topic are ignored.
+</p>
+
+
+
+
+<h2>
+<a name="N10948">6. Further reading</a>
+</h2>
+
+
+
+<p>
+The most detailed description of tolog can be found in
+<cite><a href="http://www.ontopia.net/topicmaps/materials/tolog-spec.html">tolog
+specification</a></cite> and
+<cite><a href="http://www.springerlink.com/content/d7w040544002x220/">the TMRA 2005 paper</a></cite>.
+</p>
+
+
+<p>The <cite><a href="http://www.ontopia.net/topicmaps/materials/extending-tolog.html">Extending
+tolog</a></cite> conference paper from Extreme Markup 2003
+has more background on why tolog was extended from version 0.1 to 1.0,
+and the design issues faced in that process.</p>
+
+
+<p>The original paper on tolog is <cite><a href="http://www.ontopia.net/topicmaps/materials/tolog.html">tolog - A
+topic map query language</a></cite>, from XML Europe
+2001.</p>
+
+
+<p>More about tolog updates can be found in <a href="http://www.tmra.de/2009/talks/tolog_updates">the TMRA 2009
+paper</a>.</p>
+
+
+
+<h2>Appendix: Footnotes</h2>
+<dl>
+
+
+ 
+
+                
+                
+       
+ 
+     
+  
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dt>
+<a name="footnote1">[1]</a>
+</dt>
+<dd>In practice the tolog query optimizer will start with
+the second predicate and find all cities in Italy. It will then find
+all the people born in those cities. It will do this because the other
+way around will find lots of (person, city) combinations outside
+Italy, which will be wasted because they have to be thrown away
+afterwards. The result will of course be exactly the same. It may be
+useful to be aware, however, that tolog will not necessarily run the
+query exactly as given, but may transform it to a faster, but
+equivalent, query before running it.</dd>
+
+
+ 
+
+     
+ 
+    
+       
+   
+    
+                 
+
+
+
+
+
+
+
+
+
+
+
+<dt>
+<a name="footnote2">[2]</a>
+</dt>
+<dd>The traditional
+English perversion of this is 'Milan'.</dd>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+        
+ 
+        
+       
+                    
+                    
+                     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+     
+ 
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+             
+            
+
+ 
+     
+     
+ 
+     
+     
+ 
+     
+     
+
+
+
+
+
+ 
+             
+            
+
+ 
+     
+     
+ 
+     
+     
+ 
+     
+     
+ 
+     
+     
+ 
+     
+     
+ 
+     
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+  
+  
+  
+
+
+  
+  
+  
+
+
+  
+  
+  
+
+
+  
+  
+  
+
+
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+</dl>
+</body>
+</html>

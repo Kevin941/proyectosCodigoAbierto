@@ -1,0 +1,2095 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Ontopia Topic Maps Engine</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Ontopia Topic Maps Engine</h1>
+<h2 class="subtitle">A Developer's Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>
+Ontopia
+</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N1002B">1. Introduction</a>
+</li>
+<ul>
+<li>
+<a href="#N10039">1.1. Architecture of the Ontopia Topic Maps Engine</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10052">1.2. An overview of the engine API</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10097">1.3. Overview of the engine packages</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N100EE">1.4. Support for TMAPI</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10115">2. Getting hold of a topic map</a>
+</li>
+<ul>
+<li>
+<a href="#N10159">2.1. Reading topic maps from XTM files</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1019F">2.2. Exporting to XTM files</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101BA">2.3. Working with other syntaxes</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101D9">2.4. An example</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N101ED">3. Accessing and navigating topic maps</a>
+</li>
+<ul>
+<li>
+<a href="#N101F2">3.1. An overview of the interfaces</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10267">3.2. Resources, locators and URIs</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102A7">3.3. Using the APIs: An example</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102D1">3.4. Topic names and their variants</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102FB">3.5. Creating topic maps</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10332">4. More about the utilities</a>
+</li>
+<ul>
+<li>
+<a href="#N10342">4.1. Stringifiers</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10366">4.2. Logging</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1039D">4.3. The event API</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N103EF">5. Sources and references</a>
+</li>
+<ul>
+<li>
+<a href="#N103FA">5.1. Locating topic maps&mdash;the entry package</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10436">5.2. Extensible source configuration</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1044E">5.3. The topic map repository</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10460">5.4. Transactional behaviour</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10470">6. General policies</a>
+</li>
+<ul>
+<li>
+<a href="#N10478">6.1. Deletion</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10493">6.2. Merging</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N104DC">6.3. Duplicate suppression</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N104EB">6.4. Moving objects</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N104FD">6.5. Collections policy</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+
+
+
+
+<h2>Abstract</h2>
+
+
+
+
+<p>
+This Developer's Guide is an introduction to the Ontopia Topic Maps
+Engine, intended for developers who will be using the engine API to
+develop Topic Maps applications. The main features of the API are
+described, together with some background information to help
+developers understand the intended use of the API facilities.
+</p>
+
+
+<p>
+Additional information about the core Topic Maps API interfaces can be
+found in the javadoc. In addition to the core Topic Maps API, utilities
+are provided for working with and performing various operations on a
+topic map, and for handling objects which implement the API
+interfaces.  These utilities are not so fully documented in the
+javadoc; this guide gives an overview which will help developers
+understand what utilities are available and how to use them.
+</p>
+
+
+<p>
+Familiarity with Topic Maps concepts, and the Java platform, is
+assumed in this guide.
+</p>
+
+
+
+
+
+
+<h2>
+<a name="N1002B">1. Introduction</a>
+</h2>
+
+
+
+<p>
+The Ontopia Topic Maps Engine is the heart of Ontopia, on which all
+the other components are based. The job of representing, storing, and
+making available topic maps to the rest of the product suite is its
+job, and without this crucial function none of Ontopia can do its
+work.
+</p>
+
+
+<p>
+In addition to providing a service internally within Ontopia the
+engine also provides a rich API against which Topic Maps-based
+applications may be built. However, despite the centrality of the
+engine within the product suite, the engine should not be used for all
+kinds of application development. For example, for web applications
+Ontopia provides the Navigator and Web Editor Frameworks, which are
+much more appropriate for this purpose.
+</p>
+
+
+<p>
+Ontopia also includes the Query Engine, which implements the tolog
+query language. For retrieving information from the topic maps the
+query language is far better suited than the API. It makes the task
+enormously much easier, while at the same time enabling far better
+performance, since the query engine can take shortcuts not available
+to applications working through the API.
+</p>
+
+
+<h3>
+<a name="N10039">1.1. Architecture of the Ontopia Topic Maps Engine</a>
+</h3>
+
+
+
+<p>
+The Topic Maps Engine and the Ontopia Knowledge Suite have been
+designed to support many different deployment scenarios. The most
+common, building an application on the engine using the RDBMS backend,
+is shown in the figure below.
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="EngineArch.gif">
+</p>
+<p align="center">
+<b>Figure 1. The engine architecture</b>
+</p>
+
+
+<p>
+The diagram shows the overall working relationships between a Topic
+Maps application, i.e. what you as a developer will build, the engine
+API, the utility packages, and a storage backend. The Topic Maps
+application is expected to make direct use of the engine API and the
+Topic Maps utilities.
+</p>
+
+
+<p>
+The rest of this document concentrates on the engine API and the topic
+map utilities, with a brief overview of the general utilities.
+</p>
+
+
+
+<h3>
+<a name="N10052">1.2. An overview of the engine API</a>
+</h3>
+
+
+
+<p>
+The heart of the engine is the
+<tt class="symbol">net.ontopia.topicmaps.core</tt> package.  This package
+defines the interfaces of the objects that represent the information
+in a topic map, such as the topic map itself, topics, occurrences,
+associations and so on. These interfaces are commonly referred to as
+the <dfn>core interfaces</dfn>. There is detailed
+documentation for these interfaces in the javadoc.  When reading the
+javadoc, remember that the 'IF' suffix is used to indicate an
+interface, throughout the Ontopia product suite; for example, the
+common interface for a topic object is called TopicIF.  This core API
+accommodates concepts from various versions of the topic map
+standards; these are clearly indicated in the javadoc.
+</p>
+
+
+<p>
+The engine contains several implementations of the core interfaces,
+each in a separate package below the
+<tt class="symbol">net.ontopia.topicmaps.impl</tt> package. There is one
+implementation of the core interfaces for each storage backend, and
+there are also some implementations that do not use a storage
+backend. (We will return to these later.) All these implementations
+should behave identically, except for their performance
+characteristics, which will necessarily be different. Please note that
+all code that uses the engine should use variables and arguments
+declared to use the interfaces in
+<tt class="symbol">net.ontopia.topicmaps.core</tt>, since this makes the code
+independent of the specific implementation used.  In particular, this
+allows an application to be piloted using the in-memory
+implementation, then brought into production using a database
+back-end, without any changes to the application code.
+</p>
+
+      
+<p>
+Most items, that is, interfaces, classes and methods, in the javadoc
+have an initial tag attached to them explaining the status of the
+documented item. The tags currently used are:
+</p>
+
+
+<dl>
+<dt>PUBLIC</dt>
+<dd>This tag means that the item is part of the public API of the
+      product that is being made available to developers for use in building
+      applications on top of the product.</dd>
+<dt>INTERNAL</dt>
+<dd>This tag means that the item is used by the internals of the
+      product, but is being made available to third-party code anyway
+      because the design of the product (and of the Java language) requires
+      it to be. Such items may change at any time and with no advance warning.
+      </dd>
+</dl>
+
+<dl>
+<dt>EXPERIMENTAL</dt>
+<dd>This tag means that the item is currently being developed and
+      not yet finished, in interface or in implementation. There is no
+      guarantee that it will work as documented or that it will not change
+      from one day to the next.</dd>
+</dl>
+
+
+
+<h3>
+<a name="N10097">1.3. Overview of the engine packages</a>
+</h3>
+
+
+
+<p>
+This section briefly lists the different Java packages that the
+Ontopia Engine consists of. Introductions to the use of each package
+follow later.
+</p>
+
+
+<dl>
+<dt>
+      net.ontopia.topicmaps.core
+    </dt>
+<dd>This package contains the core interfaces already
+      described.</dd>
+<dt>
+      net.ontopia.topicmaps.core.index
+    </dt>
+<dd>
+<p>
+        This package contains common interfaces for indexes which provide
+        optimized look-up of information held in a topic map, such as all
+        topics of a given type, whether a topic is used as an association type
+        anywhere and so on.  This package contains only interfaces implemented
+        elsewhere; as with the core engine API, each specific implementation
+        uses these interfaces, so that a developer need only write to the
+        common, repository-independent API.
+      </p>
+<p>
+        Ontopia is participating in the development of a standardized Topic
+        Map Query Language (TMQL), which in due course will provide much the
+        same functionality as these indexes do. In the meantime, however, the
+        indexes are the preferred way to do such lookups.
+      </p>
+</dd>
+<dt>
+      net.ontopia.topicmaps.utils
+    </dt>
+<dd>Contains various utility classes for working with
+      topic maps. Together with the indexes, these provide a repertoire of
+      operations like topic map traversal and filtering, support for merging
+      and so on.</dd>
+<dt>
+      net.ontopia.topicmaps.xml
+    </dt>
+<dd>
+        Contains topic map-specific XML-related utilities; the classes used to
+        load topic maps from XML topic map interchange documents and export
+        them back to XML. There are separate classes here for the ISO 13250
+        and XTM syntaxes.
+      </dd>
+<dt>net.ontopia.topicmaps.entry</dt>
+<dd>Contains generic interfaces and helper classes for locating
+      topic maps in file systems and persistent stores, and managing
+      references to them.</dd>
+</dl>
+
+
+
+<h3>
+<a name="N100EE">1.4. Support for TMAPI</a>
+</h3>
+
+
+
+<p>
+Ontopia now supports <a href="http://www.tmapi.org/2.0/">TMAPI
+2.0</a>, which is a de-facto standard Java API for Topic Maps
+engines. The API is supported by wrapping the Ontopia core interfaces
+in TMAPI interface implementations.
+</p>
+
+
+<p>
+To use the TMAPI support, all that's needed is to put the ontopia.jar
+file on your <tt>CLASSPATH</tt> and the
+<tt class="classname">TopicMapSystemFactory</tt> class will automatically
+detect Ontopia and start using it.
+</p>
+
+
+<p>
+If you need direct access to it, the Ontopia implementation of the
+<tt class="classname">TopicMapSystemFactory</tt> is called
+<tt class="classname">net.ontopia.topicmaps.impl.tmapi2.TopicMapSystemFactory</tt>.
+</p>
+
+
+<p>
+The rest of this document will describe the Ontopia native interfaces.
+If you would like to use the TMAPI interfaces instead, please see the 
+<a href="http://www.tmapi.org/2.0/">TMAPI 2.0</a> web site for
+documentation of TMAPI 2.0.
+</p>
+
+
+
+
+
+
+<h2>
+<a name="N10115">2. Getting hold of a topic map</a>
+</h2>
+
+
+
+<p>
+The <tt class="interfacename">TopicMapStoreIF</tt> interface defines
+the services provided by a topic map storage manager. To make a topic
+map, wherever it may be stored, the way to proceed is first to
+instantiate the appropriate topic map store manager (that is, whatever
+<tt class="interfacename">TopicMapStoreIF</tt> implementation you are
+using).  After creating the storage manager, call its
+<tt class="methodname">getTopicMap</tt> method to get the topic map
+object that is managed by it.
+</p>
+
+
+<p>
+Note that there is always one topic map per topic map store object.
+This is so because the topic map store object only represents the
+connection between the topic map object and its storage, and not the
+storage repository itself.
+</p>
+
+
+<p>
+Below is a simple example program that creates an empty topic map in
+the in-memory implementation, which is also known as the basic
+implementation.
+</p>
+
+
+<code>
+<pre>
+import net.ontopia.topicmaps.core.TopicMapIF;
+import net.ontopia.topicmaps.impl.basic.InMemoryTopicMapStore;
+
+public class Hello {
+
+  public static void main(String[] args) {
+    InMemoryTopicMapStore store = new InMemoryTopicMapStore();
+    TopicMapIF tm = store.getTopicMap();
+    System.out.println("Hello, world!");
+    System.out.println("I have a topic map with " + tm.getTopics().size() +
+                       " topics!");
+  }
+
+}</pre>
+</code>
+
+
+<p>
+The source code example above shows a simple Java program that
+instantiates an <tt class="classname">InMemoryTopicMapStore</tt> and gets
+a topic map from it. Since this topic map store is not connected to
+any permanent storage the returned topic map will be empty.
+</p>
+
+
+<p>
+Below is a list of all the
+<tt class="interfacename">TopicMapStoreIF</tt> implementations in the
+engine:
+</p>
+
+
+<dl>
+<dt>
+      net.ontopia.topicmaps.impl.basic.InMemoryTopicMapStore
+    </dt>
+<dd>A store that represents topic maps in-memory. This is
+      the default topic map store.</dd>
+<dt>net.ontopia.topicmaps.impl.rdbms.RDBMSTopicMapStore</dt>
+<dd>This is the relational database backend, which is used to
+      persist topic maps in RDBMSs, using JDBC.</dd>
+</dl>
+
+
+<h3>
+<a name="N10159">2.1. Reading topic maps from XTM files</a>
+</h3>
+
+
+
+<p>
+To read a topic map from an XTM file you use the
+<tt class="classname">XTMTopicMapReader</tt> class in the
+<tt class="symbol">net.ontopia.topicmaps.xml</tt> package. Usage is simple:
+bind the reader to a file in the constructor, then call the
+<tt class="methodname">read()</tt> method to get the topic map. The
+reader will then automatically create an
+<tt class="classname">InMemoryTopicMapStore</tt> for you and read the
+topic map into an empty topic map object.
+</p>
+
+
+<code>
+<pre>
+import java.io.File;
+
+import net.ontopia.topicmaps.core.TopicMapIF;
+import net.ontopia.topicmaps.xml.XTMTopicMapReader;
+
+public class Hello2 {
+
+  public static void main(String[] args) {
+    try {
+      XTMTopicMapReader reader = new XTMTopicMapReader(new File(args[0]));
+      TopicMapIF tm = reader.read();
+      System.out.println("Hello, world!");
+      System.out.println("I have a topic map with " + tm.getTopics().size() +
+                               " topics!");
+    }
+    catch (java.io.IOException e) {
+      System.err.println("Error reading topic map: " + e);
+    }
+  }
+
+}
+</pre>
+</code>
+
+
+<p>
+Above is a new version of the previous example program. This example
+uses the <tt class="classname">XTMTopicMapReader</tt> class to load an XTM
+file from disk into an object structure that can then be accessed.
+The reader takes care of creating an XML parser, a topic map store and
+so on. (Note that to get this example to compile you may have to put
+<tt>crimson.jar</tt> on your <tt>CLASSPATH</tt>
+explicitly.)
+</p>
+
+
+<p>
+When loading XTM files the reader will load all topic maps referred to
+using <tt class="symbol">mergeMap</tt> elements and also topic maps referred
+to by the <tt class="symbol">topicRef</tt> element. (For explanations of what
+<tt class="symbol">mergeMap</tt> and <tt class="symbol">topicRef</tt> elements do,
+see the XTM 1.0 specification.) It will also automatically merge
+topics as described by annex F of the XTM 1.0 specification.
+</p>
+
+
+<p>
+Some flexibility in resolving references to external topics and topic
+maps is provided through the
+<tt class="interfacename">ExternalReferenceHandlerIF</tt> interface.
+Applications can implement this interface to instruct the reader
+whether to read in specific external references or not and it can also
+remap references to new URIs, thus overriding the URIs given in the
+topic map document.
+</p>
+
+
+<p> Note that the readers also cater to some more specialized
+situations.  If you want to read the XTM file into a specific topic
+map object you do this with the
+<tt class="methodname">TopicMapImporterIF.importInto</tt> method. If you
+have an XML document containing several topic maps, that is, with
+several <tt class="symbol">topicMap</tt> elements, you can read in all the
+topic maps at the same time with the <tt class="methodname">readAll</tt>
+method.
+</p>
+
+
+
+<h3>
+<a name="N1019F">2.2. Exporting to XTM files</a>
+</h3>
+
+
+
+<p>
+Any topic map that is held in the engine can be exported using the
+<tt class="classname">XTMTopicMapWriter</tt> class in the
+<tt class="symbol">net.ontopia.topicmaps.xml</tt> package. When this class
+has been configured with a <tt class="classname">java.io.Writer</tt> and a
+character encoding the <tt class="methodname">write(TopicMapIF topicmap)</tt>
+can be called to write out the topic map to the
+<tt class="classname">Writer</tt>.
+</p>
+
+
+<p>
+Note that this class very carefully ensures that the character
+encoding used in the XML file that is written out is known, and also
+labels the file with the encoding used. The default encoding is UTF-8,
+which is a convenient default that is both backwards-compatible with
+ASCII and at the same time can encode any Unicode character, but this
+can be overridden by the client code. Note that if the topic map
+contains characters that cannot be encoded using the chosen encoding
+those characters will be lost.
+</p>
+
+
+
+<h3>
+<a name="N101BA">2.3. Working with other syntaxes</a>
+</h3>
+
+
+
+<p>
+The <a href="http://www.ontopia.net/download/ltm.html">LTM
+syntax</a> is a compact and easy-to-edit text syntax for topic
+maps designed by Ontopia. This syntax is supported by the Ontopia
+Topic Map Engine, and can be used just like the other topic map
+syntaxes.
+</p>
+
+
+<p>
+The engine can export and import a number of different topic map
+syntaxes (XTM, the ISO 13250 HyTM syntax, and LTM), as
+well as RDF. If you want your application to be able to import files
+by guessing the format from the file extension, you can use the
+<tt class="classname">net.ontopia.topicmaps.utils.ImportExportUtils</tt>
+to create the reader and writer instances for you. This can make your
+code both simpler and more flexible at the same time.
+</p>
+
+
+<p>
+For further details, see the javadoc for
+<tt class="classname">ImportExportUtils</tt> class, as well as the
+<tt class="symbol">net.ontopia.topicmaps.utils.ltm</tt> and
+<tt class="symbol">net.ontopia.topicmaps.utils.rdf</tt> packages.
+</p>
+
+
+
+<h3>
+<a name="N101D9">2.4. An example</a>
+</h3>
+
+
+
+<p>
+To illustrate the information in the last few sections we will write a
+simple program that converts topic maps written in LTM syntax to
+XTM. Below is the source code to this command-line tool.
+</p>
+
+
+<code>
+<pre>
+
+import java.io.File;
+import net.ontopia.topicmaps.core.*;
+import net.ontopia.topicmaps.xml.XTMTopicMapWriter;
+import net.ontopia.topicmaps.utils.ltm.LTMTopicMapReader;
+
+public class LTM2XTMConverter {
+
+  public static void main(String [] args) {
+    if (args.length != 2) {
+      usage();
+      System.exit(1);
+    }
+
+    try {
+      convert(args[0], args[1]);
+    }
+    catch (java.net.MalformedURLException e) {
+      System.err.println(e);
+      System.exit(2);
+    }
+    catch (java.io.IOException e) {
+      System.err.println(e);
+      System.exit(2);
+    }
+  }
+
+  private static void usage() {
+    System.out.println("java LTM2XTMConverter &lt;in&gt; &lt;out&gt;");
+    System.out.println("");
+    System.out.println("  Reads a topic map and writes it out in XTM form");
+    System.out.println("  &lt;in&gt;:  file name of LTM file");
+    System.out.println("  &lt;out&gt;: file to write XTM to");
+    System.out.println("");
+  }
+
+  private static void convert(String ltm, String xtm)
+    throws java.io.IOException, java.net.MalformedURLException {
+    TopicMapIF source;
+
+    source = new LTMTopicMapReader(new File(ltm)).read();
+    new XTMTopicMapWriter(xtm).write(source);
+  }
+}
+</pre>
+</code>
+
+
+<p>
+The source code of the program should be simple enough to understand.
+The only part that is specific to the Ontopia Topic Map Engine is the
+<tt class="methodname">convert</tt> method, which reads the topic map
+file into a topic map object, and then writes the object back out.
+It really is no harder than this.
+</p>
+
+
+
+
+
+<h2>
+<a name="N101ED">3. Accessing and navigating topic maps</a>
+</h2>
+
+
+
+<h3>
+<a name="N101F2">3.1. An overview of the interfaces</a>
+</h3>
+
+
+
+<p>
+The main interfaces of the <tt class="symbol">net.ontopia.topicmaps.core</tt>
+package are the ones in the diagram below. The arrows go from base
+interfaces to derived interfaces that extend the base interfaces.  The
+gray boxes represent interfaces that are never implemented directly by
+a class; they represent pieces of functionality common to several
+interfaces.
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="ci-main.png">
+</p>
+<p align="center">
+<b>Figure 2. The main interfaces of the core package</b>
+</p>
+
+
+<p>
+The three most important interfaces are:
+<tt class="interfacename">TopicIF</tt>, representing topics,
+<tt class="interfacename">AssociationIF</tt>, representing
+associations and <tt class="interfacename">OccurrenceIF</tt>,
+representing occurrences.
+</p>
+
+
+<p>
+The <tt class="interfacename">TMObjectIF</tt> interface is the base
+interface for all interfaces in the core package and all data classes
+implement this interface.  The <tt class="interfacename">ScopedIF</tt>
+interface is used by classes that represent topic map constructs that
+have scope, in this case <tt class="interfacename">AssociationIF</tt>
+and <tt class="interfacename">OccurrenceIF</tt>.
+</p>
+
+
+<p>
+There is a similar interface for typed objects:
+<tt class="interfacename">TypedIF</tt> for objects which can have a
+single type.
+</p>
+
+
+<p>
+Note that <tt class="interfacename">ScopedIF</tt>,
+<tt class="interfacename">TypedIF</tt> are both derived from
+<tt class="interfacename">TMObjectIF</tt>.
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="ci-scope.png">
+</p>
+<p align="center">
+<b>Figure 3. The scoped interfaces</b>
+</p>
+
+
+<p> 
+The interfaces shown here are all the ones which extend
+<tt class="interfacename">ScopedIF</tt>, which in turn extends
+<tt class="interfacename">TMObjectIF</tt>. (Note that
+<tt class="interfacename">TopicIF</tt> and
+<tt class="interfacename">TopicMapIF</tt> for historical reasons also
+do; their extension of <tt class="interfacename">ScopedIF</tt> is
+deprecated, and will disappear.)
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="ci-rest.png">
+</p>
+<p align="center">
+<b>Figure 4. The rest of the interfaces</b>
+</p>
+
+
+<p>
+Left over are only two interfaces; the
+<tt class="interfacename">TopicMapIF</tt> interface, which directly
+extends <tt class="interfacename">TMObjectIF</tt>, and
+<tt class="interfacename">AssociationRoleIF</tt>, which represents the
+roles played by topics participating in associations (in XTM
+terminology: topics which are members of associations). For every
+topic participating in an association there is an
+<tt class="interfacename">AssociationRoleIF</tt> object representing
+the connection point between the topic and the association.
+</p>
+
+
+
+<h3>
+<a name="N10267">3.2. Resources, locators and URIs</a>
+</h3>
+
+  
+
+<p>
+Central to topic maps is the concept of resources, data streams which
+can contain information of any kind and in any format. Topic maps can
+refer to resources in one of two ways: by using URIs or by including
+them inline.
+</p>
+
+
+<p>
+In the engine resources are catered for through the interfaces in the
+<tt class="symbol">net.ontopia.infoset.core</tt> package. The central concept
+in that package is that of a locator, which is a string using a
+particular notation to refer to an information resource. The default
+notation is <a href="http://www.ietf.org/rfc/rfc2396.txt">URI</a>, but any
+locator syntax can be implemented.
+</p>
+
+
+<p>
+The main interface is the <tt class="interfacename">LocatorIF</tt>
+interface, which represents a locator. It has a notation property,
+which will be <tt class="literal">"URI"</tt> for URIs, and an address
+property, which will contain the locator itself.  The
+<tt class="interfacename">LocatorIF</tt> implementation representing
+URIs is found in the <tt class="classname">URILocator</tt> class in the
+<tt class="symbol">net.ontopia.infoset.impl.basic</tt> package.
+</p>
+      
+<p>
+The design of the locator system considers locators to be
+primitive values, in the same way that Java considers Strings to be
+primitive values. A locator object may therefore never change its
+value; instead, a new object must be substituted if a locator property
+is to be changed. Similarly, all
+<tt class="interfacename">LocatorIF</tt> implementations must
+implement the <tt class="methodname">hashCode</tt>,
+<tt class="methodname">equals</tt> and <tt class="methodname">toString</tt>
+methods.
+</p>
+      
+<p>
+It should also be noted that all locators are canonicalized to a
+canonical syntactic form on creation and also absolutized. A
+<tt class="interfacename">LocatorIF</tt> object will therefore always
+hold an absolute locator in canonical form, which ensures that two
+logically equivalent locator objects will always compare as equal.
+This has the effect that when a topic map is loaded from file, all
+locators in that topic map will be absolute locators. The
+<tt class="methodname">resolveAbsolute</tt> method on
+<tt class="interfacename">LocatorIF</tt> should be used to create
+absolute locators from ones that are relative to a base locator.
+</p>
+
+
+
+<h3>
+<a name="N102A7">3.3. Using the APIs: An example</a>
+</h3>
+
+
+
+<p>
+To illustrate how to work with the core interfaces, here is an example
+of a small application that establishes contact with a topic map, then
+prints out all the topics in that topic map with a specific topic
+type. The application runs from the command-line and takes two
+arguments: the file name of the XTM document and the XML ID of the
+topic type.
+</p>
+
+
+<code>
+<pre>import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Collection;
+
+import net.ontopia.infoset.core.LocatorIF;
+import net.ontopia.topicmaps.core.*;
+import net.ontopia.topicmaps.xml.XTMTopicMapReader;
+
+public class TopicsOfType {
+
+  public static void main(String[] args) {
+    try {
+      printTopicsOfType(new File(args[0]), args[1]);
+    } catch (IOException e) {
+      System.err.println("ERROR reading topic map: " + e);
+    }
+  }
+
+  public static void printTopicsOfType(File tmfile, String typeId)
+    throws IOException {
+    XTMTopicMapReader reader = new XTMTopicMapReader(tmfile);
+    TopicMapIF tm = reader.read();
+
+    TopicIF topicType = getTopicByXMLId(tm, typeId);
+    if (topicType == null) {
+      System.err.println("ERROR: No such topic: " + typeId);
+      return;
+    }
+
+    Iterator it = tm.getTopics().iterator();
+    while (it.hasNext()) {
+      TopicIF topic = (TopicIF) it.next();
+      Collection types = topic.getTypes();
+      if (types.contains(topicType))
+        System.out.println(topic);
+    }
+  }
+
+  private static TopicIF getTopicByXMLId(TopicMapIF tm, String id) {
+    TopicMapStoreIF store = tm.getStore();
+    LocatorIF loc = store.getBaseAddress().resolveAbsolute("#" + id);
+    return (TopicIF) tm.getObjectByItemIdentifier(loc);
+  }
+
+}</pre>
+</code>
+
+
+<p>
+This simple application starts by creating an
+<tt class="classname">XTMTopicMapReader</tt>, which it binds to the file
+it would like to read, and then retrieves the topic map. Then, it
+looks up the type topic by its given ID, checks whether a topic was
+actually found and then iterates over all the topics in the topic map,
+printing those that have the required type.
+</p>
+
+
+<p>
+Note that it is not possible to look a topic up by its XML ID
+directly, because since the topics in a single topic map may come from
+several different XML documents there is no guarantee that a topic
+will have a unique ID. Instead, we associate the URIs of the elements
+that gave rise to the topics with the topics in their itemIdentifiers
+properties.
+</p>
+
+
+<p>
+The <tt class="methodname">getTopicByXMLId</tt> method exploits this by
+creating a URL from the base address of the topic map and the ID given
+on the command-line. This means that if the topic appeared in the XML
+document named on the command-line only its ID need to be given, but
+if it appeared outside that document the entire URI of the topic must
+be given. This simple version of the application does not handle this
+case.
+</p>
+
+
+<p>
+Notice how this example only uses the core API, so that it can easily
+be used with topic maps stored in databases or any other storage
+implementation. Note also how awkward it is, given the comparative
+simplicity of what it is trying to achieve. For this task, as for most
+tasks, it would be far better to use tolog.
+</p>
+      
+
+<p>
+When run on a topic map the example will produce output like that
+shown below.  In this case it has been told to print all the topics of
+type "script" in the "scripts and languages" topic map that comes with
+the engine distribution.
+</p>
+
+
+<pre>
+[basic.Topic, 0 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id209} ]
+[basic.Topic, 1 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id203} ]
+[basic.Topic, 2 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id60} ]
+[basic.Topic, 3 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id221} ]
+[basic.Topic, 4 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id166} ]
+[basic.Topic, 5 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id271} ]
+[basic.Topic, 6 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id268} ]
+[basic.Topic, 7 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id80} ]
+[basic.Topic, 8 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id51} ]
+[basic.Topic, 9 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id20} ]
+[basic.Topic, 10 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id173} ]
+[basic.Topic, 11 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id22} ]
+[basic.Topic, 12 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id140} ]
+[basic.Topic, 13 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id69} ]
+[basic.Topic, 14 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id139} ]
+[basic.Topic, 15 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id100} ]
+[basic.Topic, 16 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id177} ]
+[basic.Topic, 17 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id213} ]
+[basic.Topic, 18 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id150} ]
+[basic.Topic, 19 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id174} ]
+[basic.Topic, 20 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id95} ]
+[basic.Topic, 21 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id220} ]
+[basic.Topic, 22 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id125} ]
+[basic.Topic, 23 {URI|file:/home/larsga/tmp/oks-1.0/samples/i18n.xtm#id36} ]
+[...]
+</pre>
+
+
+<p>
+Each topic is here printed using the <tt class="methodname">toString</tt>
+method, and that is, as you can see, not a great help in this case.
+The problem is that all the information it provides is an
+automatically generated ID and the item identifier of the topic. We
+will improve on this result later, however.
+</p>
+
+
+
+<h3>
+<a name="N102D1">3.4. Topic names and their variants</a>
+</h3>
+
+
+
+<p>
+One part of the API that many find confusing at first is the
+representation of topic names and variants. As mentioned earlier, both
+are represented by objects that implement the
+<tt class="interfacename">TopicNameIF</tt> interface, but variant names
+have their own interface derived from this, which is called
+<tt class="interfacename">VariantNameIF</tt>. In both cases, the
+<tt class="symbol">variants</tt> property contains the
+<tt class="symbol">variant</tt> children of the object.
+</p>
+
+
+<p>
+In the XTM 1.0 syntax the <tt class="symbol">variant</tt> element name does
+not have a <tt class="symbol">scope</tt> child, but instead contains a
+<tt class="symbol">parameters</tt> child. However,
+<tt class="symbol">parameters</tt> has the same semantics as
+<tt class="symbol">scope</tt>, and so what is contained in the
+<tt class="symbol">scope</tt> property of a variant name is its parameters.
+</p>
+
+
+
+<h3>
+<a name="N102FB">3.5. Creating topic maps</a>
+</h3>
+
+
+
+<p>
+Quite often one may want to either add data to an existing topic map,
+or to process data in some other format to automatically generate a
+topic map from it. To do this one needs to create new topic map
+objects and insert them into a topic map. If no topic map exists
+already one will also have to be created.
+</p>
+
+
+<p>
+To create a topic map in the in-memory implementation create an
+instance of the
+<tt class="classname">net.ontopia.topicmaps.impl.basic.InMemoryTopicMapStore</tt>
+class. This class has a constructor with no arguments. Once that is
+done you have a topic map object, and are ready to start filling it
+with data. You will not be able to do this by instantiating topic map
+objects from the same package directly. The reason is that by doing so
+you are tying your code directly to one engine implementation, and by
+letting you do so we would be limiting our own freedom in terms of
+implementation strategies.
+</p>
+
+
+<p>
+Instead, the solution is to use the
+<tt class="interfacename">TopicMapBuilderIF</tt> object available from
+the <tt class="interfacename">TopicMapIF</tt> interface. The builder
+will let you create new topic map objects, and offers you some
+convenience methods for creating and configuring objects in a single
+method call, which makes building a bit easier.
+</p>
+
+
+<p>Many methods in the API take
+<tt class="interfacename">LocatorIF</tt> arguments, and it may not be
+obvious how to create such objects. A straightforward approach is to
+use the constructor on the
+<tt class="classname">net.ontopia.infoset.impl.basic.URILocator</tt> class
+and pass in the URI as a string. Another approch is to use the
+<tt class="classname">net.ontopia.topicmaps.utils.QNameRegistry</tt> class
+to create the locators via qnames (such as
+<tt class="literal">"tmdm:topic-name"</tt>).</p>
+
+
+<p>
+Below is an example program that creates a topic map with topics for
+the numbers 1-10 and exports it to XTM format.
+</p>
+
+
+<code>
+<pre>
+import java.io.File;
+import java.io.IOException;
+
+import net.ontopia.topicmaps.core.*;
+import net.ontopia.topicmaps.impl.basic.InMemoryTopicMapStore;
+import net.ontopia.topicmaps.xml.XTMTopicMapWriter;
+
+public class Generate {
+
+  public static void main(String[] args) throws IOException {
+    TopicMapStoreIF store = new InMemoryTopicMapStore();
+    TopicMapIF topicmap = store.getTopicMap();
+
+    TopicMapBuilderIF builder = topicmap.getBuilder();
+    for (int ix = 1; ix &lt; 11; ix++) {
+      // add topic to topic map
+      TopicIF topic = builder.makeTopic(topicmap);
+
+      // builder adds topic name to topic and sets name string
+      builder.makeTopicName(topic, Integer.toString(ix));
+    }
+
+    // having created the topic map we are now ready to export it
+    new XTMTopicMapWriter("numbers.xtm").write(topicmap);
+  }
+
+}
+</pre>
+</code>
+
+
+<p>
+Note that an alternative approach when creating topic maps is to use
+the LTM format to create small fragments which can be imported into
+the topic map. This can be much simpler than using the API directly.
+Below is an example that does the same thing using this approach.
+</p>
+
+
+<code>
+<pre>import java.io.StringReader;
+import java.io.IOException;
+
+import net.ontopia.infoset.impl.basic.URILocator;
+import net.ontopia.topicmaps.core.*;
+import net.ontopia.topicmaps.utils.ltm.LTMTopicMapReader;
+import net.ontopia.topicmaps.xml.XTMTopicMapWriter;
+
+public class GenerateLTM {
+
+  public static void main(String[] args) throws IOException {
+    String seed = "[number = \"Number\"]";
+    URILocator base = new URILocator("http://www.example.com");
+    LTMTopicMapReader reader = new LTMTopicMapReader(new StringReader(seed), base);
+    
+    TopicMapIF topicmap = reader.read();
+    for (int ix = 1; ix &lt; 11; ix++) {
+      String fragment = "[t" + ix + " : number = \"" + ix + "\"]";
+      reader = new LTMTopicMapReader(new StringReader(fragment), base);
+      reader.importInto(topicmap);
+    }
+
+    // having created the topic map we are now ready to export it
+    new XTMTopicMapWriter("numbers.xtm").write(topicmap);
+  }
+}</pre>
+</code>
+
+
+<p>
+In an example this simple the code isn't much simpler (though note
+that the LTM example does more than the API example), but in a real
+example the difference can be quite substantial once you have utility
+methods to read in the LTM. (And if you use a scripting language like
+Jython the difference can become dramatic, since it's much easier to
+produce the string fragments in such a language.)
+</p>
+
+
+
+
+
+<h2>
+<a name="N10332">4. More about the utilities</a>
+</h2>
+
+
+
+<p>
+This section provides additional information about the topic map
+utility package (<tt class="symbol">net.ontopia.topicmaps.utils</tt>).  The
+discussions below not only provide information about individual
+utilities, but hopefully also insight into the general design and
+coding style used throughout the Ontopia code.
+</p>
+
+
+<p>
+In general, the philosophy behind the design of the engine has been
+for the core interfaces to only represent the data in a topic map and
+to leave all other functionality to be built on top of these core
+interfaces. This means that functionality like association traversal,
+merging, information lookup and so on has all been placed in packages
+outside the core interfaces. The implementations of these utilities
+are independent of specific topic map implementations where possible,
+and the interfaces to the functionality are always independent of the
+particular implementation used.
+</p>
+
+
+
+
+<h3>
+<a name="N10342">4.1. Stringifiers</a>
+</h3>
+
+
+
+<p>
+Stringifiers are objects which implement the
+<tt class="interfacename">StringifierIF</tt> interface in the
+<tt class="symbol">net.ontopia.utils</tt> package. This means that it can
+take any object and return a string value somehow derived from the
+state of this object.
+</p>
+
+
+<p>
+The most common use of stringifiers is to extract the name of a
+topic. This operation is actually quite complex, since topic maps
+allow topics to have arbitrarily many names of different kinds.  In
+the <tt class="symbol">net.ontopia.topicmaps.utils</tt> package there is a
+class named <tt class="classname">TopicStringifiers</tt> with three
+different methods that create stringifiers for topics. These
+stringifiers can then be used to extract the names of any topic. (See
+the javadoc for further details.)
+</p>
+
+
+<p>
+This allows us to extend our previous TopicsOfType example application
+to print the names of topics, and the source code of this improved
+version is given below.
+</p>
+
+
+<code>
+<pre>import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Collection;
+
+import net.ontopia.infoset.core.LocatorIF;
+import net.ontopia.topicmaps.core.*;
+import net.ontopia.topicmaps.utils.ImportExportUtils;
+import net.ontopia.topicmaps.utils.TopicStringifiers;
+import net.ontopia.utils.StringifierIF;
+
+public class TopicsOfType2 {
+
+  public static void main(String[] args) {
+    try {
+      printTopicsOfType(new File(args[0]), args[1]);
+    } catch (IOException e) {
+      System.err.println("ERROR reading topic map: " + e);
+    }
+  }
+
+  public static void printTopicsOfType(File tmfile, String typeId)
+    throws IOException {
+    TopicMapReaderIF reader = ImportExportUtils.getReader(tmfile);
+    TopicMapIF tm = reader.read();
+
+    TopicIF topicType = getTopicByXMLId(tm, typeId);
+    if (topicType == null) {
+      System.err.println("ERROR: No such topic: " + typeId);
+      return;
+    }
+
+    StringifierIF stringifier = TopicStringifiers.getDefaultStringifier();
+    Iterator it = tm.getTopics().iterator();
+    while (it.hasNext()) {
+      TopicIF topic = (TopicIF) it.next();
+      Collection types = topic.getTypes();
+      if (types.contains(topicType))
+        System.out.println(stringifier.toString(topic));
+    }
+  }
+
+  private static TopicIF getTopicByXMLId(TopicMapIF tm, String id) {
+    TopicMapStoreIF store = tm.getStore();
+    LocatorIF loc = store.getBaseAddress().resolveAbsolute("#" + id);
+    return (TopicIF) tm.getObjectByItemIdentifier(loc);
+  }
+
+}</pre>
+</code>
+
+
+<p>
+This new and improved version now produces the output below (for the
+same topics that the previous version printed). Note that these names
+are all basenames in the unconstrained scope, since these are the
+default names for the topics.
+</p>
+
+
+<pre>
+Telugu script
+Bengali script
+Hangul
+Tamil script
+Cyrillic
+Gurmukhi
+Kannada
+Gujarati script
+Mkhedruli
+Arabic script
+Oriya script
+Thai script
+Osmanya
+Divehi
+Burmese script
+Chieng Mai
+Sinhalese
+Greek
+Latin script
+Tibetan script
+Mongolian script
+Hiragana
+Malayalam script
+Kaithi
+</pre>
+
+
+
+<h3>
+<a name="N10366">4.2. Logging</a>
+</h3>
+
+
+
+<p> The logging support in the engine is based on the
+<a href="http://www.slf4j.org/">Simple Logging Facade for Java
+(SLF4J)</a>, which makes it possible to use any logging tool
+supported by SLF4J for the actual logging. By default, Ontopia
+uses <a href="http://jakarta.apache.org/log4j/docs/index.html">log4j</a>,
+an open source logging package developed as part of the Jakarta Apache
+project. For the engine to properly log its runtime messages log4j
+needs to be configured. If it is not properly configured the first log
+statement will output an error message like the following to the
+console.</p>
+
+
+<pre>
+log4j:ERROR No appenders could be found for category (net.ontopia.topicmaps.xml.AbstractTopicMapContentHandler).
+log4j:ERROR Please initialize the log4j system properly.
+</pre>
+
+
+<p>
+To avoid this problem one needs to configure log4j properly. The
+easiest way to do this and get a sensible default is to call the
+<tt class="methodname">configure</tt> method of the
+<tt class="classname">org.apache.log4j.BasicConfigurator</tt> class.  You
+can also use the <tt class="classname">PropertyConfigurator</tt> class to
+load a property file with the log4j configuration. Given the right
+<tt class="symbol">import</tt> statements, the code would go something like
+this:
+</p>
+
+
+<pre>
+BasicConfigurator.configure();
+PropertyConfigurator.configure("log4j.properties");
+</pre>
+
+
+<p>
+To learn how log4j works and other mechanisms for configuring logging
+see <a href="http://jakarta.apache.org/log4j/docs/manual.html">the
+log4j manual</a>. In order to switch to a different logging engine
+than log4j, all that's necessary is to replace the jar file that binds
+SLF4J to log4j with one that binds to another logging engine.
+See <a href="http://www.slf4j.org/manual.html">the SLF4J manual</a>
+for further details.
+</p>
+
+
+<p>
+More complete documentation of the logging conventions used by the
+engine and recommendations for how to configure logging will be added
+later. If you need information on this, please send an email to
+<a href="mailto:support@ontopia.net">support@ontopia.net</a>.
+</p>
+
+
+
+<h3>
+<a name="N1039D">4.3. The event API</a>
+</h3>
+
+
+
+<p>
+Some applications may want to be informed when changes are made to the
+topic map, and the event API enables this by allowing applications to
+register in order to receive method callbacks on changes to the topic
+map. The API is in the <tt class="symbol">net.ontopia.topicmaps.core.events</tt>,
+which contains an interface event listeners must implement
+(<tt class="interfacename">TopicMapListenerIF</tt>) and
+a class for registering listeners (<tt class="classname">TopicMapEvents</tt>).
+</p>
+
+
+<dl>
+<dt class="note">Note</dt>
+<dd>
+  
+<p>At the moment there are three events: topic added, topic
+  modified and topic deleted. The API will be extended with support
+  for more events as these are needed.</p>
+
+</dd>
+</dl>
+
+
+<p>
+A simple example command-line application using the event API is given
+below.
+</p>
+
+
+<pre>import net.ontopia.topicmaps.core.TopicIF;
+import net.ontopia.topicmaps.core.TMObjectIF;
+import net.ontopia.topicmaps.core.TopicMapIF;
+import net.ontopia.topicmaps.core.TopicMapBuilderIF;
+import net.ontopia.topicmaps.core.events.TopicMapEvents;
+import net.ontopia.topicmaps.core.events.AbstractTopicMapListener;
+import net.ontopia.topicmaps.core.events.TopicMapListenerIF;
+import net.ontopia.topicmaps.entry.TopicMapReferenceIF;
+import net.ontopia.topicmaps.entry.StoreFactoryReference;
+import net.ontopia.topicmaps.utils.DeletionUtils;
+import net.ontopia.topicmaps.utils.SameStoreFactory;
+import net.ontopia.topicmaps.utils.ImportExportUtils;
+
+public class EventTest {
+
+  public static void main(String[] argv) throws java.io.IOException {
+    // import the topic map, whichever one it is
+    TopicMapIF tm = ImportExportUtils.getReader(argv[0]).read();
+
+    // the API requires a reference, so we have to perform some extra
+    // steps here; in web applications this is easy (see event API
+    // javadoc)
+    SameStoreFactory ssf = new SameStoreFactory(tm.getStore());
+    TopicMapReferenceIF ref = new StoreFactoryReference("test", "test", ssf);
+
+    // register to listen for events
+    TestListener listener = new TestListener();
+    TopicMapEvents.addTopicListener(ref, listener);
+
+    // get the store through the reference so the listener is registered
+    ref.createStore(false);
+
+    // let's add a topic
+    System.out.println("Off we go");
+    TopicMapBuilderIF builder = tm.getBuilder();
+    TopicIF newbie = builder.makeTopic(tm);
+    System.out.println("Let's name this topic");
+    builder.makeTopicName(newbie, "Newbie topic");
+
+    // then let's remove it
+    System.out.println("And now, the exit");
+    DeletionUtils.remove(newbie);
+    System.out.println("Goodbye, short-lived topic");
+  }
+
+  // ----- Listener
+
+  static class TestListener extends AbstractTopicMapListener {
+
+    public void objectAdded(TMObjectIF snapshot) {
+      System.out.println("Topic added: " + snapshot.getObjectId());
+    }
+
+    public void objectModified(TMObjectIF snapshot) {
+      System.out.println("Topic modified: " + snapshot.getObjectId());
+    }
+
+    public void objectRemoved(TMObjectIF snapshot) {
+      System.out.println("Topic removed: " + snapshot.getObjectId());
+    }
+  }
+}</pre>
+
+
+<p>
+The result of running it on the command-line is shown below:
+</p>
+
+
+<pre>[larsga@dhcp-98 tmp]$ java EventTest bkclean.xtm 
+Off we go
+Topic added: 3409
+Let's name this topic
+Topic modified: 3409
+Topic modified: 3409
+And now, the exit
+Topic removed: 3409
+Goodbye, short-lived topic</pre>
+
+
+<p>
+Pay careful attention to the order in which the lines appear in the
+output, and you'll see that the topic added event occurs
+<em>before</em> the <tt class="methodname">makeTopic</tt>
+method returns. There are some consequences of this, but before we go
+into them you should note that the in-memory and RDBMS implementations
+behave differently on this point, as described below.
+</p>
+
+
+<ul>
+<li>
+    
+<p>In the in-memory implementation events are dispatched
+    immediately as we're effectively running in auto-commit mode. For
+    the add event this means that events will arrive before anything
+    is known about the topic except the object ID.  That is, if
+    identities or names are added, they haven't been added yet, which
+    can cause difficulties. Note that this behaviour can result in
+    multiple topic modified events.</p>
+  
+</li>
+<li>
+    
+<p>In the RDBMS implementation events are dispatched when the
+    transaction is committed, because before the commit it is not yet
+    known whether the change is permanent. This means that topics will
+    typically arrive with at least a basic set of information
+    attached, which makes things easier. Only one topic modified event
+    should be issued per topic per transaction.</p>
+  
+</li>
+</ul>
+
+
+<p>
+The one thing you can rely on always getting is the object ID of the
+topic. 
+</p>
+
+
+<p>
+Another consideration to note is that the objects you receive through
+the event API are <em>not</em> the same objects that exist
+in the topic map itself. This is for two reasons. The first is that
+deleted objects contain no useful information, and so passing them
+through the event API is not very helpful. The second is that the
+event API does not know which transaction (if any) the listeners are
+operating in, and so it needs to avoid making assumptions about this.
+Therefore, the object passed through the callbacks are dead snapshot
+objects that live outside any transaction. The object graph can be
+traversed a little way out from the initial topic, but will soon stop
+in stub objects.
+</p>
+
+
+<p>
+The way to handle this is to use the object IDs to look up the
+corresponding objects in the topic map in order to get the complete
+information about them.
+</p>
+
+
+<p>
+You can choose whether to implement
+<tt class="interfacename">TopicMapListenerIF</tt> directly or subclass
+<tt class="classname">AbstractTopicMapListener</tt>. Subclassing is
+recommended as this is more future-proof as any new methods that gets
+added to the listener interface will then be automatically be picked
+up by your listener implementation. The advantage is that you then
+don't have to extend and recompile the class before a software
+upgrade. The abstract listener class implements all event methods, but
+none of them do anything.
+</p>
+
+
+
+
+
+<h2>
+<a name="N103EF">5. Sources and references</a>
+</h2>
+
+
+
+<p>
+The <tt class="symbol">net.ontopia.topicmaps.entry</tt> package contains
+interfaces and classes that are very useful for applications that
+wants to work with topic maps found in different kinds of locations.
+This section provides more information on this package.
+</p>
+
+
+<h3>
+<a name="N103FA">5.1. Locating topic maps&mdash;the entry package</a>
+</h3>
+
+
+
+<p>
+The entry architecture itself is very simple. It contains two
+interfaces: <tt class="interfacename">TopicMapSourceIF</tt> and
+<tt class="interfacename">TopicMapReferenceIF</tt>.
+</p>
+
+
+<p>
+A topic map source is used to locate a collection of topic maps, topic
+map references to be presice. The source will look in a place that is
+specific to each implementation of the interface and generate a list
+of the topic maps to be found there. The location can be a database, a
+directory on disk or somewhere else. The
+<tt class="interfacename">TopicMapSourceIF</tt> interface has only one
+method, <tt class="methodname">getReferences</tt>, which returns the
+references that was found in the location(s) known to the source.
+</p>
+
+
+<p> Each of the topic map references (that is,
+<tt class="interfacename">TopicMapReferenceIF</tt> objects) is a
+reference to a topic map store, and thus also indirectly to a topic
+map. You can ask the reference for a new topic map store instance by
+calling the <tt class="methodname">createStore(boolean)</tt> method. The
+store is not open by default. This avoids unnecessary use of resources
+like database connections and memory.</p>
+
+
+<p>
+The rationale for having a separate topic map reference object is that
+applications need to be able to work with available topic maps without
+actually creating any transactions for the individual topic
+maps.
+</p>
+
+
+<p>
+A topic map reference has two additional properties: id and title.
+Ids can be used to identify individual references and titles gives the
+application labels usable for display. The title property is useful,
+since it allows applications to get a display name without accessing
+the topic map itself. Where the title comes from is up to the
+reference implementation to decide.
+</p>
+
+
+<p>
+To make this discussion a bit more complete we will now develop an
+example that shows how to use these interfaces. The
+<tt class="classname">net.ontopia.topicmaps.xml.XTMPathTopicMapSource</tt>
+class is an implementation of
+<tt class="interfacename">TopicMapSourceIF</tt> that is capable of
+locating and retrieving references to XTM files. It searches a
+directory for files matching a given filter.
+</p>
+
+
+<p>
+The following code snippet uses an
+<tt class="classname">XTMPathTopicMapSource</tt> to locate XTM files (with
+the suffix <tt>.xtm</tt>), in the /ontopia/topicmaps
+directory. The first reference is retrieved and resolved to get at the
+actual topic map object.
+</p>
+
+
+<code>
+<pre>
+    // Create and configure the source
+    XTMPathTopicMapSource source = new XTMPathTopicMapSource();
+    source.setPath("/ontopia/topicmaps");
+    source.setSuffix(".xtm");
+
+    // Retrieve all the references
+    Collection refs = source.getReferences();
+    System.out.println(refs.size() + " topicmap references found.");
+
+    // Resolve the first reference
+    TopicMapReferenceIF ref = (TopicMapReferenceIF) refs.iterator().next();
+
+    // Get the topic map
+    TopicMapIF topicmap = ref.createStore(false).getTopicMap();
+</pre>
+</code>
+
+
+
+<h3>
+<a name="N10436">5.2. Extensible source configuration</a>
+</h3>
+
+
+
+<p>
+In the entry package there is a utility class called
+<tt class="classname">XMLConfigSource</tt>, which can be useful when
+building topic map applications.
+<tt class="classname">XMLConfigSource</tt> is an implementation of
+<tt class="interfacename">TopicMapSourceIF</tt>, which reads an XML
+file containing other source configurations.
+</p>
+
+
+<p>
+Applications using this class is able to separate out the source
+configurations, so that applications don't have to be updated every
+time new sources become available. See the javadoc of
+<tt class="classname">net.ontopia.topicmaps.entry.XMLConfigSource</tt> for
+complete documentation.
+</p>
+
+
+
+<h3>
+<a name="N1044E">5.3. The topic map repository</a>
+</h3>
+
+
+
+<p> The <tt class="interfacename">TopicMapSourceIF</tt> interface
+provides a rather awkward interface to the topic maps it holds, as it
+only lets you iterate over the topic maps in sequence. The
+<tt class="interfacename">TopicMapRepositoryIF</tt>, on the other
+hand, wraps the <tt class="interfacename">TopicMapSourceIF</tt> to
+provide a more convenient interface. Using this, you can add as many
+sources as you want, to be managed by the repository. You can look the
+references up by reference key, refresh all your sources at the same
+time, and so on.  </p>
+
+
+
+<h3>
+<a name="N10460">5.4. Transactional behaviour</a>
+</h3>
+
+
+
+<p>
+Although the interfaces for accessing and modifying topic maps are
+designed to handle transactions correctly this does not mean that all
+implementations are transactional. In particular, the in-memory topic
+map implementation is not transactional, and unless you are using the
+RDBMS backend, this is the implementation you will be working with.
+This means that although you can modify the topic maps the
+<tt class="methodname">commit</tt> and <tt class="methodname">rollback</tt>
+methods have no effect.
+</p>
+
+
+
+
+
+
+<h2>
+<a name="N10470">6. General policies</a>
+</h2>
+
+
+
+<p>
+During development of the engine, a number of policies were decided on
+in order to deal with the many problematic aspects of maintaining
+topic maps as object structures. Some of these policies are actively
+maintained by the engine, others are just design decisions made, which
+developers using the engine should be aware of. This section contains
+the only documentation of these policies, since there is no natural
+place to keep this documentation in the javadoc.
+</p>
+
+
+<h3>
+<a name="N10478">6.1. Deletion</a>
+</h3>
+
+
+
+<p>
+Deleting objects from a topic map object structure is difficult
+because topic maps are so strongly interconnected and it can be
+difficult to avoid leaving the topic map in an inconsistent state.
+The approach taken by the engine is that certain objects are owned, or
+contained, by others. The topic map contains the topics and
+associations in it. A topic contains its characteristics (except
+association roles), a topic name contains its variants, and an
+association contains its roles.  This concept of containment is made
+use of in deletion in that when an object is deleted all its contained
+objects, or children, will be deleted together with it.
+</p>
+
+
+<p>
+A special problem, however, is presented by topics, to which there may
+be any number of references throughout the topic map. A topic may
+appear as the type (or class) of another object or in a scope, plus
+that it may participate in associations. In these cases the policy of
+the engine is to throw an exception. In order to remove such topics
+they must removed from all its current uses as a type or in a scope in
+the topic map. The class <tt class="classname">DeletionUtils</tt> in
+<tt class="interfacename">net.ontopia.topicmaps.utils</tt> can be used
+to remove such topics by also removing all their uses.
+</p>
+
+
+<p>
+Note that there is a special case when a topic plays a role in an
+association, since in this case the association role is a child of the
+association, but one would intuitively expect it to be a child of the
+topic as well and one certainly can't delete the topic without
+deleting the association role. Because of this
+<tt class="methodname">removeTopic</tt> will reject removal of such
+topics, although the opposite, removing the association, works just
+fine, and will cause the role to be removed from the topic as well.
+(The <tt class="classname">DeletionUtils</tt> class provides functionality
+for deleting a topic together with all its associations.)
+</p>
+
+
+
+<h3>
+<a name="N10493">6.2. Merging</a>
+</h3>
+
+
+<p>
+Similar problems exist with regards to the merging of topics in that
+there are certain conditions under which the standard requires that
+topics be merged. Merging topics in an object structure, however, is
+not a safe operation, since it will inevitably leave some objects dead
+and no longer usable, and in ways that may surprise developers. The
+policy followed by the engine is instead to deny any operation which
+would have caused two topics to merge.
+</p>
+
+
+<p>
+This means that any attempt to do any of the following will cause a
+<tt>UniquenessViolationException</tt> to be
+thrown by the engine:
+</p>
+
+
+<ul>
+<li>
+    
+<p>setting the subject locator of one topic to the
+subject locator of another topic already in the topic map,</p>
+    
+  
+</li>
+<li>
+    
+<p>adding a subject identifier to a topic when another topic in the
+topic map already has it as a subject identifier,</p>
+    
+  
+</li>
+<li>
+    
+<p>adding a subject identifier to a topic when another topic in the
+topic map already has it as an item identifier,</p>
+    
+  
+</li>
+<li>
+    
+<p>adding an item identifier to an object when another object in the
+topic map already has that item identifier, and</p>
+    
+  
+</li>
+<li>
+    
+<p>adding an item identifier to a topic when a topic in the topic map
+already has the same URI as its subject identifier,</p>
+    
+  
+</li>
+</ul>
+
+
+<p>
+In addition to these constraints a
+<tt>ConstraintViolationException</tt> will be
+raised if any of these properties are modified on an object that is
+not attached to a topic map. This is because in these cases there is
+no way to test whether the modification is allowed or not.
+</p>
+
+
+<p>
+If the application really does want to merge two topics that exist in
+the same topic map the class <tt class="classname">MergeUtils</tt> in the
+<tt class="symbol">net.ontopia.topicmaps.utils</tt> can be used to do this.
+It will take care to also deal with all references to the topic that
+is discarded in the merge.
+</p>
+
+
+
+<h3>
+<a name="N104DC">6.3. Duplicate suppression</a>
+</h3>
+
+
+
+<p>
+According to the topic map standard certain duplicate objects are to
+be removed when loading in a topic map from an XTM document. It is
+tempting to also translate this into a policy to be maintained by the
+engine, but our current view is that this would be much too costly,
+and so at the moment the engine simply ignores any duplicates.
+</p>
+
+
+<p>
+If you do wish to remove duplicates you can do so by using the
+<tt class="classname">DuplicateSuppressionUtils</tt>. This allows you to
+remove duplicates at any level in your application.
+</p>
+
+
+
+<h3>
+<a name="N104EB">6.4. Moving objects</a>
+</h3>
+
+
+
+<p>
+In the Ontopia Topic Map Engine all objects have references to the
+parents that contain them. This means that if an object is contained
+by another and application code then attempts to add that object to a
+second container a problem will arise. Firstly, the object can only
+have one parent, and, secondly, difficult-to-trace problems may occur
+if an object is contained in two containers and then modified in one
+of them.
+</p>
+
+
+<p>
+The engine handles this by denying the add operation if the object to
+be added is already contained by another object. This means that if a
+topic name is attached to one topic and an application wants to move it
+to another topic it must first remove the topic name from the topic it
+is already attached to. The exception that is thrown is the
+<tt>ConstraintViolationException</tt>.
+</p>
+      
+<p>
+A related issue arises when applications attempt to insert topics from
+one implementation into another. Since implementations are required to
+work behind the core interfaces this will generally not work and may
+fail in surprising ways. The engine does currently not test for these
+situations, however.
+</p>
+
+
+
+<h3>
+<a name="N104FD">6.5. Collections policy</a>
+</h3>
+
+
+
+<p>
+There are two subtleties to be aware of with the collections returned
+from the core APIs. The first is that all collections are
+unmodifiable, so any attempt to add new elements or remove elements
+from the collections will fail. The reason is that we want your code
+to use our <tt class="symbol">addXxx</tt> and <tt class="symbol">removeXxx</tt>
+methods instead, so that we can fire internal events needed to keep
+the object model consistent.
+</p>
+
+
+<p>
+The other subtlety is that the collections returned are "live", which
+means that the following code will fail with a
+<tt>ConcurrentModificationException</tt>:
+</p>
+
+
+<pre>
+Iterator it = topic.getOccurrences().iterator();
+while (it.hasNext()) {
+  OccurrenceIF occ = (OccurrenceIF) it.next();
+  if (occ.getType().equals(sometype))
+    topic.removeOccurrence(occ);
+}
+</pre>
+
+
+<p>
+The reason is that the <tt class="methodname">removeOccurrence</tt>
+method removes the occurrence from the same collection that the
+collection returned by <tt class="methodname">getOccurrence</tt> is
+connected to. The correct implementation is as follows:
+</p>
+
+
+<pre>
+Iterator it = new ArrayList(topic.getOccurrences()).iterator();
+while (it.hasNext()) {
+  OccurrenceIF occ = (OccurrenceIF) it.next();
+  if (occ.getType().equals(sometype))
+    topic.removeOccurrence(occ);
+}
+</pre>
+
+
+
+</body>
+</html>

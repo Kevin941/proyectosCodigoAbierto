@@ -1,0 +1,602 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Ontopia Schema Language</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Ontopia Schema Language</h1>
+<h2 class="subtitle">Tutorial</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>
+This document provides a tutorial introduction to The Ontopia Schema
+Language, suitable for learning the language. For detailed information
+about the language syntax and semantics, see <cite>The Ontopia
+Schema Language: Reference Specification</cite>. You can also
+find a DTD for the schema language in
+<tt>${basedir}/doc/schema/schema.dtd</tt>.
+</p>
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10020">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10041">2. The basics of the schema language</a>
+</li>
+<ul>
+<li>
+<a href="#N1004C">2.1. How it works</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1010A">2.2. Introductory example</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N101A7">3. Working with schemas</a>
+</li>
+<ul>
+<li>
+<a href="#sect-tools">3.1. Tools for working with schemas</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N101C7">4. TMCL</a>
+</li>
+<ul></ul>
+</ul>
+
+
+
+
+
+
+<h2>
+<a name="N10020">1. Introduction</a>
+</h2>
+
+
+
+<p>
+The Ontopia Schema Language provides a way to describe and constrain
+the information in your topic maps, and this can be made use of in a
+number of different ways. Some of the most important are:
+</p>
+
+
+<ul>
+<li>
+
+<p>To verify that the information in your topic maps is consistent
+and meaningful. That is, that nobody has by mistake asserted that a
+city was born in a composer, forgotten to say that Mozart was a
+composer, or given an opera a birth date.</p>
+
+</li>
+<li>
+
+<p>To document the constraints which topic maps processed or
+displayed by an application must abide by. Or, similarly, to document
+the structure of your topic map.</p>
+
+</li>
+<li>
+
+<p>To help topic map editors and other applications provide a
+better user interface, by making use of the information your schema
+provides about your topic maps.</p>
+
+</li>
+</ul>
+
+
+<p>
+This tutorial shows you how to write a schema for your topic maps and
+how to validate the topic maps against the schema, but does not go
+into making use of the schema in other ways.
+</p>
+
+
+
+<h2>
+<a name="N10041">2. The basics of the schema language</a>
+</h2>
+
+
+
+<p>
+A topic map schema in the Ontopia Schema Language consists of a set of
+topic and association class definitions. These class definitions
+constrain the structure of the instances of the classes, and so
+control the form information may take in a topic map that uses the
+schema.
+</p>
+
+
+<p>
+This section shows you how the Ontopia Schema Language works by first
+giving a general introduction to the concepts behind it, and then
+walking you through the creation of a simple schema for the 'Free XML
+Tools' topic map.
+</p>
+
+
+<h3>
+<a name="N1004C">2.1. How it works</a>
+</h3>
+
+
+
+<p>
+A schema in the Ontopia Schema Language consists of a set of topic and
+association class definitions that state what the allowed structure of
+instances of the classes are. The class definitions contain
+constraints on the characteristics of instances of the classes, which
+in turn may contain further constraints.
+</p>
+
+
+<p>
+A topic map is validated against a schema by iterating over the
+topics in the topic maps, validating each, then repeating the process
+with the associations. For each topic or association the class it
+belongs to is found, and the characteristics of the topic or
+association are then validated against the constraints in the class.
+Each characteristic is compared with the constraints until a
+constraint matching the characteristic is found; the characteristic is
+then validated against that constraint.
+</p>
+
+
+<p>
+Generally, the type of the characteristic is used to match the
+constraint, but for objects which have no type scope is used. A
+special case is association roles seen from within topics, which are
+matched by both role type and association type. This is because
+different rules may apply to how a topic can play role A in
+association B from how it may play role A in association C.
+</p>
+
+
+<p>
+The table below shows what objects may be constrained in what
+contexts, what is used to match them against their constraints, and
+by what they may be constrained beyond what the rows in the table
+show.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. What can be constrained</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Container</th><th class="dbTableHeaderEntry">Containee</th><th class="dbTableHeaderEntry">Element</th><th class="dbTableHeaderEntry">Match by</th><th class="dbTableHeaderEntry">Constrainable</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Topic map</td><td class="dbTableEntry">Topics</td><td class="dbTableEntry"><tt class="symbol">topic</tt></td><td class="dbTableEntry">Type</td><td class="dbTableEntry">Other classes, superclasses</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Topic</td><td class="dbTableEntry">Topic names</td><td class="dbTableEntry"><tt class="symbol">baseName</tt></td><td class="dbTableEntry">Scope</td><td class="dbTableEntry">Cardinality</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Topic name</td><td class="dbTableEntry">Variant names</td><td class="dbTableEntry"><tt class="symbol">variantName</tt></td><td class="dbTableEntry">Scope</td><td class="dbTableEntry">Cardinality</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Topic</td><td class="dbTableEntry">Occurrences</td><td class="dbTableEntry"><tt class="symbol">occurrence</tt></td><td class="dbTableEntry">Type</td><td class="dbTableEntry">Cardinality, scope, internal/external</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Topic</td><td class="dbTableEntry">Association roles</td><td class="dbTableEntry"><tt class="symbol">playing</tt></td><td class="dbTableEntry">Role and association type</td><td class="dbTableEntry">Cardinality</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Topic map</td><td class="dbTableEntry">Associations</td><td class="dbTableEntry"><tt class="symbol">association</tt></td><td class="dbTableEntry">Type</td><td class="dbTableEntry">Scope</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Association</td><td class="dbTableEntry">Association roles</td><td class="dbTableEntry"><tt class="symbol">role</tt></td><td class="dbTableEntry">Type</td><td class="dbTableEntry">Cardinality, player type</td>
+</tr>
+</table>
+
+
+<p>
+Note that a topic map schema in the Ontopia Schema Language does not
+contain any topic definitions. Instead, it refers to typing and
+scoping topics within the topic map to be validated by URI. This can
+be done by referring directly to the <tt class="symbol">topic</tt> element
+within the topic map to be validated (using
+<tt class="symbol">topicRef</tt>), by referring to the subject identifier of
+the topic (using <tt class="symbol">subjectIndicatorRef</tt>), or by giving
+the URI of the <tt class="symbol">topic</tt> element relative to the document
+URI of the topic map (using <tt class="symbol">internalTopicRef</tt>).
+</p>
+
+
+<p>
+What this means is that schemas in this schema language are not
+independent of the topic maps they are used to validate. This is
+slightly awkward, but we have not been able to think of any better
+solution.
+</p>
+
+
+
+<h3>
+<a name="N1010A">2.2. Introductory example</a>
+</h3>
+
+
+
+<p>
+In this section we'll make a schema for the 'Free XML Tools' topic
+map, which you can find in the <tt>${basedir}/samples</tt>
+directory. This topic map contains information about free and open
+source XML tools, their authors, the standards they support, and/or
+implement, and so on.  We'll create the schema step by step, using the
+validation errors we get to improve the schema.
+</p>
+
+
+<p>
+We start of with the simplest schema imaginable, one that simply says
+that anything is allowed, which is what the schema below does.
+</p>
+
+
+<p align="center">
+<b>The unconstraining schema</b>
+</p>
+
+
+<pre>
+
+&lt;tm-schema match="loose"&gt;
+&lt;/tm-schema&gt;
+
+</pre>
+
+
+<p>
+This schema has no classes, and uses loose matching. Loose matching
+means that there are no constraints on topics and associations that
+are not instances of one of the classes mentioned in the schema. Since
+this schema has no classes it means that all topics and associations
+will be accepted.
+</p>
+
+
+
+<p>
+This, of course, is not very useful, so we'll add a class definition
+for the 'standard' class of topics. Below is an empty class definition
+for this topic type.
+</p>
+
+
+<p align="center">
+<b>Empty standard class</b>
+</p>
+
+
+
+<pre>
+
+  &lt;topic&gt;
+    &lt;instanceOf&gt;
+      &lt;internalTopicRef href="#TMTT_Standard"/&gt;
+    &lt;/instanceOf&gt;
+
+    &lt;!-- characteristic constraints go here --&gt;
+  &lt;/topic&gt;
+
+</pre>
+
+
+<p>
+Above is shown an empty topic class definition. It looks just like a
+topic in the XTM format, except for the reference to the topic that
+defines the class. We use the <tt class="symbol">internalTopicRef</tt>
+element here, which contains a URI that is relative to the base
+address of the topic map, rather than of the schema document. This is
+useful because it means you can refer to the typing topic without
+caring where the topic map document is located relative to the schema
+document.
+</p>
+
+
+<p>
+You can also use the <tt class="symbol">topicRef</tt> element from XTM, but
+this will then depend on where the topic map is located relative to
+the schema. The <tt class="symbol">subjectIndicatorRef</tt> element can also
+be used, and is independent of where the topic map is located, but
+requires the typing topic to have a subject identifier.
+</p>
+
+
+
+<p>
+If we try validating the topic map with this schema (see <a href="#sect-tools">section
+        3.1</a>) we get 374 errors, so clearly we need to
+improve the schema. One thing we do know is that all standards have at
+least one topic name in the unconstrained scope. We add the following
+constraint to reflect that, causing the topic class definition to look
+as shown below.
+</p>
+
+
+<p align="center">
+<b>Standard class with basename</b>
+</p>
+
+
+<pre>
+
+  &lt;topic&gt;
+    &lt;instanceOf&gt;
+      &lt;internalTopicRef href="#TMTT_Standard"/&gt;
+    &lt;/instanceOf&gt;
+
+    &lt;baseName min="1" max="Inf"&gt;
+      &lt;scope&gt;&lt;/scope&gt;
+    &lt;/baseName&gt;
+  &lt;/topic&gt;
+
+</pre>
+
+
+<p>
+This example says that the topic must have one topic name or more in
+the unconstrained scope (the <tt class="symbol">scope</tt> element is empty).
+The <tt class="symbol">min</tt> attribute says we must have at a minimum 1
+topic name matching this constraint, while the <tt class="symbol">max</tt>
+says that there is no upper limit on the number of topic names. Note
+that if we'd left out these two attributes there would still have been
+no upper limit, but standards would then be allowed to have no name in
+the unconstrained scope.
+</p>
+
+
+
+<p>
+Validating with this constraint we get only 290 errors. Many of these
+are related to occurrences of the types 'specification', 'home page',
+'link collection', and 'informational site'. We add four new
+constraints to the topic class in order to get rid of those errors.
+</p>
+
+
+<p align="center">
+<b>Constraints for occurrences</b>
+</p>
+
+
+<pre>
+
+    &lt;occurrence external="yes"&gt;
+      &lt;instanceOf&gt;
+          &lt;internalTopicRef href="#TMOR_Specification"/&gt;
+      &lt;/instanceOf&gt;
+    &lt;/occurrence&gt;
+
+    &lt;occurrence external="yes"&gt;
+      &lt;instanceOf&gt;
+          &lt;internalTopicRef href="#TMOR_Homepage"/&gt;
+      &lt;/instanceOf&gt;
+    &lt;/occurrence&gt;
+
+    &lt;occurrence external="yes"&gt;
+      &lt;instanceOf&gt;
+          &lt;internalTopicRef href="#TMOR_Site"/&gt;
+      &lt;/instanceOf&gt;
+    &lt;/occurrence&gt;
+
+    &lt;occurrence external="yes"&gt;
+      &lt;instanceOf&gt;
+          &lt;internalTopicRef href="#TMOR_Links"/&gt;
+      &lt;/instanceOf&gt;
+    &lt;/occurrence&gt;
+
+</pre>
+
+
+<p>
+These constraints allow topics of class 'standard' to have occurrences
+of these four types. The <tt class="symbol">external</tt> attribute is here
+used to say that the occurrences must be external (that is, they can't
+use <tt class="symbol">resourceData</tt>). It is possible to constrain the
+scope of occurrences as well, by using the <tt class="symbol">scope</tt>
+element inside the <tt class="symbol">occurrence</tt> element, but we have no
+use for that here, so we don't do it.
+</p>
+
+
+
+<p>
+Validating with this improved schema gives us 247 errors, all of them
+related to standards playing the role 'standard' in associations of
+the type 'product implements standard' or 'product uses standard'. We
+solve this by adding a constraint allowing these two uses.
+</p>
+
+
+<p align="center">
+<b>Constraint for association roles</b>
+</p>
+
+
+
+<pre>
+
+    &lt;playing&gt;
+      &lt;instanceOf&gt;
+          &lt;internalTopicRef href="#TMTT_Standard"/&gt;
+      &lt;/instanceOf&gt;
+      &lt;in&gt;
+        &lt;instanceOf&gt;
+              &lt;internalTopicRef href="#TMAT_StandardImplemented"/&gt;
+        &lt;/instanceOf&gt;
+        &lt;instanceOf&gt;
+              &lt;internalTopicRef href="#TMAT_ProductUse"/&gt;
+        &lt;/instanceOf&gt;
+      &lt;/in&gt;
+    &lt;/playing&gt;
+</pre>
+
+
+<p>
+This element says that topics of type 'standard' may play this role in
+associations of one of the given types.
+</p>
+
+
+
+<p>
+When we add this constraint to the schema it validates with no errors
+at all. Note, however, that so far we only validate topics of one
+type, and we do not validate associations at all. We validate the
+roles the topics of type 'standard' play, but not the associations
+themselves. In order to allow associations to be constrained as well
+the schema language also supports association class definitions
+</p>
+
+
+<p>
+As an example, we'll create an association class definition for the
+'standard implemented' association. This is given below.
+</p>
+
+
+<p align="center">
+<b>Association class definition</b>
+</p>
+
+
+
+<pre>
+
+  &lt;association&gt;
+    &lt;instanceOf&gt;
+      &lt;internalTopicRef href="#TMAT_Used"/&gt;
+    &lt;/instanceOf&gt;
+
+    &lt;role min="1" max="1"&gt;
+      &lt;instanceOf&gt;
+          &lt;internalTopicRef href="#TMAR_Used"/&gt;
+      &lt;/instanceOf&gt;
+      &lt;player&gt;
+          &lt;internalTopicRef href="#TMTT_Product"/&gt;
+      &lt;/player&gt;
+    &lt;/role&gt;
+
+    &lt;role min="1" max="1"&gt;
+      &lt;instanceOf&gt;
+          &lt;internalTopicRef href="#TMAR_Using"/&gt;
+      &lt;/instanceOf&gt;
+      &lt;player&gt;
+          &lt;internalTopicRef href="#TMTT_Standard"/&gt;
+      &lt;/player&gt;
+    &lt;/role&gt;
+  &lt;/association&gt;
+
+</pre>
+
+
+<p>
+What this class definition does is to say that associations of this
+type must contain one role of type 'used, the player of which role
+must be a product, and one role of type 'using, and that the player of
+this role must also be of type 'product'. This means that the
+association is constrained to always be a simple binary association
+between two products, where one is used and the other is using.
+</p>
+
+
+
+<p>
+At this stage, of course, we only validate one class of topics and one
+class of associations. If we now change the schema to use strict
+matching we get 1154 errors when validating.
+</p>
+
+
+
+
+
+<h2>
+<a name="N101A7">3. Working with schemas</a>
+</h2>
+
+
+
+
+
+<h3>
+<a name="sect-tools">3.1. Tools for working with schemas</a>
+</h3>
+
+
+
+<p>
+Included in the distribution is a command-line tool for validating
+topic maps against schemas. This tool can be run by giving the command
+<tt>java
+net.ontopia.topicmaps.schema.impl.osl.cmdline.Validate</tt>.
+Doing so makes it show information on how to use it correctly. This
+tool lets you easily and quickly try out schemas as you write them,
+and also to easily verify your topic maps after you have created them.
+</p>
+
+
+<p>
+Included in the distribution is also a validator plugin for the
+Omnigator (see <cite>The Ontopia Schema Tools: Installation
+guide</cite> for information on installing it). This validates
+the current topic map against a schema, which it looks for in the
+<tt>WEB-INF/schemas</tt> directory of the Omnigator web
+application. It assumes that the schema document has the same file
+name as the ID of the topic map being browsed, with the addition of
+the extension ".osl" (e.g., "xmltools-tm.xtm.osl").
+</p>
+
+
+
+
+
+
+
+<h2>
+<a name="N101C7">4. TMCL</a>
+</h2>
+
+
+
+<p>
+ISO is currently working on a standard schema (or constraint) language
+for topic maps, to be called ISO 19756 Topic Maps Constraint Language,
+or TMCL. At the time of writing it seems that this language will be
+very similar to OSL, but more powerful, and that the syntax will be
+different. For more details, please consult 
+<a href="http://www.isotopicmaps.org/tmcl/">the TMCL home page</a>.
+</p>
+
+
+</body>
+</html>

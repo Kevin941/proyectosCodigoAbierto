@@ -1,0 +1,1348 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Ontopia Navigator Framework</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Ontopia Navigator Framework</h1>
+<h2 class="subtitle">Configuration Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>
+This document is a guide to configuring the Ontopia Navigator
+Framework. The Navigator Framework offers a large number of
+configuration options, and this document explains where they can be
+found and what they do. By looking in the actual configuration files
+you can find additional advanced configuration options not documented
+here.
+</p>
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#sect-introduction">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-sources-xml">2. tm-sources.xml</a>
+</li>
+<ul>
+<li>
+<a href="#sect-path-tm-sources">2.1. The path sources</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101D5">2.2. The RDBMSTopicMapSource</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1020D">2.3. The RDBMSSingleTopicMapSource</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-pattern-source">2.4. RDBMSPatternSingleTopicMapSource</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102C7">2.5. The URLTopicMapSource</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102E3">2.6. Relationship with the API</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#sect-log4j">3. Log4j logging</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-data-sharing">4. Sharing topic maps</a>
+</li>
+<ul>
+<li>
+<a href="#sect-jndi">4.1. Sharing topic maps with JNDI</a>
+</li>
+<ul>
+<li>
+<a href="#N103A9">4.1.1. Setting up one or more shared repositories</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1043A">4.1.2. Making an application use the shared repository</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+<li>
+<a href="#sect-web-xml">5. web.xml</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-application-xml">6. application.xml</a>
+</li>
+<ul>
+<li>
+<a href="#N104C7">6.1. Autoloads</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N104E5">6.2. Model/View/Skin</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10524">6.3. Properties</a>
+</li>
+<ul>
+<li>
+<a href="#N1059B">6.3.1. Obsolete properties</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N105F4">6.4. Class shortnames</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+
+
+
+
+
+
+
+<h2>
+<a name="sect-introduction">1. Introduction</a>
+</h2>
+
+
+
+<p>
+The only configuration you must have in order for the framework to
+function is a <tt>tm-sources.xml</tt> file, which tells
+the framework where to find the topic maps. (How the
+<tt>tm-sources.xml</tt> file works is explained in <a href="#sect-sources-xml">section
+        2</a>.)
+</p>
+
+
+<p>
+The default is that the <tt>tm-sources.xml</tt> file is
+loaded from the classpath. So for this to work, all you need to do is
+to put such a file on the classpath somewhere. On Tomcat, a good
+location is in <tt>apache-tomcat/common/classes</tt>.
+</p>
+
+
+<p>
+If you just want to get the framework running you can stop here,
+because this is all you need for that. The rest of this document
+explains alternative approaches for cases where you want to control
+the setup more.
+</p>
+
+
+
+
+<h2>
+<a name="sect-sources-xml">2. tm-sources.xml</a>
+</h2>
+
+
+
+<p>
+The Navigator Framework uses this file to find topic maps and enter
+them into the topic map repository. The file basically contains a
+collection of sources, where each source can produce references to
+topic maps. The next sections describe different types of sources that
+can be configured in the file.
+</p>
+
+
+<h3>
+<a name="sect-path-tm-sources">2.1. The path sources</a>
+</h3>
+
+
+
+<p>
+These sources look in a specific directory of the file system for
+files with a particular suffix. Those found will be made available to
+the Navigator Framework, which may then choose to load them. Each
+source class expects files with a different syntax.
+</p>
+
+
+
+<p>
+Below is shown an example configuration element for the XTM path
+source. The <tt class="parameter">path</tt> parameter tells the source
+what directory to look in. The <tt class="symbol">${CWD}</tt> is a variable
+replaced by the path of the directory where the
+<tt>tm-sources.xml</tt> file was found. The
+<tt class="parameter">suffix</tt> parameter tells the source what suffixes
+to look for on files.
+</p>
+
+
+<p align="center">
+<b>Example configuration</b>
+</p>
+
+
+
+<pre>
+
+    &lt;source class="net.ontopia.topicmaps.xml.XTMPathTopicMapSource"&gt;
+      &lt;param name="path" value="${CWD}/../xml"/&gt;
+      &lt;param name="suffix" value=".xtm"/&gt;
+    &lt;/source&gt;
+</pre>
+
+
+
+<p>
+The full list of path source classes is:
+</p>
+
+
+<dl>
+<dt>net.ontopia.topicmaps.xml.XTMPathTopicMapSource</dt>
+<dd>
+
+
+<p>This source reads XTM 1.0 and 2.0 files.</p>
+
+</dd>
+<dt>net.ontopia.topicmaps.utils.ltm.LTMPathTopicMapSource</dt>
+<dd>
+
+
+<p>This source reads LTM files.</p>
+
+</dd>
+<dt>net.ontopia.topicmaps.xml.TMXMLPathTopicMapSource</dt>
+<dd>
+
+
+<p>This source reads <a href="http://www.ontopia.net/topicmaps/tmxml.html">TM/XML</a>
+files.</p>
+
+</dd>
+<dt>net.ontopia.topicmaps.utils.ltm.RDFPathTopicMapSource</dt>
+<dd>
+
+
+<p>This source reads RDF files in the RDF/XML syntax, but can be
+adjusted to also read RDF files in other syntaxes.</p>
+
+</dd>
+</dl>
+
+
+<p>
+There is also a larger set of parameters to these sources than just
+the <tt class="symbol">path</tt> and <tt class="symbol">suffix</tt> ones. Below is a
+complete list of the parameters, together with an overview over which
+sources support which parameters.
+</p>
+
+
+<p align="center">
+<b>Table 2.1. Source parameters</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Parameter</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Purpose</th><th class="dbTableHeaderEntry">Sources</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">path</td><td class="dbTableEntry">Path</td><td class="dbTableEntry">Path to the directory where the source will look for topic
+  map files. The token <tt class="symbol">${CWD}</tt> can be used to refer to
+  the directory of the source file to specify relative paths.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">suffix</td><td class="dbTableEntry">String</td><td class="dbTableEntry">The file name extension of files in the <tt class="parameter">path</tt>
+  directory which the source will make topic maps from.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">maintainFulltextIndexes</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">If true a full-text index for the topic map will be created
+  and automatically kept up to date with changes in the topic map.
+  Setting this to true for sources containing Ontopoly topic maps is
+  highly recommended.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">indexDirectory</td><td class="dbTableEntry">Path</td><td class="dbTableEntry">Path to the directory where the source will create the
+  full-text index for topic maps from this source. The token
+  <tt class="symbol">${CWD}</tt> can be used to refer to the directory of the
+  source file to specify relative paths. If not specified, the index
+  directory defaults to the current directory of the Java
+  process.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">maintainFulltextIndexes</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">If true a full-text index for the topic map will be created
+  and automatically kept up to date with changes in the topic map.
+  Setting this to true for Ontopoly topic maps is highly
+  recommended.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">title</td><td class="dbTableEntry">String</td><td class="dbTableEntry">The name of the source, to be displayed in the drop-down list
+  on the Ontopoly start screen where the user is asked to specify
+  which source to create the new topic map in. (This list is only
+  displayed if more than one source has
+  <tt class="parameter">supportsCreate</tt> set to true.)</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">id</td><td class="dbTableEntry">String</td><td class="dbTableEntry">Unique identifier for this source within the repository. Used
+  by the Ontopoly user interface. If an ID is needed, and none is set
+  explicitly, the source will generate one automatically.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">duplicateSuppression</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">If 'true' will cause duplicate information to be removed from
+  the topic map once it has finished loading.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">followTopicRefs</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">The default is true, which means that
+  <tt class="symbol">topicRef</tt> elements pointing to external files
+  will cause those files to be loaded and merged in. If set to false
+  no action is taken.</td><td class="dbTableEntry">xtm</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">validation</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">If 'true' any XTM files loaded through this source will be
+  validated against the XTM 1.0 DTD.</td><td class="dbTableEntry">xtm</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">mappingFile</td><td class="dbTableEntry">Path</td><td class="dbTableEntry">References an RDF file which contains the RDF mapping
+  statements to be used when loading RDF files with this source. The
+  <tt class="symbol">${CWD}</tt> token can be used here.</td><td class="dbTableEntry">rdf</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">supportsCreate</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">Sets whether or not the source allows new topic maps to be
+  created within the source. This is used when creating new topic maps
+  in Ontopoly.</td><td class="dbTableEntry">xtm tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">supportsDelete</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">Sets whether or not the source allows topic maps coming from
+  the source to be deleted. This is used when deleting topic maps in
+  Ontopoly.</td><td class="dbTableEntry">xtm ltm rdf tmxml</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">syntax</td><td class="dbTableEntry">"RDF/XML"/"N3"/"N-TRIPLE"</td><td class="dbTableEntry">The name of the RDF syntax to assume RDF files loaded with
+  this source are written in. If not specified defaults to RDF/XML.</td><td class="dbTableEntry">rdf</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">generateNames</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">If "true" the RDF source will generate names for topics in
+  the topic map which have no names. The names will be based on the
+  URIs of the topics in the original RDF file.</td><td class="dbTableEntry">rdf</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">lenient</td><td class="dbTableEntry">true/false</td><td class="dbTableEntry">If "true" the RDF source allow errors in the RDF mapping that
+  would be reported if the value were "false".</td><td class="dbTableEntry">rdf</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N101D5">2.2. The RDBMSTopicMapSource</a>
+</h3>
+
+
+
+<p>
+If you have the RDBMS Database Backend product you can use this class
+to make the Navigator Framework find topic maps in your relational database.
+This source understands these parameters:
+</p>
+
+
+<dl>
+<dt>propertyFile</dt>
+<dd>This is the filename of the property file containing the RDBMS
+backend configuration settings. This file is documented in
+<cite>The RDBMS Backend Connector: Installation Guide</cite>.
+</dd>
+<dt>baseAddress</dt>
+<dd>This property overrides the base address of the topic map. This
+property must be a URI and the notation is assumed to be 'URI'. See
+the API documentation for
+<tt class="symbol">TopicMapStoreIF.getBaseAddress()</tt> for more
+information.
+</dd>
+</dl>
+
+
+<p>
+Below is shown an example configuration element.
+</p>
+
+
+<p align="center">
+<b>Example configuration</b>
+</p>
+
+
+
+<pre>
+
+    &lt;source class="net.ontopia.topicmaps.impl.rdbms.RDBMSTopicMapSource"&gt;
+      &lt;param name="propertyFile" value="/usr/local/ontopia/jdbc.prop"/&gt;
+      &lt;param name="baseAddress" value="http://www.ontopia.net/topicmaps/foo.ltm"/&gt;
+    &lt;/source&gt;
+
+</pre>
+
+
+
+
+<h3>
+<a name="N1020D">2.3. The RDBMSSingleTopicMapSource</a>
+</h3>
+
+
+
+<p>
+If you have the RDBMS Database Backend product you can use this class
+to make the Navigator Framework find an individual topic map in your relational
+database. This source understands these parameters:
+</p>
+
+
+<dl>
+<dt>topicMapId</dt>
+<dd>This is the id of the topic map as it is stored in the
+relational database. The id must be a number.</dd>
+<dt>title</dt>
+<dd>This is the title of the topic map. The title will be used in
+the Omnigator unless the topic map is reified and assigned a
+name.</dd>
+<dt>referenceId</dt>
+<dd>This property specifies the id that you can retrieve the topic
+map by in your navigator application.</dd>
+<dt>propertyFile</dt>
+<dd>This is the filename of the property file containing the RDBMS
+backend configuration settings. This file is documented in
+<cite>The RDBMS Backend Connector: Installation Guide</cite>.
+</dd>
+<dt>baseAddress</dt>
+<dd>This property overrides the base address of the topic map. This
+property must be a URI and the notation is assumed to be 'URI'. See
+the API documentation for
+<tt class="symbol">TopicMapStoreIF.getBaseAddress()</tt> for more
+information.
+</dd>
+</dl>
+
+
+<p>
+Below is shown an example configuration element.
+</p>
+
+
+<p align="center">
+<b>Example configuration</b>
+</p>
+
+
+
+<pre>
+
+    &lt;source class="net.ontopia.topicmaps.impl.rdbms.RDBMSSingleTopicMapSource"&gt;
+      &lt;param name="topicMapId" value="5001"/&gt;
+      &lt;param name="title" value="The Foo Topic Map"/&gt;
+      &lt;param name="referenceId" value="foo"/&gt;
+      &lt;param name="propertyFile" value="/usr/local/ontopia/jdbc.prop"/&gt;
+      &lt;param name="baseAddress" value="http://www.ontopia.net/topicmaps/foo.ltm"/&gt;
+    &lt;/source&gt;
+
+</pre>
+
+
+
+
+<h3>
+<a name="sect-pattern-source">2.4. RDBMSPatternSingleTopicMapSource</a>
+</h3>
+
+
+
+<p>A source producing a single topic map with a defined reference
+ID (Omnigator ID) by searching the RDBMS for a matching topic map. If
+multiple topic maps match the given search pattern the one with the
+highest ID is used. This source is useful when you have a topic map in
+the RDBMS which is frequently deleted and re-imported. You can then
+use this source to avoid having to change
+<tt>tm-sources.xml</tt> every time the topic map is
+reimported.</p>
+
+
+<p>These are the parameters supported by the source:</p>
+
+
+<dl>
+<dt>id</dt>
+<dd>The ID of the source. Must not be the same as any other source
+ID in the repository, but can otherwise be anything at all.</dd>
+<dt>referenceId</dt>
+<dd>The Omnigator ID of the topic map produced by the source. This
+is the ID used in your code to refer to the topic map.</dd>
+<dt>propertyFile</dt>
+<dd>The RDBMS properties file.</dd>
+<dt>match</dt>
+<dd>Which field in the database to match. It is best to set this to
+<tt class="symbol">title</tt>.</dd>
+<dt>pattern</dt>
+<dd>The value to search for.</dd>
+</dl>
+
+
+<p>Below is an example configuration for this source:</p>
+
+
+<pre>
+&lt;source class="net.ontopia.topicmaps.impl.rdbms.RDBMSPatternSingleTopicMapSource"&gt;
+  &lt;param name="id" value="pattern"/&gt;
+  &lt;param name="referenceId" value="mytopicmap.xtm"/&gt;
+  &lt;param name="propertyFile" value="rdbms.properties"/&gt;
+  &lt;param name="match" value="title"/&gt;
+  &lt;param name="pattern" value="mytopicmap.xtm"/&gt;
+&lt;/source&gt;
+</pre>
+
+
+<p>If, when importing topic maps from file, using the following
+command will ensure that the title of the topic map is set correctly,
+so that the source as configured above will pick it up.</p>
+
+
+<pre>
+java net.ontopia.topicmaps.cmdlineutils.RDBMSImport \
+  --title mytopicmap.xtm \
+  rdbms.properties whateverfile.xtm
+</pre>
+
+
+
+<h3>
+<a name="N102C7">2.5. The URLTopicMapSource</a>
+</h3>
+
+
+
+<p>
+This source will read a single topic map from a given URL rather than
+from the local file system. It can be used to get a topic map from a
+remote web site, for example. It supports exactly the same parameters
+as the XTM topic map source, but adds a few extra parameters. Below is
+an example of how to use this source.
+</p>
+
+
+<p align="center">
+<b>Example configuration</b>
+</p>
+
+
+
+<pre>
+    &lt;source class="net.ontopia.topicmaps.entry.URLTopicMapSource"&gt;
+      &lt;param name="title" value="Free XML Tools"/&gt;
+      &lt;param name="referenceId" value="xmltools"/&gt;
+      &lt;param name="url" value="http://www.garshol.priv.no/download/xmltools/xmltools-tm.xml"/&gt;
+      &lt;param name="syntax" value="XTM"/&gt;
+    &lt;/source&gt;
+</pre>
+
+
+
+<p>
+This example would load the Free XML Tools topic map from the <a href="http://www.garshol.priv.no/download/xmltools/">Free XML Tools web
+site</a>. Note the required <tt class="symbol">syntax</tt> parameter,
+which tells the source what syntax to expect. Possible values for this
+parameter are XTM, LTM, HyTM, RDF, RDF/XML, N3, and N-TRIPLE. The
+reference id is set to 'xmltools', so you can retrieve the topic map
+in your navigator application using this id.
+</p>
+
+
+
+<h3>
+<a name="N102E3">2.6. Relationship with the API</a>
+</h3>
+
+
+
+<p>
+This section explains how the <tt>tm-sources.xml</tt> file
+corresponds to the API. Basically, the file contains entries that are
+used to create <tt class="interfacename">TopicMapSourceIF</tt> objects
+(see the <tt class="symbol">entry</tt> package javadoc), which can find topic
+maps by various means and make them available to the Navigator
+Framework.
+</p>
+
+
+<p>
+In this file, each <tt class="symbol">source</tt> element creates an instance
+of the class named in its <tt class="symbol">class</tt> attribute. The class
+must implement the <tt class="interfacename">TopicMapSourceIF</tt>
+interface. The <tt class="symbol">source</tt> elements contain
+<tt class="symbol">param</tt> elements, which give configuration information
+to the source objects using Java bean introspection.
+</p>
+
+
+<p>
+The advantage of this approach is that with this configuration file
+one can easily make the navigator find topic maps in the file system,
+in a database, or by any other imaginable means. Each section below
+documents some <tt class="interfacename">TopicMapSourceIF</tt>
+implementations.
+</p>
+
+
+<p>
+Note that if you wish to use this functionality in your own
+applications you can use the
+<tt class="classname">net.ontopia.topicmaps.entry.XMLConfigSource</tt>
+class.
+</p>
+
+
+
+
+
+<h2>
+<a name="sect-log4j">3. Log4j logging</a>
+</h2>
+
+
+
+<p>
+Ontopia uses <a href="http://jakarta.apache.org/log4j/docs/manual.html">log4j</a>
+for its logging. You can also find a little more information on log4j
+and how Ontopia uses it in the <cite><a href="../devguide.html">The Ontopia Topic Maps Engine - Developer's
+Guide</a></cite>. If you want to configure the log4j logging
+in Navigator Framework applications, just put a
+<tt>log4j.properties</tt> file on the classpath, and
+Ontopia will automatically pick it up.
+</p>
+
+
+
+
+<h2>
+<a name="sect-data-sharing">4. Sharing topic maps</a>
+</h2>
+
+
+
+<p>
+There are three main ways of connecting an application with a
+repository of topic maps created by a
+<tt>tm-sources.xml</tt> file:
+</p>
+
+
+<ul>
+<li>
+    
+<p>The default approach, described in
+    <a href="#sect-introduction">section
+        1</a>.</p>
+  
+</li>
+<li>
+    
+<p>Using JNDI. This requires quite a bit of configuration, and
+    is usually quite painful. We do not recommend this approach, and
+    it is only supported for historical reasons. It is documented in
+    <a href="#sect-jndi">section
+        4.1</a>.
+    </p>
+  
+</li>
+<li>
+    
+<p>Using the <tt class="symbol">source_config</tt> parameter, which
+    refers directly to the <tt>tm-sources.xml</tt> file,
+    and makes the application use its own repository of topic maps.
+    (Described in <a href="#sect-web-xml">section
+        5</a>.)
+    </p>
+  
+</li>
+</ul>
+
+
+<p>
+In general, we strongly recommend using the default approach. If you
+want to use more than one <tt>tm-sources.xml</tt> file,
+give the file a different name, or point to it directly, this is all
+possible. In the standard <tt>web.xml</tt> configuration
+file you can specify the
+<tt class="parameter">topicmaps_repository_id</tt> parameter. This
+parameter references the <tt>tm-sources.xml</tt> file to
+be used in one of two ways:
+</p>
+
+
+<ul>
+<li>
+    
+<p>Using a file URL in the normal way, as in
+    <tt>file:/Users/larsga/config/tm-sources.xml</tt>.
+    This will cause that particular file to be loaded. All
+    applications which reference the same file will share a repository
+    of topic maps.</p>
+  
+</li>
+<li>
+    
+<p>Using a classpath URL, as in
+    <tt>classpath:tm-sources.xml</tt>, which is the
+    default setting. This causes a file named
+    <tt>tm-sources.xml</tt> to be loaded from the
+    classpath. All applications which use the same reference will
+    share a repository of topic maps.</p>
+  
+</li>
+</ul>
+
+
+<h3>
+<a name="sect-jndi">4.1. Sharing topic maps with JNDI</a>
+</h3>
+
+
+
+<dl>
+<dt class="note">Note</dt>
+<dd>
+  
+<p>This approach is obsolete, and we do not recommend that you
+  use it. The default approach is much better.</p>
+
+</dd>
+</dl>
+
+
+<p>
+In order to use JNDI your web server must support JNDI and be
+configured to use it. How this is done is server-dependent.  Any
+number of named shared topic map repositories can be set up, and each
+web application can choose whether to use its own repository or to use
+a named shared repository.
+</p>
+
+
+<p>
+To share topic maps between applications there are two steps to be
+performed:
+</p>
+
+
+<ol>
+<li>
+    
+<p>Configure the web server to make set up the shared
+    repository and make it available via JNDI. Note that all this does
+    is enable the repository; it will not be used before the
+    configurations of individual applications are changed.</p>
+  
+</li>
+<li>
+    
+<p>Configure each web application you want to use the shared
+    repository to use the repository instead of setting up its own.
+    It's possible to have three applications in the same server where
+    two use the shared repository and one does not, so each
+    application must be configured separately.</p>
+  
+</li>
+</ol>
+
+
+<p>
+The two sections below describe how to perform the two steps.
+</p>
+
+
+<h4>
+<a name="N103A9">4.1.1. Setting up one or more shared repositories</a>
+</h4>
+
+
+
+<p>
+This section describes how to set up a shared repository as a JNDI
+resource.
+</p>
+
+
+<p>
+In Tomcat, shared repositories are set up by adding the following to
+the <tt>server.xml</tt> file, inside the
+<tt class="symbol">Host</tt> element.
+</p>
+
+
+<p>
+<em>Tomcat 5.0.x:</em>
+</p>
+
+
+<pre>
+    &lt;DefaultContext override="true"&gt;
+
+      &lt;Resource name="OmnigatorRegistry" auth="Container"
+                type="net.ontopia.topicmaps.entry.SharedStoreRegistry"/&gt;
+ 
+      &lt;ResourceParams name="OmnigatorRegistry"&gt;
+        &lt;parameter&gt;
+          &lt;name&gt;factory&lt;/name&gt;
+          &lt;value&gt;org.apache.naming.factory.BeanFactory&lt;/value&gt;
+        &lt;/parameter&gt;
+        &lt;parameter&gt;
+          &lt;name&gt;registryName&lt;/name&gt;
+          &lt;value&gt;OmnigatorRegistry&lt;/value&gt;
+        &lt;/parameter&gt;
+      &lt;/ResourceParams&gt;
+
+    &lt;/DefaultContext&gt;
+</pre>
+
+
+<p>
+<em>Tomcat 5.5.x:</em>
+</p>
+
+
+<pre>
+  &lt;GlobalNamingResources&gt;
+    ...
+    &lt;Resource name="OmnigatorRegistry" auth="Container"
+              type="net.ontopia.topicmaps.entry.SharedStoreRegistry"
+              factory="org.apache.naming.factory.BeanFactory" /&gt;
+
+  &lt;/GlobalNamingResources&gt;
+</pre>
+
+
+<p>
+The name given to the resources in this example is
+<em>OmnigatorRegistry</em>. This name is the name used to
+refer to the shared repository.
+</p>
+
+
+<p>
+The shared repository will be configured by reading
+<tt>tm-sources.xml</tt> from the CLASSPATH as visible to
+the application server internals. Be aware that there usually are
+several locations on which one can put resources to make them visible
+for the application servers' class loaders. In Tomcat one should
+normally put the <tt>tm-sources.xml</tt> file in the
+<tt>common/classes</tt> directory. In most situations one
+would put the file in the same class loader context as the ontopia.jar
+file.
+</p>
+
+
+<p>
+You can make the shared repository read its configuration from another
+file by specifying the <tt class="symbol">sourceLocation</tt> parameter.
+</p>
+
+
+<p>
+<em>Tomcat 5.0.x:</em>
+</p>
+
+
+<pre>
+      &lt;ResourceParams name="OmnigatorRegistry"&gt;
+        ...
+        &lt;parameter&gt;
+          &lt;name&gt;sourceLocation&lt;/name&gt;
+          &lt;value&gt;/tmp/tm-sources.xml&lt;/value&gt;
+        &lt;/parameter&gt;
+      &lt;/ResourceParams&gt;
+</pre>
+
+
+<p>
+<em>Tomcat 5.5.x:</em>
+</p>
+
+
+<pre>
+  &lt;GlobalNamingResources&gt;
+    ...
+    &lt;Resource name="OmnigatorRegistry" auth="Container"
+              type="net.ontopia.topicmaps.entry.SharedStoreRegistry"
+              factory="org.apache.naming.factory.BeanFactory" 
+              sourceLocation="/tmp/tm-sources.xml" /&gt;
+
+  &lt;/GlobalNamingResources&gt;
+</pre>
+
+
+<p>
+Alternatively you can tell the SharedStoreRegistry resource what the
+resource name of the source configuration file to load from the
+CLASSPATH is. This can be done by specifying the
+<tt class="symbol">resourceName</tt> parameter. The default value is
+<tt class="symbol">tm-sources.xml</tt>. If you would like to set up multiple
+shared repositories where more than one of them is to read their
+source configuration from the CLASSPATH then the
+<tt class="symbol">resourceName</tt> parameter will have to be given for all
+except one of them.
+</p>
+
+
+<p>Here is an example of how you can set up two shared repositories
+that both loads their source configuration from the CLASSPATH:</p>
+
+
+<p>
+<em>Tomcat 5.0.x:</em>
+</p>
+
+
+<pre>
+      &lt;ResourceParams name="MyRegistry1"&gt;
+        ...
+        &lt;parameter&gt;
+          &lt;name&gt;resourceName&lt;/name&gt;
+          &lt;value&gt;tm-sources1.xml&lt;/value&gt;
+        &lt;/parameter&gt;
+      &lt;/ResourceParams&gt;
+
+      &lt;ResourceParams name="MyRegistry2"&gt;
+        ...
+        &lt;parameter&gt;
+          &lt;name&gt;resourceName&lt;/name&gt;
+          &lt;value&gt;tm-sources2.xml&lt;/value&gt;
+        &lt;/parameter&gt;
+      &lt;/ResourceParams&gt;
+</pre>
+
+
+<p>
+<em>Tomcat 5.5.x:</em>
+</p>
+
+
+<pre>
+  &lt;GlobalNamingResources&gt;
+
+    &lt;Resource name="MyRepository1" auth="Container"
+              type="net.ontopia.topicmaps.entry.SharedStoreRegistry"
+              factory="org.apache.naming.factory.BeanFactory" 
+              resourceName="tm-sources1.xml" /&gt;
+
+    &lt;Resource name="MyRepository2" auth="Container"
+              type="net.ontopia.topicmaps.entry.SharedStoreRegistry"
+              factory="org.apache.naming.factory.BeanFactory" 
+              resourceName="tm-sources2.xml" /&gt;
+
+  &lt;/GlobalNamingResources&gt;
+</pre>
+
+
+<p>With <em>Tomcat 5.5.x</em> one also has to relate
+the global naming source with individual web applications. This is how
+it has been set up for the Omnigator web application:</p>
+
+
+<pre>
+  &lt;Context path="/omnigator"&gt;
+    &lt;ResourceLink name="OmnigatorRegistry"
+              global="OmnigatorRegistry"
+              type="net.ontopia.topicmaps.entry.SharedStoreRegistry"/&gt;
+  &lt;/Context&gt;
+</pre>
+
+
+<p>The <tt class="symbol">&lt;Context&gt;</tt> elements can be added just
+right before the <tt class="symbol">&lt;/Host&gt;</tt> end-tag. You will need to
+add one <tt class="symbol">&lt;Context&gt;</tt> element per web
+application. Also make sure that the <tt class="symbol">path</tt> attribute
+point to the correct web application.</p>
+
+
+<p>
+Note that any number of shared repositories can be specified. If you
+set up more than a single shared repository make sure that you give
+them unique resource names and unique 'registryName' parameters. You
+would also have to make sure that they load their configuration from
+different locations. See the description of the
+<tt class="symbol">sourceLocation</tt> parameter above.
+</p>
+
+
+<p>
+Setting up a shared repository in the <a href="http://www.caucho.com/products/resin/">Resin</a> application
+server is done by adding the following to the
+<tt>resin.conf</tt> file, inside the <tt class="symbol">host</tt>
+element:
+</p>
+
+
+<pre>
+  &lt;resource-ref&gt;
+    &lt;res-ref-name&gt;OmnigatorRegistry&lt;/res-ref-name&gt;
+    &lt;res-type&gt;net.ontopia.topicmaps.entry.SharedStoreRegistry&lt;/res-type&gt;
+  &lt;/resource-ref&gt;
+</pre>
+
+
+
+
+<h4>
+<a name="N1043A">4.1.2. Making an application use the shared repository</a>
+</h4>
+
+
+
+<p>
+In order to make a web application use a shared repository, edit the
+<tt>web.xml</tt> file of that application to remove the
+<tt class="parameter">source_config</tt> parameter, and replace it by the
+following: 
+</p>
+
+
+<pre>
+  &lt;context-param&gt;
+    &lt;param-name&gt;jndi_repository&lt;/param-name&gt;    
+    &lt;param-value&gt;OmnigatorRegistry&lt;/param-value&gt;
+  &lt;/context-param&gt;
+</pre>
+
+
+<p>
+The value of the parameter is the JNDI resource name of the shared
+repository, as given in the
+<tt>server.xml</tt>/<tt>resin.conf</tt> file.
+</p>
+
+
+
+
+
+
+<h2>
+<a name="sect-web-xml">5. web.xml</a>
+</h2>
+
+
+
+<p>
+This file is part of the Java Servlet system and contains information
+used by the servlet system, as well as simple name/value configuration
+properties for individual servlet applications.
+</p>
+
+
+<p>
+The following configuration settings are used by the Navigator Framework:
+</p>
+
+
+<dl>
+<dt>source_config</dt>
+<dd>Tells the navigator where to find the configuration file used to
+find out how to locate topic maps. See <a href="#sect-sources-xml">section
+        2</a>.</dd>
+<dt>app_config</dt>
+<dd>Tells the navigator where to find the application configuration
+file, which is documented in <a href="#sect-application-xml">section
+        6</a>.
+The default value is <tt>WEB-INF/config/application.xml</tt>.
+</dd>
+<dt>plugins_rootdir</dt>
+<dd>Tells the navigator in what directory the plug-ins are located,
+if you want to change it from the default.
+</dd>
+<dt>topicmaps_repository_id</dt>
+<dd>References the topic maps repository to be used, as described
+in <a href="#sect-data-sharing">section
+        4</a>.</dd>
+<dt>jndi_repository</dt>
+<dd>This setting is used instead of
+<tt class="parameter">source_config</tt> when topic maps are shared across
+web applications with JNDI (see <a href="#sect-jndi">section
+        4.1</a>). This
+setting is obsolete.</dd>
+</dl>
+
+
+
+<h2>
+<a name="sect-application-xml">6. application.xml</a>
+</h2>
+
+
+
+<p>
+This configuration file stores the configuration for a Navigator web
+application, and by modifying this file it is possible to control many
+aspects of how the application behaves.
+</p>
+
+
+<dl>
+<dt class="note">Note</dt>
+<dd>
+  
+<p>Note that this file is obsolete. You do not need it.</p>
+
+</dd>
+</dl>
+
+
+<h3>
+<a name="N104C7">6.1. Autoloads</a>
+</h3>
+
+
+
+<p>
+The Navigator uses the information in the source.xml file (<a href="#sect-sources-xml">section
+        2</a>) to populate the topic map registry with
+topic map references. It does not load any of these topic maps before
+the user requests it through the manage page, however. The autoloads
+section can be used to request that some topic maps be loaded when the
+Navigator starts up, without the user having to explicitly request it.
+</p>
+
+
+<p>
+Below is shown the default autoloads section:
+</p>
+
+
+<p align="center">
+<b>Autoloads</b>
+</p>
+
+
+
+<pre>
+
+  &lt;autoloads&gt;
+    &lt;autoload topicmapid="opera.ltm" /&gt;
+    &lt;!-- autoload topicmapid="xmltools-tm.xtm" /--&gt;
+  &lt;/autoloads&gt;
+</pre>
+
+
+
+<p>
+The topic map IDs used here are the file names of the topic maps,
+including the suffix. The special ID <tt class="literal">~all</tt> can be
+used to make the system automatically load all topic maps it finds.
+(Note that this can cause slow startups, and if you have too many
+large topic maps it may cause the server to run out of memory during
+startup.)
+</p>
+
+
+
+<h3>
+<a name="N104E5">6.2. Model/View/Skin</a>
+</h3>
+
+
+
+<p>
+With this section you can control what models, views, and skins are to
+be made available to users (including ones that you develop yourself),
+and you can also set the default model, view, and skin. The
+<tt class="symbol">model</tt>, <tt class="symbol">view</tt>, and
+<tt class="symbol">skin</tt> elements in the <tt class="symbol">mvs</tt> element
+each make available a model, a view, or a skin on the customize page.
+They can have the following attributes:
+</p>
+
+
+<dl>
+<dt>name</dt>
+<dd>The ID of the model, view, or skin, used in the file names
+and also as a general identifier for the model/view/skin.</dd>
+<dt>title</dt>
+<dd>The title to be displayed to the user.</dd>
+<dt>default</dt>
+<dd>If set to <tt class="literal">yes</tt> it makes this model/view/skin the
+default.</dd>
+</dl>
+
+
+
+<h3>
+<a name="N10524">6.3. Properties</a>
+</h3>
+
+
+
+<p>
+In this section one can set a number of configuration options that
+control how the Navigator Framework behaves. These options are all simple named
+string values. The ones currently in use are:
+</p>
+
+
+<dl>
+<dt>defaultCharacterEncoding</dt>
+<dd>
+This property controls the character encoding in which the Navigator
+Framework writes all its output. The default value is 'utf-8'. If you
+get problems with international characters you most likely need to
+change this value to the name of your national character encoding.
+If you have problems with this, please contact
+<a href="mailto:support@ontopia.net">support@ontopia.net</a>.
+</dd>
+<dt>defaultContentType</dt>
+<dd>
+This property controls the HTTP content type which the Navigator
+Framework declares on its output pages via the
+<tt class="symbol">framework:response</tt> tag. The default value is
+'text/html', and as long as you are only making ordinary web
+applications you do not need to change it. If you want to make web
+applications which output WML or XML you should change this property
+to make sure that user agents treat the output correctly.
+</dd>
+<dt>allowLoadOnRequest</dt>
+<dd>
+<p>Controls whether topic maps are autoloaded when requested or
+not. If this property is set to <tt class="symbol">true</tt> topic maps that
+have not previously been loaded through the manage page will be loaded
+automatically when someone tries to access them.</p>
+<p>This differs from the autoload section in that topic maps listed
+there will be loaded when the server starts, before anyone has
+requested them. If this option is on, any topic maps that have not been
+loaded but which are requested by a user will be loaded
+automatically. If this option is turned off the topic maps in the
+autoloads section will still be loaded on startup.</p>
+</dd>
+<dt>pluginsOrder_foo</dt>
+<dd>This property defines the order of the plug-ins in a particular
+group (the group being the ID appearing after the underscore in the
+property name). The value is a whitespace-separated list of plug-in
+IDs.</dd>
+<dt>nameStringNonExistent</dt>
+<dd>This is the string displayed by <tt class="symbol">output:name</tt>
+for topics which have no basenames.</dd>
+<dt>nameStringNullValue</dt>
+<dd>This is the string displayed by <tt class="symbol">output:name</tt> when
+the most appropriate name of a topic has the value <tt class="literal">null</tt>.</dd>
+<dt>nameStringEmptyValue</dt>
+<dd>This is the string displayed by <tt class="symbol">output:name</tt>
+when the most appropriate name of a topic has an empty string as its
+value.</dd>
+</dl>
+
+
+<h4>
+<a name="N1059B">6.3.1. Obsolete properties</a>
+</h4>
+
+
+
+<dl>
+<dt class="warning">Warning</dt>
+<dd>
+
+<p>
+There are also some properties used by the old Navigator Framework tag
+libraries that are now deprecated. These are listed below, but note
+that these apply only to tags that are deprecated.
+</p>
+
+</dd>
+</dl>
+
+
+<dl>
+<dt>maxListLength</dt>
+<dd>The <tt class="symbol">logic:foreach</tt> tag stops after the number
+of iterations set here (default 500) in order to keep the framework
+from producing near-endless lists. By changing this value you can
+change the cutoff point.</dd>
+<dt>checkForChangedModules</dt>
+<dd>If set to <tt class="symbol">true</tt> the
+<tt class="symbol">logic:include</tt> tag will check if the referenced module
+file has been updated since the last time the tag was executed every
+time it is executed. If it has changed the module will be reloaded.
+If set to <tt class="symbol">false</tt> the module will be loaded on startup,
+but never again. The default is <tt class="symbol">false</tt>.</dd>
+<dt>occurrenceEmptyValue</dt>
+<dd>This is the string displayed by <tt class="symbol">output:content</tt>
+for occurrences whose value is an empty string.</dd>
+<dt>occurrenceNullValue</dt>
+<dd>This is the string displayed by <tt class="symbol">output:content</tt>
+for occurrences whose value is <tt class="literal">null</tt>.</dd>
+</dl>
+
+
+
+
+<h3>
+<a name="N105F4">6.4. Class shortnames</a>
+</h3>
+
+
+
+<p>
+In several places in the tag libraries classes are referred to. Often
+the same classes have to be referred to in many different places, and
+it can quickly get tedious to repeat the same long classnames many
+times throughout the source code. To help solve this problem we've
+added a section to the <tt>application.xml</tt> file called
+the classmap. Using this shortnames for classes can be defined, and
+classes can then be referred to in the JSP pages using these shortnames.
+Below is shown an example of a minimal classmap section, which should
+show how it is used.
+</p>
+
+
+<p align="center">
+<b></b>
+</p>
+
+
+
+<pre>
+  &lt;classmap&gt;
+
+    &lt;class shortcut="topicComparator"
+           fullname="net.ontopia.topicmaps.nav.utils.comparators.TopicComparator"/&gt;
+
+  &lt;/classmap&gt;
+</pre>
+
+
+
+
+</body>
+</html>

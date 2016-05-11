@@ -1,0 +1,2134 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Ontopia Vizigator</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Ontopia Vizigator</h1>
+<h2 class="subtitle">User's Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia 
+      </td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2> 
+      
+      
+<p> This document introduces the reader to Vizigator. It provides
+        guidance on the use of Vizigator to: 
+        <ul>
+<li> 
+            
+<p>visualize and navigate topic maps;</p> 
+          
+</li>
+<li> 
+            
+<p>customize the visualization characteristics of a topic map
+              for an application; and </p> 
+          
+</li>
+<li> 
+            
+<p>embed a visualization window in web applications built using
+              Ontopia.</p> 
+          
+</li>
+</ul>
+</p> 
+      
+<p>Reading this document assumes some basic knowledge about topic
+        maps. If you are not familiar with topic maps, try reading one of the simple
+        introductions, such as 
+        <a href="http://www.ontopia.net/topicmaps/materials/tao.html">The
+          TAO of Topic Maps</a>, available from the Ontopia web site. If you are
+        technically minded, you might also want to look at the 
+        <a href="http://www.topicmaps.org/xtm/1.0/">XTM
+          Specification</a> or the latest drafts of the new version of ISO 13250,
+        especially the 
+        <a href="http://www.isotopicmaps.org/sam/sam-model/">Data
+          Model</a>.</p> 
+      
+<p> We welcome any suggestions you might have on ways of
+      improving this User Guide. Please send them to <a href="http://groups.google.com/group/ontopia">the mailing
+      list</a>.</p>
+      
+<p>Happy Vizigating! </p> 
+    
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10055">1. Introduction</a>
+</li>
+<ul>
+<li>
+<a href="#N10063">1.1. Components</a>
+</li>
+<ul></ul>
+<li>
+<a href="#scope">1.2. Scope of Use</a>
+</li>
+<ul></ul>
+<li>
+<a href="#locsupport">1.3. Localization Support</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#vd01">2. VizDesktop - Getting started with Vizigator</a>
+</li>
+<ul>
+<li>
+<a href="#startvizdesktop">2.1. Starting VizDesktop</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101A2">2.2. The user interface</a>
+</li>
+<ul>
+<li>
+<a href="#N101A9">2.2.1. Primary graphical conventions</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10210">2.2.2. Viewing principles</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sl01">2.2.3. Screen Layout</a>
+</li>
+<ul></ul>
+<li>
+<a href="#menubar">2.2.4. Menus</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10376">2.2.5. Loading a topic map</a>
+</li>
+<ul></ul>
+<li>
+<a href="#nav">2.2.6. Navigating the graph</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10431">2.2.7. Summary of operations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1050F">2.2.8. The Properties box</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#search01">2.3. Searching in VizDesktop</a>
+</li>
+<ul></ul>
+<li>
+<a href="#mconf">2.4. Configuration</a>
+</li>
+<ul>
+<li>
+<a href="#configcomponents">2.4.1. Components of a configuration</a>
+</li>
+<ul></ul>
+<li>
+<a href="#filtering">2.4.2. Filtering Topics and Associations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#stylingtopics">2.4.3. Styling Topics and Associations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#genoptions">2.4.4. Determining General Options</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-type-precedence">2.4.5. Topic Type Precedence</a>
+</li>
+<ul></ul>
+<li>
+<a href="#name_scope">2.4.6. Name Scoping</a>
+</li>
+<ul></ul>
+<li>
+<a href="#assoc_scope">2.4.7. Association Scoping</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1069B">2.4.8. Saving and using the configuration</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+<li>
+<a href="#vl01">3. VizLet - Vizigating in web applications</a>
+</li>
+<ul>
+<li>
+<a href="#N106BE">3.1. Comparing VizLet to VizDesktop</a>
+</li>
+<ul></ul>
+<li>
+<a href="#usevizlet">3.2. Using VizLet in a web application</a>
+</li>
+<ul>
+<li>
+<a href="#sect-menufile">3.2.1. The menufile parameter</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#sect-copy-name">3.3. The "Copy name" operation</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#vp01">4. VizPlugin - Vizigating in Omnigator</a>
+</li>
+<ul>
+<li>
+<a href="#N10912">4.1. Using VizPlugin</a>
+</li>
+<ul></ul>
+</ul>
+</ul> 
+   
+  
+  
+
+   
+
+
+<h2>
+<a name="N10055">1. Introduction</a>
+</h2> 
+     
+    
+<p>The Topic Maps model describes the knowledge structures inherent in
+      an underlying body of information. This model, which reflects the associative
+      mode typical of the way humans think, can then be intuitively perused in
+      different ways. </p> 
+    
+<p>One possibility is a text-based interface. The Ontopia Omnigator (the
+      name is a contraction of "omnivorous navigator") uses a form-based navigation
+      paradigm that is commonly known and used by most of us every day when using the
+      web. </p> 
+    
+<p>However, often a picture or graphic can be easier to grasp than a
+      wordy description. The Ontopia Vizigator ("vi[z]ual navigator") uses a
+      graphical interface to provide an additional method of topic map navigation.
+      Although Vizigator can be used on its own, it is also well-suited to complement
+      a text-based interface.</p> 
+    
+<h3>
+<a name="N10063">1.1. Components</a>
+</h3> 
+       
+      
+<p> Vizigator consists of three components which are related/dependent
+        on each other. 
+        <ul>
+<li> 
+            
+<p>
+<strong>VizDesktop</strong> -
+              designer's configuration tool</p> 
+            
+<p> VizDesktop can be used without any other Ontopia browsing
+              environment. However, it is primarily a configuration tool for application
+              designers to determine whether and/or how various topic types and associations
+              will be graphically displayed. This is the entry point to the entire Ontopia
+              Vizigator. To get started, see <a href="#vd01">section
+        2</a>
+</p> 
+          
+</li>
+<li> 
+            
+<p>
+<strong>VizLet</strong> - reusable
+              applet component</p> 
+
+            
+<p> All of the visualization capability of VizDesktop, but
+              without the configuration toolkit, VizLet can be used within other web
+              applications. To bring topic map visualization to any web site, see
+              <a href="#vl01">section
+        3</a>
+</p> 
+          
+</li>
+<li> 
+            
+<p>
+<strong>VizPlugin</strong> -
+              Omnigator plug-in</p> 
+
+            
+<p> Based on VizLet, VizPlugin can be used to visualize any
+              topic currently under view in Omnigator. To find out more about navigating
+              visually in Omnigator, see <a href="#vp01">section
+        4</a>
+</p> 
+          
+</li>
+</ul>
+</p> 
+
+        
+<p>Vizigator uses TouchGraph, an open source toolkit for
+        graph visualization, which is maintained as a Sourceforge
+        project. For further information, please see the <a href="http://touchgraph.sourceforge.net/discuss.html">Sourceforge
+        project homepage</a> and the <a href="http://www.touchgraph.com/index.html">TouchGraph
+        homepage</a> with other example applications.</p>
+     
+    
+<h3>
+<a name="scope">1.2. Scope of Use</a>
+</h3> 
+       
+      
+<p>Vizigator is designed for graphically browsing and navigating topic
+        maps. It supports all aspects of ISO 13250 with the exception of merging and
+        some aspects of scope. It accepts topic maps in a variety of serialization
+        syntaxes. </p> 
+      
+<p>Vizigator is used to visualize a topic map, not an ontology. That
+        is, Vizigator is designed to help users understand, navigate, and browse a
+        populated topic map via a graphical interface.</p> 
+      
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+        
+<p>It is possible to visualize an ontology using Vizigator; however,
+          it requires modifications to the topic map. One way to accomplish this is to
+          create a topic type, such as 'ontology_topic' and make all typing topics an
+          instance of that type.</p> 
+      
+</dd>
+</dl> 
+      
+<p>Creating and editing topic maps via Vizigator is not supported at
+        this time.</p> 
+     
+    
+<h3>
+<a name="locsupport">1.3. Localization Support</a>
+</h3> 
+       
+      
+<p> Vizigator has internationalization support for translating the
+        user interface into any language. The following table lists the currently
+        supported languages and the codes that should be used to designate their use
+        (see <a href="#startvizdesktop">section
+        2.1</a> and <a href="#usevizlet">section
+        3.2</a>).
+        Additional languages will be added over time. </p> 
+      
+<p align="center">
+<b>Table 1.1. Interface localizations</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Language</th><th class="dbTableHeaderEntry">Code</th><th class="dbTableHeaderEntry">Translation
+              Acknowledgements</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">English</td><td class="dbTableEntry">en</td><td class="dbTableEntry">- </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Japanese</td><td class="dbTableEntry">ja</td><td class="dbTableEntry">Thank you to
+              Motomu Naito, CEO of partner 
+              <a href="http://www.knowledge-synergy.com/">Knowledge 
+              Synergy</a>, Inc., Japan
+            </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">German</td><td class="dbTableEntry">de</td><td class="dbTableEntry">Thank you to Ingo
+              Sch&ouml;nfeld, Knowledge Engineer at ATLAS Elektronik GmbH, Germany</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Norwegian</td><td class="dbTableEntry">no</td><td class="dbTableEntry">- </td>
+</tr>
+</table> 
+      
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+        
+<p>Users interested in translating the interface to an unsupported
+          language should contact the Ontopia project 
+          <a href="http://groups.google.com/group/ontopia">mailing
+          list</a>.</p> 
+      
+</dd>
+</dl> 
+     
+  
+ 
+  
+<h2>
+<a name="vd01">2. VizDesktop - Getting started with Vizigator</a>
+</h2> 
+     
+
+      
+<p>VizDesktop provides: 
+        <ul>
+<li> 
+            
+<p>a simple graphical topic map browser;</p> 
+          
+</li>
+<li> 
+            
+<p>tools to configure views for Omnigator (VizPlugin) or your
+              own application (VizLet).</p> 
+          
+</li>
+</ul>
+</p> 
+      
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+        
+<p>The VizDesktop application is developed using the GUI
+        toolkit (Java Foundation Classes(JFC)/Swing) provided with
+        Java platform 2 standard edition (J2SE). The general look and
+        feel of the user interface is according to the Java Swing
+        controls in order to run on both Windows and Unix/Linux
+        clients.</p>
+      
+</dd>
+</dl> 
+
+    
+<h3>
+<a name="startvizdesktop">2.1. Starting VizDesktop</a>
+</h3> 
+       
+      
+<p>
+<strong>Prerequisites:</strong> VizDesktop
+      is a Java application and requires the Java Developer Kit (JDK),
+      Standard Edition Version 1.3 (or higher).</p>
+      
+      
+<p>Starting VizDesktop: 
+        <ol>
+<li> 
+            
+<p>
+<strong>On Windows</strong> execute the
+              <tt>vizdesktop.bat</tt> file in
+              <tt>${ONTOPIA_HOME}\bin</tt>.</p> 
+          
+</li>
+<li> 
+            
+<p>
+<strong>On UNIX/Linux</strong> execute the
+              <tt>vizdesktop.sh</tt> file in
+              <tt>${ONTOPIA_HOME}/bin</tt>.</p> 
+          
+</li>
+</ol>
+</p> 
+      
+<p> To set the language used in the VizDesktop interface, you can edit
+        the command line in the 
+        <tt>.bat</tt> or 
+        <tt>.sh</tt> file with the parameter 
+        <tt>--lang=&lt;lang&gt;</tt> where 
+        <tt>&lt;lang&gt;</tt> is a two-character designation of the
+        language to be used. (See <a href="#locsupport">section
+        1.3</a> for the list of
+        supported languages.) Alternatively, you can add the parameter when invoking
+        the batch files: 
+        <ol>
+<li> 
+            
+<p>
+<strong>On Windows</strong>: 
+              <tt>vizdesktop --lang=&lt;lang&gt;</tt>
+</p> 
+          
+</li>
+<li> 
+            
+<p>
+<strong>On UNIX/Linux</strong>: 
+              <tt>vizdesktop.sh --lang=&lt;lang&gt;</tt>
+</p> 
+          
+</li>
+</ol>
+</p> 
+      
+<p>Please send all comments to 
+        <a href="mailto:support@ontopia.net">support@ontopia.net</a>. Bugs can be reported in 
+        <a href="http://www.ontopia.net/bugs/">the bug
+          database</a>.</p> 
+     
+    
+<h3>
+<a name="N101A2">2.2. The user interface</a>
+</h3> 
+       
+      
+<p></p> 
+      
+<h4>
+<a name="N101A9">2.2.1. Primary graphical conventions</a>
+</h4> 
+         
+        
+<p>Conventions for visualization of topic map constructs are as
+          follows: 
+          <ul>
+<li> 
+              
+<p>
+<strong>Topics</strong> appear as nodes
+                with a topic name. Other names by which the topic is known are available via the
+                <dfn>Properties box</dfn> accessible via the context menu (right
+                click on the topic). </p> 
+              
+<p> Alternatively, all topic names in a given scope can be
+                displayed by choosing a scoping topic from the 
+                <tt>Name Scoping</tt> menu item. If a topic does not
+                have a name within a chosen scope, the <dfn>unconstrained
+                scope</dfn> topic name is used.</p> 
+              
+<p>The algorithm for determining which topic name to display in
+                the unconstrained scope is as follows: 
+                <ul>
+<li> 
+                    
+<p>use an unscoped name (randomly selected if more than
+                      1), </p> 
+                  
+</li>
+<li> 
+                    
+<p>else, use a scoped name (randomly selected if more
+                      than 1).</p> 
+                  
+</li>
+</ul> 
+</p> 
+              
+<p> 
+                
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+                  
+<p>Very long topic names will be shortened
+                    algorithmically to aid visualization. Shortened names will end in '...' and
+                    holding the mouse over the node will cause the name to expand.</p> 
+                
+</dd>
+</dl> 
+</p> 
+            
+</li>
+<li> 
+              
+<p>
+<strong>Topic Types</strong> are
+                distinguishable based on the shape, color, and other style characteristics
+                applied to the node. The name of the type is available on the Properties
+                box.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<strong>Associations</strong> between
+                topics are shown as edges (lines). Association types are distinguishable based
+                on the shape and color of the edge. Association types and role names are
+                visible during mouse-over; role names may be optionally suppressed.</p> 
+              
+<p> By default, all associations in all scopes are displayed.
+                It is possible to filter associations by scope using the <em>Association
+                Scoping</em> menu item (see <a href="#assoc_scope">section
+        2.4.7</a>).</p> 
+            
+</li>
+<li> 
+              
+<p>
+<strong>Occurrences</strong>, grouped by
+                type, are viewable via the Properties box. 
+                <dl>
+<dt class="note">Note</dt>
+<dd> 
+                  
+<p>It is not possible to navigate to the occurrences in
+                    VizDesktop, only in VizLet and VizPlugin.</p> 
+                
+</dd>
+</dl>
+</p> 
+            
+</li>
+</ul>
+</p> 
+        
+<p>If no predefined configuration is associated with a topic map,
+          each type of topic and each type of association is automatically and randomly
+          assigned a color each time the topic map is opened. These colors can be changed
+          and saved in a configuration for the specific topic map. </p> 
+      
+      
+<h4>
+<a name="N10210">2.2.2. Viewing principles</a>
+</h4>
+         
+        
+<p>For the purposes of this section, we will ignore the fact that
+          the graph in Vizigator represents a topic map, and instead focus on the graph
+          and what happens to it. This means that in general, a node is considered to be
+          just a node, regardless of whether it represents a topic or an association.
+          </p>
+        
+<p> The graph available through Vizigator is best seen as divided
+          into three sets: </p> 
+        
+<dl>
+<dt>The complete graph</dt>
+<dd> 
+               
+              
+<p>This is the entire, unfiltered graph where every topic and
+                association in the topic map have corresponding nodes and edges.</p> 
+            
+</dd>
+<dt>The filtered graph</dt>
+<dd> 
+               
+              
+<p>This is the graph as filtered by the type and scope filter
+                settings.</p> 
+            
+</dd>
+<dt>The visible graph</dt>
+<dd> 
+               
+              
+<p>This is the graph that is actually shown in the Vizigator
+                screen (including parts that may be scrolled off outside the rectangle
+                currently being shown).</p> 
+            
+</dd>
+</dl> 
+        
+<p> The visible graph is always a subset of the filtered graph
+          (though not necessarily a true subset), and the filtered graph is always a
+          subset of the complete graph (though again not necessarily a true subset). The
+          filter settings determine what's in the filtered graph, but determining what is
+          in the visible graph is more complex. There are two views or modes of operation
+          for the visible graph: </p> 
+        
+<dl>
+<dt>Map View</dt>
+<dd> 
+               
+              
+<p>In <dfn>Map View</dfn> the visible graph is the
+                filtered graph, minus nodes and edges explicitly hidden by the user.</p> 
+            
+</dd>
+<dt>Topic View</dt>
+<dd> 
+               
+              
+<p>In <dfn>Topic View</dfn>, that is, when there
+                is a <dfn>Focus Node</dfn>, the visible graph is the fragment of
+                the filtered graph within X steps of the Focus Node. However, the user can
+                modify the visible graph by both adding and removing nodes and edges.</p> 
+            
+<ul>
+<li> 
+                
+<p>
+<strong>Focus Node</strong>. The node
+                  from which the locality is computed in Topic View. It is designated by double
+                  clicking on a topic or by defining or using a <dfn>Start
+                  Topic</dfn>. If in Map View at the time a Focus Node is chosen, the
+                  display changes to Topic View; if in Topic View, the display refocuses on the
+                  new Focus Node.</p> 
+                
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+                  
+<p>The Focus Node is identified visually by a deep yellow
+                    color. Use of this color in a configuration should be avoided.</p> 
+                
+</dd>
+</dl>
+              
+</li>
+<li> 
+                
+<p>
+<strong>Start Topic</strong>. The node
+                  that is focused when the topic map is opened (if there is a pre-defined
+                  configuration that includes a Start Topic). Topic View is initiated when a
+                  topic is designated as the Start Topic (via the topic's context menu) or when
+                  choosing to focus on a previously defined Start Topic via the 
+                  <tt>View\Focus Start Topic</tt> menu item. Only one
+                  topic can be designated as the Start Topic at any one time. Returning to Map
+                  View or designating a new Focus Node does not affect the Start Topic
+                  designation.</p> 
+              
+</li>
+</ul>
+</dd>
+</dl> 
+        
+<p> When initially loading a topic map, dialog boxes allow
+        the user to choose a Focus Node, to proceed with modelling a
+        Map View, or to cancel the loading. From a Topic View, Map
+        View can be can be restored via the <tt>View\Map
+        View</tt> menu item. </p>
+        
+<p>VizLet (and VizPlugin) and VizDesktop behave the same
+        way, with the exception that VizLet always operates in topic
+        view.</p>
+       
+      
+<h4>
+<a name="sl01">2.2.3. Screen Layout</a>
+</h4> 
+         
+        
+<p>The VizDesktop window includes a main menu bar, three scroll
+          bars, a number control, and a search box: 
+          <ul>
+<li> 
+              
+<p>
+<em>VizDesktop Window</em>. The file names of
+                the open topic map and loaded configuration (if any) are displayed at the top
+                of the VizDesktop Window.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>Menu bar</em>. See <a href="#menubar">section
+        2.2.4</a>
+</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>Scroll bars</em>. The vertical scroll bar
+                at the right of the window and the horizontal scroll bar at the bottom of the
+                window are used to position the graph in the viewing area, much like any other
+                graphical viewer. The graph also can be repositioned by dragging the nodes
+                using the mouse or by dragging the background. </p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>Zoom bar</em>. The scroll bar at the top of
+                the screen, the <dfn>zoom bar</dfn>, is used to zoom
+                in/out of the topic map. When the thumbwheel is all the way to the left, all of
+                the nodes are very close together and the lines between them will not even be
+                visible. As the thumbwheel is moved to the right, the nodes spread out and the
+                relationships (lines) become visible. The optimum location of the zoom bar's
+                thumbwheel will vary based on the size of the topic map or the portion of the
+                topic map chosen for viewing.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>Locality factor</em>. To the left of the
+                zoom bar is a box with an increment/decrement number control. This
+                <dfn>locality factor</dfn> designates the maximum number of hops to
+                be displayed from the Focus Node when in a Topic View. Locality factor has no
+                effect on Map View. </p> 
+              
+<p>The locality factor number can be changed by clicking on
+                the arrows or by typing in a number. The maximum value accessible using the
+                arrows is the maximum distance between topics within the current topic map. If
+                some associations have been filtered out of the view, the number might be
+                misleading because even though the locality factor is increased, the display
+                won't change. </p> 
+              
+<p>A small red box with a number (or asterisk for numbers
+                higher than 9), the <dfn>further-associations box</dfn>, appears in
+                the upper right hand corner of a topic shape when a topic has additional
+                associations that are beyond the range of the locality factor. A single left
+                click on the topic will display that set of associations. The display can be
+                collapsed again by right clicking on the topic and choosing 
+                <tt>collapse node</tt> from the context menu.
+                Associations outside the range of the locality, or those not made to other
+                topics within the locality will be removed. Those that are within the locality
+                or are linked to other topics within the locality will remain.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>Search box</em>. The search box is located
+                just above the zoom bar at the top of the window. See <a href="#search01">section
+        2.3</a> for details on the use of the search box.</p> 
+            
+</li>
+</ul>
+</p> 
+        
+<p align="center"> 
+          
+<img align="center" src="viz_desktop_ui_description.png"> 
+        </p>
+<p align="center">
+<b>Figure 1.  VizDesktop user interface</b>
+</p> 
+        
+<p>To hide/display the scrollbars, zoom bar, search box, and
+          locality factor, right click on the background and select "Toggle Controls".
+          Alternatively, only the search box can be removed from the display through use
+          of the check box.</p> 
+       
+      
+<h4>
+<a name="menubar">2.2.4. Menus</a>
+</h4> 
+         
+        
+<p>The main menu bar consists of the following menu items: 
+          <ul>
+<li> 
+              
+<p>
+<strong>File</strong> - menu choices
+                include loading a topic map into the viewer, saving a configuration, and
+                specifying an RDF mapping file. 
+                <dl>
+<dt class="note">Note</dt>
+<dd> 
+                  
+<p>When vizigating a topic map view of an RDF file,
+                    Vizigator looks for an RDF mapping file. The default file is 
+                    <tt>mapping.rdff</tt> and is located in
+                    <tt>$TOMCAT_HOME\webapps\omnigator\WEB-INF\topicmaps</tt> (the
+                    default location for the mapping file used by Omnigator). The name of the file
+                    and its location may be changed or additional mapping files may be designated
+                    via the 
+                    <tt>File\RDF mapping file</tt> menu item. </p>
+                  
+                
+</dd>
+</dl>
+</p> 
+            
+</li>
+<li> 
+              
+<p>
+<strong>View</strong> - menu choices for
+                viewing modes and focus.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<strong>Filtering Topics</strong> - a
+                checklist (on/off) to decide which topic types will be visible in the display.
+                For further details on using filtering, see <a href="#filtering">section
+        2.4.2</a>.</p>
+              
+            
+</li>
+<li> 
+              
+<p>
+<strong>Filtering Associations</strong> - a
+                checklist (on/off) to decide which associations will be visible in the display.
+                For further details on using filtering, see <a href="#filtering">section
+        2.4.2</a>.</p>
+              
+            
+</li>
+<li> 
+              
+<p>
+<strong>Styling</strong> - menu choices for
+                styling topic and association types. For further details on using Styling, see
+                <a href="#stylingtopics">section
+        2.4.3</a>.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<strong>Options</strong> - mechanisms for
+                generally configuring the viewing environment. For further details on using
+                Options, see <a href="#genoptions">section
+        2.4.4</a>.</p> 
+            
+</li>
+<li> 
+              
+<p> 
+<strong>Name Scoping</strong> - when
+                defined in the topic map, a list of topics that are used to choose among a
+                topic's names for the one to be displayed. For further details, see
+                <a href="#name_scope">section
+        2.4.6</a>
+</p> 
+            
+</li>
+<li> 
+              
+<p> 
+<strong>Association Scoping</strong> -
+                when defined in the topic map, a set of topics that are used to filter the
+                types of associations to be displayed. For further details, see
+                <a href="#assoc_scope">section
+        2.4.7</a>
+</p> 
+            
+</li>
+<li> 
+              
+<p>
+<strong>Help</strong> - information on
+                Vizigator.</p> 
+            
+</li>
+</ul>
+</p> 
+        
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+          
+<p>If a menu item has been assigned a keyboard short cut, it is
+            shown to the right of the item's name.</p> 
+        
+</dd>
+</dl> 
+       
+      
+<h4>
+<a name="N10376">2.2.5. Loading a topic map</a>
+</h4> 
+         
+        
+<p> Vizigator recognizes all files with the extensions
+          <tt>.xtm</tt>,<tt>.hytm</tt>,
+          <tt>.ltm</tt>, <tt>.tmx</tt>, 
+          <tt>.rdf</tt>, or
+          <tt>.n3</tt>. </p> 
+        
+<p>What to expect when loading a topic map will differ depending on
+          whether or not a configuration has been saved for the topic map.</p> 
+        
+<ul>
+<li> 
+            
+<p>
+<strong>When loading a topic map for the first
+              time</strong>, it will open in Map View or Topic View based on the user's
+              choices in the 
+              <tt>Select initial topic</tt> and follow-on dialog
+              boxes. It does not load any default configuration which could reduce the
+              complexity of a large topic map. </p> 
+          
+</li>
+<li> 
+            
+<p>
+<strong>When loading a topic map for which
+              there is a configuration</strong>, the visualization will conform to the
+              parameters of the configuration (see <a href="#configcomponents">section
+        2.4.1</a>). If a
+              Start Topic was designated, it will open in Topic View; otherwise, it will open
+              in Map View.</p> 
+          
+</li>
+</ul> 
+        
+<p> Hints for achieving a sensible display of a very large topic
+          map: 
+          <ul>
+<li> 
+              
+<p>Setting the zoom bar furthest to the left will force the
+                greatest number of topics into the viewing space; in most cases it will include
+                all topics. Use the zoom bar to zoom into the topic map and choose a current
+                topic by double clicking a topic. The view will change into the Topic View with
+                the focus around the chosen topic and in conformance with the current locality
+                factor. </p> 
+            
+</li>
+<li> 
+              
+<p>Although a locality factor of 2 or 3 for a topic view may
+                seem like quite a low number, in a large topic map there can still be an
+                overwhelming number of topics visible. It is often easier to start with a
+                locality factor of 1 and increase that as needed.</p> 
+            
+</li>
+<li> 
+              
+<p>Removing the 'Instance of" association is often useful when
+                the locality is set to 2 or more in a large topic map. For example, if the
+                topic under consideration is 
+                <tt>Florence</tt>, one association level away might
+                be the topic 
+                <tt>city</tt>, and two associations away would be all
+                other instances of 
+                <tt>city</tt>. Removing the 
+                <tt>Instance of</tt> association, would remove the
+                presence of all of the other topics that are instances of type 
+                <tt>city</tt>. </p> 
+            
+</li>
+<li> 
+              
+<p>To quickly find a specific topic, use the search box (see
+                <a href="#search01">section
+        2.3</a>).</p> 
+            
+</li>
+</ul>
+</p> 
+       
+      
+<h4>
+<a name="nav">2.2.6. Navigating the graph</a>
+</h4> 
+         
+        
+<p>The following section gives a short introduction and overview of
+          the default actions available using the mouse: 
+          <ul>
+<li> 
+              
+<p>
+<em>left mouse button; single click on a
+                topic</em> - expand topic (equivalent to context menu 'Expand node'); has
+                no effect on topics without a further-associations box or within Map
+                View.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>left mouse button; double click on a
+                topic</em> - make the topic the Focus Node and the locality factor
+                triggers how many related topics are displayed. </p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>right mouse button, click on
+                background</em> - displays menu items for toggling on/off the window
+                controls (locality factor, zoom bar, search box, and scroll bars) as a group or
+                the search box individually. </p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>right mouse button, click on a topic </em>
+                - the 
+                <tt>context menu</tt> pops up. </p> 
+              
+<p>The context menu displays all the actions that can be
+                applied to the topic (e.g., expand, collapse, hide node, set as start node),
+                provides access to the topic's Properties box (for names, types, and
+                occurrences), and allows the topic to be designated as
+                <dfn>sticky</dfn> (topic will remain positioned relative to other
+                topics where specifically moved by user).</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>right mouse button, click on an edge
+                (association) </em> - displays 
+                <tt>Hide edge</tt> menu choice. By clicking on 
+                <tt>Hide edge</tt>, the edge will be hidden and
+                connected topics, which will be then disconnected, will also acquire a
+                further-associations box (or have the number in their further-associations box
+                incremented). </p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>mouse-over edge (association) </em> -
+                displays the name of the association. </p> 
+            
+</li>
+</ul>
+</p> 
+        
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+          
+<p>For changing the default mouse actions, see
+            <a href="#genoptions">section
+        2.4.4</a>
+</p> 
+        
+</dd>
+</dl> 
+       
+      
+<h4>
+<a name="N10431">2.2.7. Summary of operations</a>
+</h4> 
+         
+        
+<p> This section summarizes the effects of the various operations.
+          Since the effects of operations are different in the two views, each view is
+          described separately. </p> 
+        
+<h5>
+<a name="N10439">2.2.7.1. Topic View</a>
+</h5> 
+           
+          
+<p> Topic View is the view where there is a Focus Node, and the
+            visible graph (at least initially) contains only the nodes within a specified
+            distance (the locality) of the Focus Node. Distance is computed with no regard
+            to whether nodes represent topics or associations. The Focus Node is always in
+            the visible graph. </p> 
+          
+<dl>
+<dt>Hide node</dt>
+<dd> 
+                 
+                
+<p>If hiding the node disconnects part of the visible graph
+                  that part is removed.</p> 
+              
+</dd>
+<dt>Hide edge</dt>
+<dd> 
+                 
+                
+<p>If hiding the edge disconnects part of the visible graph
+                  that part is removed.</p> 
+              
+</dd>
+<dt>Expand node</dt>
+<dd> 
+                 
+                
+<p>All nodes in the filtered graph that are neighbours of
+                  the expanded node become visible together with the edges connecting them to the
+                  expanded node and any edges between the newly visible nodes.</p> 
+              
+</dd>
+<dt>Collapse node</dt>
+<dd> 
+                 
+                
+<p>All nodes which only have edges to the collapsed node and
+                  between each other are removed from the visible graph.</p> 
+              
+</dd>
+<dt>Set Focus Node</dt>
+<dd> 
+                 
+                
+<p>Whether done by double-clicking a node or setting the
+                  Start Topic, recomputes the visible graph from the new Focus Node with the
+                  existing locality setting.</p> 
+              
+</dd>
+<dt>Change locality</dt>
+<dd> 
+                 
+                
+<p>Recomputes the visible graph from the existing Focus Node
+                  with the new locality setting. (This ignores the user's
+                  expanding/collapsing/hiding modifications, but is a consistent behaviour,
+                  matches the current code, and is the simplest option.)</p> 
+              
+</dd>
+<dt>Filter out</dt>
+<dd> 
+                 
+                
+<p>Any nodes and edges filtered out of the visible graph are
+                  removed, and any parts of the graph disconnected from the Focus Node by this
+                  are also removed.</p> 
+              
+</dd>
+<dt>Filter in</dt>
+<dd> 
+                 
+                
+<p>The topic view is recomputed, but without hiding already
+                  visible nodes/edges outside the topic view.</p> 
+              
+</dd>
+</dl> 
+         
+        
+<h5>
+<a name="N104A5">2.2.7.2. Map view</a>
+</h5> 
+           
+          
+<dl>
+<dt>Hide node</dt>
+<dd> 
+                 
+                
+<p>The node and all its edges are removed from the visible
+                  graph.</p> 
+              
+</dd>
+<dt>Hide edge</dt>
+<dd> 
+                 
+                
+<p>The edge is removed from the visible graph.</p> 
+              
+</dd>
+<dt>Expand node</dt>
+<dd> 
+                 
+                
+<p>Any of the node's edges which are in the filtered graph
+                  but not in the visible graph are added, together with the nodes on the other
+                  side and any edges between those nodes in the filtered graph but not in the
+                  visible graph.</p> 
+              
+</dd>
+<dt>Collapse node</dt>
+<dd> 
+                 
+                
+<p>All nodes which only have edges to the collapsed node and
+                  between each other are removed from the visible graph.</p> 
+              
+</dd>
+<dt>Set Focus Node</dt>
+<dd> 
+                 
+                
+<p>Whether done by double-clicking a node or setting the
+                  Start Topic, moves into topic view.</p> 
+              
+</dd>
+<dt>Change locality</dt>
+<dd> 
+                 
+                
+<p>No effect.</p> 
+              
+</dd>
+<dt>Filter out</dt>
+<dd> 
+                 
+                
+<p>Any nodes and edges filtered out of the visible graph are
+                  removed.</p> 
+              
+</dd>
+<dt>Filter in</dt>
+<dd> 
+                 
+                
+<p>New nodes and edges are added to the visible
+                  graph.</p> 
+              
+</dd>
+</dl> 
+         
+       
+      
+<h4>
+<a name="N1050F">2.2.8. The Properties box</a>
+</h4> 
+         
+        
+<p>The Properties box is accessed via a topic's context menu (right
+          mouse click). Where applicable, it contains: 
+          <ul>
+<li> 
+              
+<p>The topic's Topic Name(s);</p> 
+            
+</li>
+<li> 
+              
+<p>The topic's Type(s); </p> 
+            
+</li>
+<li> 
+              
+<p>The topic's Subject Indicator(s) and</p> 
+            
+</li>
+<li> 
+              
+<p>The list of Occurrences associated with the topic, grouped
+                by occurrence type.</p> 
+            
+</li>
+</ul>
+</p> 
+        
+<p align="center">
+<a name="propertiesboxpix"> 
+          <img align="center" src="propertiesbox.png"> 
+        </a>
+</p>
+<p align="center">
+<b>Figure 2. Properties Box</b>
+</p> 
+        
+<p>The Properties box remains open until specifically closed. Its
+          contents are updated each time a different topic's properties are
+          requested.</p> 
+       
+     
+    
+<h3>
+<a name="search01">2.3. Searching in VizDesktop</a>
+</h3> 
+       
+      
+<p>The search box provides an alternative way to find topics. Enter
+        all or part of a topic name in the search box. Vizigator will search the
+        topic names that appear in the topic shapes. The hits will blink and the visible
+        part of the topic map will be repositioned to center the hit with the highest
+        relevance (i.e., closest matches).</p> 
+      
+<p>If more than one hit is displayed, the topic type can be determined
+        by right clicking on a blinking topic to a ccess its Properties box. Once the
+        appropriate topic has been found, right clicking to set it as the Start Topic
+        will localize a Topic View around the chosen topic.</p> 
+      
+<p>Using the 
+        <tt>Clear</tt> button will clear the search box, stop all
+        topics from blinking, and reset the cursor within the search box.</p> 
+     
+    
+<h3>
+<a name="mconf">2.4. Configuration</a>
+</h3> 
+       
+      
+<h4>
+<a name="configcomponents">2.4.1. Components of a configuration</a>
+</h4> 
+         
+        
+<p>A configuration is defined by the current state of each of the
+          items under the following menus: 
+          
+          <ul>
+<li> 
+              
+<p>
+<tt>Filtering Topics</tt>;</p> 
+            
+</li>
+<li> 
+              
+<p>
+<tt>Filtering Associations</tt>;</p> 
+            
+</li>
+<li> 
+              
+<p>
+<tt>Styling</tt>;</p> 
+            
+</li>
+<li> 
+              
+<p>
+<tt>Options</tt>; </p> 
+            
+</li>
+<li> 
+              
+<p>
+<tt>Topic Type Precedence</tt>; </p> 
+            
+</li>
+<li> 
+              
+<p>
+<tt>Name Scoping</tt>; and</p> 
+            
+</li>
+<li> 
+              
+<p> 
+                
+<tt>Association Scoping</tt>
+</p> 
+            
+</li>
+</ul>
+</p> 
+        
+<p>Optionally, if a Start Topic is specified, it will be saved as
+          part of the configuration.</p> 
+        
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+          
+<p>The locality factor is not saved as part of a configuration. If
+            a topic map is opened in Topic View, it will conform to the current setting of
+            the locality factor.</p> 
+        
+</dd>
+</dl> 
+       
+
+
+<h4>
+<a name="filtering">2.4.2. Filtering Topics and Associations</a>
+</h4> 
+ 
+
+
+<p>The <tt>Filtering Topics</tt> and <tt>Filtering
+Associations</tt> menus provide checklists for including or
+excluding topic and association types to be displayed.  Unchecking the
+box of a particular topic type will remove all of the topics of that
+type from the visualization, as well as any associations by which they
+are linked to other topics. Conversely, unchecking the box of a
+particular association type will remove all of the associations of
+that type and any topics that are only in the visualization because of
+that association.</p>
+
+
+<p>For example, assume that a topic map has both
+<tt>born-in</tt> and <tt>died-in</tt>
+associations, each expressing relationships between a
+<tt>person</tt> and either a <tt>city</tt> or a
+<tt>country</tt>. </p>
+
+
+<p>Unchecking the topic type <tt>city</tt> will remove
+not only all of the topics of type <tt>city</tt>, but also
+all <tt>born-in</tt> and <tt>died-in</tt>
+associations in which a <tt>city</tt> plays the
+<tt>place</tt> role, but not in which a
+<tt>country</tt> plays that role. Unchecking the
+<tt>born-in</tt> association will remove all such
+associations and topics of type either <tt>city</tt> or
+<tt>country</tt> that play the <tt>place</tt> role
+in each instance of that association (and which do not play any other
+roles in that view).</p>
+
+
+<p>Note that if the checkbox is shown in gray this means that the
+topic or association type has no setting, and that the setting used is
+that of the default topic or association type. Checkboxes shown in
+green or red are set specifically for the given topic/association
+type. The menu will contain an item for "Default type" which can be
+used to change the default setting.</p>
+ 
+
+
+<h4>
+<a name="stylingtopics">2.4.3. Styling Topics and Associations</a>
+</h4> 
+ 
+
+
+<p> The <tt>Styling</tt> menu consists of two items to
+change the randomly pre-assigned shapes, colors, and fonts used to
+designate topic and association types.</p>
+
+
+<p>The <tt>Styling\Styling Associations</tt> and
+<tt>Styling\Styling Topics</tt> menu items each bring up
+similar dialog boxes for choosing the Shape (geometric shape, weight)
+, color, and font to be used for topics or associations of a
+particular type. The <tt>Icon</tt> portion of the
+<tt>Shape</tt> tab can be used to stipulate an icon to
+appear to the left of each topic of that type. Clicking
+<tt>Clear</tt> will clear the field and remove the icons for
+the designated type.</p>
+
+
+<p>Note that a type can either have a specified setting, or it can
+use the setting for the default type. The default type appears in the
+list and its settings can be changed just like those of real
+types. There is also a button for each type that can be used to remove
+all settings so that it reverts to getting its settings from the
+default type.</p>
+ 
+
+
+<h4>
+<a name="genoptions">2.4.4. Determining General Options</a>
+</h4> 
+ 
+        
+<p>The 
+          <tt>Options\General</tt> menu item brings up the
+          multi-tabbed 
+          <tt>General Options</tt> dialog box, which is used to set
+          more general parameters: 
+          <ul>
+<li> 
+              
+<p>
+<em>Interaction</em> - mouse button default
+                behavior is described in <a href="#nav">section
+        2.2.6</a>; this tab is used to override
+                that behavior and to designate the amount of information to be displayed when
+                hovering over an association.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>Background Color</em> - for choosing the
+                background color to be used in the visualization.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<em>Topic Type Exclusion</em> - for choosing
+                the typing topics that should not be visible. Continuing the example from
+                <a href="#filtering">section
+        2.4.2</a>, unchecking the 
+                <tt>city</tt> topic type under the 
+                <tt>Filtering Topics</tt> menu will remove all
+                instances of 
+                <tt>city</tt>, but will not remove the 
+                <tt>city</tt> topic itself. This dialog box can be
+                used to remove the typing topic 
+                <tt>city</tt>, regardless of whether instances of the
+                topic type are also removed.</p> 
+            
+</li>
+</ul>
+</p> 
+      
+
+
+<h4>
+<a name="sect-type-precedence">2.4.5. Topic Type Precedence</a>
+</h4>
+
+
+
+<p>
+The <tt>Options\Topic Type Precedence</tt> menu item brings
+up a simple dialog box that can be used to specify the precedence
+order of topic types. This is used to determine how to render topics
+which have more than one type. Topics which have more than one type
+will then be rendered according to the configuration for the topic
+which is comes first in the precedence order.
+</p>
+
+ 
+      
+<h4>
+<a name="name_scope">2.4.6. Name Scoping</a>
+</h4> 
+         
+        
+<p>The 
+          <tt>Name Scoping</tt> menu offers a choice of scoping
+          topics available in the topic map (if any) to be applied to the Topic Names of
+          all topics. Choosing a scoping topic makes that scope active. The active scope
+          will be saved with a configuration.</p> 
+       
+      
+<h4>
+<a name="assoc_scope">2.4.7. Association Scoping</a>
+</h4> 
+         
+        
+<p>The 
+          <tt>Association Scoping</tt> menu offers a choice of
+          scoping topics available in the topic map (if any) to be applied to the
+          Association Types of all topics. </p> 
+        
+<p>The menu is divided into two sections. The top section has three
+          options: 
+          <ul>
+<li> 
+              
+<p>
+<tt>Show All</tt>: In this mode, the scope filter
+                is off, and none of the settings in the lower part of the menu have any effect.
+                All associations are shown, regardless of their scope.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<tt>Loose Filter</tt>: In this mode, the scope
+                filter is on, and all associations whose scopes contain one of the chosen
+                scoping topics in the lower section will be shown.</p> 
+            
+</li>
+<li> 
+              
+<p>
+<tt>Strict Filter</tt>: In this mode, the scope
+                filter is on, and all associations which are in the unconstrained scope or
+                whose scope contain all of the chosen scoping topics will be shown.</p> 
+            
+</li>
+</ul>
+</p> 
+        
+<p>The lower section contains one item for every topic that occurs
+          in the scope of an association in the topic map, sorted alphabetically. If the
+          scoping topics are instances of more than one type (say, if some are instances
+          of "language" and others of "country"), the menu will have an additional
+          level.</p> 
+        
+<p>Choosing a scoping topic makes that scope active. The active
+          scope will be saved with a configuration.</p> 
+       
+      
+<h4>
+<a name="N1069B">2.4.8. Saving and using the configuration</a>
+</h4> 
+         
+        
+<p>The current state of the configuration settings can be saved
+          using the 'File menu'. </p> 
+        
+<p>When a topic map (e.g., foo.xtm) is loaded into VizDesktop, if a
+          configuration file (e.g., foo.xtm.viz) exists in the same directory, it will be
+          automatically loaded at the same time.</p> 
+        
+<p>Otherwise, a topic map is loaded without a defined configuration,
+          that is, all topics and associations are visible and VizDesktop uses default
+          shapes and fonts, and randomly assigned colors for topic and association type
+          displays.</p> 
+        
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+          
+<p>In order for configuration files to properly do their job, they
+            have to be able to reference topics in a topic map. There are a number of ways
+            in which this can be done, some more robust than others.</p> 
+          
+<p>The most robust method is through a subject identifier, which
+            Vizigator will use if available. Where no subject identifier has been specified
+            by the author of the topic map, the fallback solution is for Vizigator to use
+            the item identifier, which involves pointing back into the source topic map file
+            itself. What this means is that if the file is moved to another location, the
+            references may break. The moral of this story is always use subject
+            identifiers, especially for typing topics. </p> 
+        
+</dd>
+</dl> 
+       
+     
+  
+ 
+  
+<h2>
+<a name="vl01">3. VizLet - Vizigating in web applications</a>
+</h2> 
+     
+
+      
+<p> VizLet is an applet that provides the same visualization
+        functionality as VizDesktop, except that the menu bar (and all the
+        functionality available through it), is unavailable. VizLet is intended to be
+        used to add visualization functionality to web applications and can be embedded
+        in any web application. </p> 
+
+    
+<h3>
+<a name="N106BE">3.1. Comparing VizLet to VizDesktop</a>
+</h3> 
+       
+      
+<p>The following restrictions apply to VizLet compared to VizDesktop: 
+        <ul>
+<li> 
+            
+<p>The configuration cannot be changed. That is, filter
+              settings, colors, etc., are loaded from the server and cannot be modified by
+              the user.</p> 
+          
+</li>
+<li> 
+            
+<p>The topic map to be vizigated is given in the settings loaded
+              from the server and cannot be changed.</p> 
+          
+</li>
+</ul>
+</p> 
+      
+<p>The following differences apply to VizLet compared to VizDesktop: 
+        <ul>
+<li> 
+            
+<p>Each time VizLet is entered, it will be: 
+              <ul>
+<li> 
+                  
+<p>in Topic View;</p> 
+                
+</li>
+<li> 
+                  
+<p>with locality of 1; and</p> 
+                
+</li>
+<li> 
+                  
+<p>with the topic used to initiate vizigation set as the
+                    Focus Node.</p> 
+                
+</li>
+</ul> 
+</p> 
+          
+</li>
+<li> 
+            
+<p>There is no Map View.</p> 
+          
+</li>
+<li> 
+            
+<p>Even if a Start Topic has been specified in the
+              configuration, there is no provision to access it in the VizLet
+              interface.</p> 
+          
+</li>
+<li> 
+            
+<p>It is possible to navigate to the Occurences listed in the
+              Properties box.</p> 
+          
+</li>
+<li> 
+            
+<p>A topic's context menu (right click) contains the "Go to
+              Topic Page" item, supporting reverse navigation back to the text-based view of
+              the topic map.</p> 
+          
+</li>
+<li> 
+            
+<p> The 
+              <tt>Association Scoping</tt> menu is available on the
+              popup menu when right-clicking on the background. It will have the same
+              functionality as in VizDesktop, but will only contain the topics used in the
+              scope of associations in the topic map fragment held by the VizLet at that
+              time.</p> 
+          
+</li>
+</ul>
+</p> 
+     
+    
+
+<h3>
+<a name="usevizlet">3.2. Using VizLet in a web application</a>
+</h3> 
+ 
+
+
+<p>VizLet can be added to a web page by adding the following HTML
+to the page:</p>
+      
+<pre>
+  &lt;applet width="800" height="800" alt="Ontopia vizlet" 
+          code="net.ontopia.topicmaps.viz.Vizlet.class"
+          archive="ontopia-vizlet.jar"&gt;
+    &lt;param name="baseuri"  value="omnigator/plugins/viz/"/&gt;
+    &lt;param name="tmid"     value="opera.ltm"/&gt;
+    &lt;param name="idtype"   value="indicator"/&gt;
+    &lt;param name="idvalue"  value="http://www.topicmaps.org/xtm/1.0/country.xtm#cn"/&gt;
+  &lt;/applet&gt;
+</pre> 
+      
+<p>The applet parameters are as follows:</p> 
+
+      
+<dl>
+<dt>tmrap</dt>
+<dd>This is the URL on the server where the TMRAP servlet can be
+              found. (More about how to set these up below.) The URL is resolved relative to
+              the code base of the applet.</dd>
+<dt>config</dt>
+<dd>This is the URL on the server where the configuration topic
+              map in XTM syntax can be found. VizLet will load it directly from this URL. The
+              URL is resolved relative to the code base of the applet. If this parameter is
+              omitted, VizLet will work without a configuration.</dd>
+<dt>tmid</dt>
+<dd>This is the ID of the topic map in the topic map
+              registry.</dd>
+<dt>idvalue</dt>
+<dd>This is the identifying value used to look up the Focus Node
+              to be loaded in VizLet. This is always a URI.</dd>
+<dt>idtype</dt>
+<dd>This tells VizLet what kind of identifier is contained in the
+              <tt class="symbol">idvalue</tt> parameter. The alternatives are
+              <tt class="literal">"source"</tt> (meaning item identifier),
+              <tt class="literal">"indicator"</tt> (meaning subject identifier), and
+              <tt class="literal">"subject"</tt> (meaning subject locator).</dd>
+<dt>gototarget</dt>
+<dd>The name of the HTML frame in which Vizlet should open topic
+              pages when the user selects the "Go to Topic Page" menu item in Vizlet.
+              Defaults to the current frame if not set.</dd>
+<dt>proptarget</dt>
+<dd>The name of the HTML frame in which Vizlet should open URLs
+              when the user selects a URL in the Properties box. Defaults to
+              <tt class="literal">_blank</tt> (meaning new frame every time) if not set.</dd>
+<dt>scopevalue</dt>
+<dd>The identifying value used to look up the topic used for name
+              scoping, identified by URI. A value set here will override a value saved in the
+              Vizigator configuration.</dd>
+<dt>scopetype</dt>
+<dd>This tells VizLet what kind of identifier is contained in the
+              <tt class="symbol">scopevalue</tt> parameter. The alternatives are the same as for
+              <tt class="symbol">idtype</tt>.</dd>
+<dt>controlsVisible</dt>
+<dd>A boolean value of 'true' or 'false' that specifies whether
+              the control panel should be visible or not. The default is 'true'.</dd>
+<dt>lang</dt>
+<dd>Specifies the language that is to be used in the user
+              interface. The default is 'en' (English). See <a href="#scope">section
+        1.2</a> for the
+              currently supported languages.</dd>
+<dt>menufile</dt>
+<dd>Specifies the location of a file which describes which menu
+      items in popup menus are to be enabled or disabled. The value is a
+      URI relative to the URI the applet was loaded from. For more
+      detail, see <a href="#sect-menufile">section
+        3.2.1</a>.</dd>
+<dt>locality</dt>
+<dd>The locality setting VizLet starts with on loading. The
+      default is 1.</dd>
+<dt>max-locality</dt>
+<dd>The largest locality value which VizLet will accept. The
+      default is 5.</dd>
+<dt>wallpaper_image</dt>
+<dd>A URL pointing to an image to be used as a wallpaper
+      background in the Vizlet. If no URL is provided, no background
+      will be shown.</dd>
+</dl> 
+
+
+<p>In order for this to work, a number of things need to be set up
+on the server side, and we will walk through them one by one. One
+example of how this can be done can be found in VizPlugin for
+Omnigator; looking at its source code may be instructive.</p>
+
+
+<p>The first step is to make the
+<tt>${ONTOPIA_HOME}/extras/ontopia-vizlet.jar</tt> file available on the server
+side. Put it anywhere you want, then make the <tt class="symbol">applet</tt>
+element refer to it. Use the Java console of your web browser to check
+whether you have succeeded or not. For more information consult <a href="http://www.w3.org/TR/html401/struct/objects.html#h-13.4">the HTML
+4.01 Recommendation</a>.</p>
+      
+<p>The next step is to set up the TMRAP (topic map remote access
+        protocol) servlet used by the applet to download topic map fragments for the
+        visualization. This is done by adding the following to the
+        <tt>web.xml</tt> file of the web application:</p> 
+      
+<pre>
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;TMRAPServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;
+      net.ontopia.topicmaps.utils.tmrap.RAPServlet
+    &lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;view_uri&lt;/param-name&gt;
+      &lt;param-value&gt;http://localhost:8080/omnigator/models/topic_complete.jsp?tm=%tmid%&amp;amp;id=%topicid%&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;edit_uri&lt;/param-name&gt;
+      &lt;param-value&gt;http://localhost:8080/ontopoly/enter.ted?tm=%tmid%&amp;amp;id=%topicid%&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/servlet&gt;
+
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;TMRAPServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/plugins/viz/xtm-fragment&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;TMRAPServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/plugins/viz/topic-page&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+</pre> 
+      
+<p>The <tt class="symbol">url-pattern</tt> parameter must match what is given
+        in the <tt class="symbol">tmrap</tt> parameter to the applet, so that the servlet is
+        made available where the applet expects to find it. Also, the
+        <tt class="symbol">uri</tt> parameter to the servlet must be a URI template where once
+        the topic map ID and topic ID are filled in, the main page for the topic can be
+        found. VizLet will go to this URI when the "Go to Topic Page" option is
+        selected in VizLet.</p> 
+      
+<p>The final part is to place the configuration XTM file somewhere on
+        the server so that VizLet can download it. This must be in the location that
+        the <tt class="symbol">config</tt> parameter refers to. VizPlugin uses a JSP file to
+        do this, because it needs to be able to support multiple configurations, but if
+        you only have a single configuration file you can just refer to it directly and
+        store it on the server as a normal file.</p> 
+      
+<p>If you experience unexpected results with VizLet, please do the
+        following: 
+        <ul>
+<li> 
+            
+<p>empty the browser cache, restart the brower, and try again,
+              to make sure you have the latest version of the VizLet;</p> 
+          
+</li>
+<li> 
+            
+<p>check the Java Console, as the VizLet will print its version
+              number and build number there; and </p> 
+          
+</li>
+<li> 
+            
+<p>check the Java Console for exceptions, which we would very
+              much like to see in any bug reports.</p> 
+          
+</li>
+</ul>
+</p> 
+
+
+
+<h4>
+<a name="sect-menufile">3.2.1. The menufile parameter</a>
+</h4>
+
+
+
+<p>
+As stated above, this parameter specifies the location of a file which
+describes which menu items in popup menus should be visible. The menu
+file is a normal text file, of which an example can be seen below:
+</p>
+
+
+<pre>expand.node=on
+collapse.node=on
+hide.node=on
+hide.edge=on
+sticky=on
+properties=off       # users never use this, anyway
+set.start.topic=on
+go.to.topic.page=off # we don't have topic pages
+search.bar=off
+</pre>
+
+
+<p>
+Menu items that are not mentioned in the file will be displayed (and
+if the parameter is not given all items are displayed). The list of
+menu choice names is:
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow"></tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">expand.node</td><td class="dbTableEntry">Expand node</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">collapse.node</td><td class="dbTableEntry">Collapse node</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">hide.node</td><td class="dbTableEntry">Hide node</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">hide.edge</td><td class="dbTableEntry">Hide edge</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">sticky</td><td class="dbTableEntry">Sticky</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">properties</td><td class="dbTableEntry">Properties</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">set.start.topic</td><td class="dbTableEntry">Set start topic</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">copy.name</td><td class="dbTableEntry">Copy name</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">go.to.topic.page</td><td class="dbTableEntry">Go to topic page</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">show.search.bar</td><td class="dbTableEntry">Show search bar</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">toggle.controls</td><td class="dbTableEntry">Toggle controls</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">set.all.nodes.sticky</td><td class="dbTableEntry">Set all nodes sticky</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">set.all.nodes.unsticky</td><td class="dbTableEntry">Set all nodes unsticky</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">stop.moving.nodes</td><td class="dbTableEntry">Stop moving nodes</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">enable.motion.killer</td><td class="dbTableEntry">Start/stop motion reduction</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">undo</td><td class="dbTableEntry">Undo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">redo</td><td class="dbTableEntry">Redo</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">enable.neighbour.circle</td><td class="dbTableEntry">Enable neighbour circle</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic.styles</td><td class="dbTableEntry">Topic type configuration</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">association.styles</td><td class="dbTableEntry">Association type configuration</td>
+</tr>
+</table>
+
+ 
+
+
+<h3>
+<a name="sect-copy-name">3.3. The "Copy name" operation</a>
+</h3>
+
+
+
+<p>
+In VizDesktop the popup menu on topic nodes contains a "Copy name"
+choice, which copies the name of the node to the system clipboard.
+This menu choice is by default not present in VizLet because for
+security reasons applets do not have access to the clipboard.
+(Otherwise, web pages would be able to spy on your clipboard, or spam
+it with unwelcome content.)
+</p>
+
+
+<p>
+To solve this, there is another version of the VizLet in the
+<tt>${ONTOPIA_HOME}/extras/signed-vizlet.jar</tt> file, which is
+cryptographically signed. This gives the VizLet access to the
+clipboard, provided users accept the certificate with which it was
+signed. In order to avoid bothering users with certificates the
+VizPlugin (see <a href="#vp01">section
+        4</a>) does not use the signed applet.
+</p>
+
+
+<p>
+Using the signed applet is not in itself enough to enable the "Copy
+name" menu item. To do this, use the <tt class="symbol">menufile</tt>
+parameter to VizLet as described in <a href="#sect-menufile">section
+        3.2.1</a>.
+</p>
+
+
+ 
+  
+<h2>
+<a name="vp01">4. VizPlugin - Vizigating in Omnigator</a>
+</h2> 
+     
+
+      
+<p> VizPlugin is an Omnigator plug-in that adds support for graphic
+        visual navigation of topic maps. It uses VizLet (described in
+        <a href="#vl01">section
+        3</a>) to support visualization directly in the browser. Like
+        the other plug-ins, it appears as a button (<dfn>Vizigate</dfn>) in
+        the row of links at the top of Omnigator topic pages. </p> 
+
+      
+<p>All of the restrictions and differences that apply to VizLet, when
+        compared to VizDesktop, also apply to VizPlugin.</p> 
+
+    
+<h3>
+<a name="N10912">4.1. Using VizPlugin</a>
+</h3> 
+       
+      
+<p>To use VizPlugin, click on the 
+        <tt>Vizigate</tt> link, and the current topic will be loaded
+        into VizLet and displayed. To return to the Omnigator view, right click on the
+        topic to be viewed in Omnigator and choose the additional menu item available ,
+        <dfn>Go to Topic Page</dfn>. </p> 
+      
+<dl>
+<dt class="note">Note</dt>
+<dd> 
+        
+<p>For this to work, support for Java applets must be turned on in
+          your browser, and it must also support Swing applets.</p> 
+      
+</dd>
+</dl> 
+      
+<p align="center">
+<a name="vizpluginpix"> 
+        <img align="center" src="vizplugin.png"> 
+      </a>
+</p>
+<p align="center">
+<b>Figure 3.  VizPlugin is VizLet as used in the Omnigator</b>
+</p> 
+      
+<p> VizPlugin will work for any topic map, regardless of whether a
+        configuration has been created for it or not, but results are more likely to be
+        more consistent if a configuration exists.</p> 
+     
+   
+
+</body>
+</html>

@@ -1,0 +1,1133 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Web Editor Tag Libraries</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Web Editor Tag Libraries</h1>
+<h2 class="subtitle">Reference Documentation</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N1001C">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1003F">2. The form tags</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10496">3. Templates</a>
+</li>
+<ul></ul>
+</ul> 
+  
+  
+
+  
+  
+  
+<h2>
+<a name="N1001C">1. Introduction</a>
+</h2> 
+     
+    
+<p>
+      This tag library is used to produce HTML forms from topic map
+      data and to map the information entered into those forms back
+      into actions that cause the topic map to be modified. The tags
+      fall into three categories: for producing the form, for
+      producing form components, and helper tags for added
+      flexibility.
+    </p>
+    
+<p>
+      These tags must always be contained in a
+      <tt class="symbol">tolog:context</tt> tag
+      <sup><a href="#footnote1">[1]</a></sup>, while the form component
+      tags must always be contained in a <tt class="symbol">webed:form</tt>
+      tag, and the helper tags must always be contained in one of the
+      form component tags.
+    </p>
+    
+<p>
+      The tag library is designed as an extension of the Navigator
+      Framework tag libraries, and uses the same variable concept.
+      Many of the attributes in this tag library contain variable
+      names which resolve to Navigator Framework variables.
+    </p>
+    
+<p>
+      In addition, some of the attribute values refer to the action
+      configuration file, which is typically located under
+      <tt>${WEB_APP}/WEB-INF/config/actions.xml</tt>. This
+      file contains action definitions clumped together in action
+      groups. HTML forms and action groups usually correspond one-to-one.
+    </p>
+  
+  
+  
+<h2>
+<a name="N1003F">2. The form tags</a>
+</h2>
+<h3>Index</h3>
+<ul>
+<li>
+<a href="#N10301">actionid</a>
+</li>
+<li>
+<a href="#N1019D">button</a>
+</li>
+<li>
+<a href="#N10395">checkbox</a>
+</li>
+<li>
+<a href="#N100EF">field</a>
+</li>
+<li>
+<a href="#N10046">form</a>
+</li>
+<li>
+<a href="#N10413">invoke</a>
+</li>
+<li>
+<a href="#N1024A">list</a>
+</li>
+</ul>
+<h3>
+<a name="N10301">actionid</a>
+</h3>
+<p>
+        Generates as output the ID of an action, and will bind the
+        name and any given parameters to that action. Any request with
+        this ID as a request parameter will trigger the action with
+        the given parameters. Useful in cases where more complex action
+        handling is wanted.
+        </p>
+      
+      
+<h4>Attributes</h4>
+        
+        
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Value</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">action</td><td class="dbTableEntry">
+                  Yes
+                </td><td class="dbTableEntry">Action name</td><td class="dbTableEntry">
+                  The name of the action which should be executed
+                  when the form is submitted.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">params</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s) or qname(s) or JSP attributes</td><td class="dbTableEntry">
+                Additional parameters to the action.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">value</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s) or JSP attribute</td><td class="dbTableEntry">
+                The value of the form control; will be received by the
+                triggered action. If the attribute is not specified the 
+                action will be always be invoked when the form is submitted.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">control</td><td class="dbTableEntry">No</td><td class="dbTableEntry">( list | button )</td><td class="dbTableEntry">
+                Name of form control that is being rendered. The default is 'button'.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">pattern</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable or JSP attribute</td><td class="dbTableEntry">If given, the string value entered in the text
+                field must be match the regular expression. This will
+                be validated both using JavaScript in the HTML page
+                and on receipt of the submitted form on the
+                server.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">readonly</td><td class="dbTableEntry">No</td><td class="dbTableEntry">
+                  Variable or <tt class="literal">"false"</tt>
+                </td><td class="dbTableEntry">
+                  
+<p>If the action is readonly it cannot submit any
+                  changes to the topic map.</p>
+                  
+                  
+<p>Whether the actionid is readonly depends on the
+                  readonly attribute of the actionid and the readonly
+                  state of the form.  For details, please read about
+                  the readonly attribute of the form tag.</p>
+                
+</td>
+</tr>
+</table>
+      
+    
+<h3>
+<a name="N1019D">button</a>
+</h3>
+<p>
+          Renders a button control element (according to the button
+          template) used to submit the form and trigger an action on
+          the server side.
+        </p>
+      
+      
+<h4>Attributes</h4>
+        
+        
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Value</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">action</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">Action name</td><td class="dbTableEntry">
+                  Sets the name of the action which should be executed
+                  when the form is submitted.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">params</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s) or qname(s) or JSP attributes</td><td class="dbTableEntry">
+                  Value which should be made available to the action
+                  triggered by the button. The names must be
+                  separated by whitespace. Note that the order of the
+                  parameters matters and is specific to the action.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">image</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Image type name</td><td class="dbTableEntry">
+                  If set the button will be shown as an image.  The
+                  image name is mapped to the action configuration
+                  file. If <tt class="symbol">text</tt> is set, that will
+                  become the button title (shown as tooltip by most
+                  browsers). One of <tt class="symbol">text</tt> and
+                  <tt class="symbol">image</tt> must be specified.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">text</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Text value</td><td class="dbTableEntry">
+                  If set, and <tt class="symbol">image</tt> is not set, the
+                  value given will be the label on the button. One of
+                  <tt class="symbol">text</tt> and <tt class="symbol">image</tt>
+                  must be specified.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">reset</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name or (true | false)</td><td class="dbTableEntry">
+                  Whether this button should be a reset button (which
+                  resets the form field values to their original
+                  values).  The default is "false".
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">id</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Unique ID</td><td class="dbTableEntry">Specifies a unique id for the tag that will be
+                used as the value of an ID attribute in the generated
+                output. This id value can later be used to look up the
+                content generated by the tag.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">readonly</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name or <tt class="literal">"false"</tt></td><td class="dbTableEntry">
+                  If the button is readonly, the button will not be
+                  displayed at all.  Whether the button is readonly
+                  depends on the readonly attribute of the button and
+                  the readonly state of the form.  For details, please
+                  read about the readonly attribute of the form tag.
+                </td>
+</tr>
+</table>
+      
+    
+<h3>
+<a name="N10395">checkbox</a>
+</h3>
+<p>
+        Renders a check box element, which the user can check or
+        uncheck. Changing the state of the check box causes the
+        attached action to be triggered.
+        </p>
+      
+      
+<h4>Attributes</h4>
+        
+        
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Value</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">action</td><td class="dbTableEntry">
+                  Yes
+                </td><td class="dbTableEntry">Action name</td><td class="dbTableEntry">
+                  The name of the action which should be executed
+                  when the form is submitted.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">params</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s) or qname(s) or JSP attributes</td><td class="dbTableEntry">
+                Additional parameters to the action.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">state</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name or JSP attribute</td><td class="dbTableEntry">
+                The state of the check box. If the variable name is
+                bound to a value that evaluates as true the box is
+                checked, otherwise not. (If the attribute is not given
+                the box is not checked.)
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">id</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Unique ID</td><td class="dbTableEntry">Specifies a unique id for the tag that will be
+                used as the value of an ID attribute in the generated
+                output. This id value can later be used to look up the
+                content generated by the tag.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">readonly</td><td class="dbTableEntry">No</td><td class="dbTableEntry">
+                  Variable or <tt class="literal">"false"</tt>
+                </td><td class="dbTableEntry">
+                  If the checkbox is readonly it is disabled in the
+                  page.
+                  
+                  Whether the checkbox is readonly depends on the readonly
+                  attribute of the checkbox and the readonly state of the form.
+                  For details, please read about the readonly attribute of
+                  the form tag.
+                </td>
+</tr>
+</table>
+      
+    
+<h3>
+<a name="N100EF">field</a>
+</h3>
+<p>
+          Generate a text input field element (according to the field
+          template) that can be used to edit text strings. This may be
+          one-line or multiline.
+        </p>
+      
+      
+<h4>Attributes</h4>
+        
+        
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Value</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">action</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">Action name</td><td class="dbTableEntry">
+                  Sets the name of the action which should be executed
+                  to reflect the changed value of the field when the
+                  form is submitted.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">type</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">Field type name</td><td class="dbTableEntry">
+                  Retrieves information about the field type (whether
+                  it should be a single or multiline input field and
+                  the concrete dimension) by the given name from the
+                  action configuration file (see element
+                  <tt class="symbol">fieldMap</tt>).
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">params</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s) or qname(s) or JSP attributes</td><td class="dbTableEntry">
+                  Values which should be made available to the action
+                  handling the field. The names are separated by
+                  whitespace. Note that the order of the parameters
+                  matters and is specific to the related action. See
+                  the action library reference for the parameters used
+                  by the different actions.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">id</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Unique ID</td><td class="dbTableEntry">Specifies a unique id for the tag that will be
+                used as the value of an ID attribute in the generated
+                output. This id value can later be used to look up the
+                content generated by the tag.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">trim</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name, JSP attribute, or (true | false)</td><td class="dbTableEntry">Leading and trailing whitespace will be removed from the
+                contents of the tag if true, otherwise they will be left in.
+                The default is true.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">pattern</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable or JSP attribute</td><td class="dbTableEntry">If given, the string value entered in the text
+                field must be match the regular expression. This will
+                be validated both using JavaScript in the HTML page
+                and on receipt of the submitted form on the
+                server.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">readonly</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable or <tt class="literal">"false"</tt></td><td class="dbTableEntry">
+                  
+<p>
+                    If the field is readonly, then it cannot submit
+                    any changes to the topic map and the field will
+                    not be editable. Instead the text contents of the
+                    field will be displayed as plain text.
+                  </p>
+                  
+<p>
+                    Whether the field is readonly depends on the
+                    <tt class="symbol">readonly</tt> attribute of the field
+                    and the readonly state of the form.  For details,
+                    please read about the <tt class="symbol">readonly</tt>
+                    attribute of the <tt class="symbol">form</tt> tag.
+                  </p>
+                
+</td>
+</tr>
+</table>
+      
+    
+<h3>
+<a name="N10046">form</a>
+</h3>
+<p>
+          Generates a form element (according to the form template)
+          which acts as a container for input fields, selection lists
+          and control buttons. The form is mapped to an action group
+          which handles the form data when the form is submitted.
+        </p>
+      
+      
+<h4>Attributes</h4>
+        
+        
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Value</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">actiongroup</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">Group name</td><td class="dbTableEntry">
+                  Sets the name of the action group as specified in the
+                  action configuration file.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">actionURI</td><td class="dbTableEntry">No</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">
+                  If a (relative or absolute) action URI is specified
+                  this overwrites the default action of the form
+                  (which is the process servlet<sup><a href="#footnote2">[2]</a></sup>). In most cases it is
+                  not necessary to specify something for this
+                  value.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">target</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Frame target name</td><td class="dbTableEntry">
+                  If target is given it overwrites the default frame
+                  target setting deduced from the action configuration
+                  file.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">lock</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name or JSP attribute</td><td class="dbTableEntry">
+                  Name of the navigator variable containing the
+                  objects to lock. If one of the objects cannot be
+                  locked the request will be forwarded to a special
+                  page (as specified in the action configuration
+                  file). If no such page is specified,
+                  the form becomes readonly (for details, 
+                  see the readonly attribute).
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">id</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Unique ID</td><td class="dbTableEntry">
+                  Specifies a unique id for the tag that will be
+                  used as the value of an ID attribute in the generated
+                  output. This id value can later be used to look up the
+                  content generated by the tag.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">readonly</td><td class="dbTableEntry">No</td><td class="dbTableEntry">
+                  Variable or <tt class="literal">"false"</tt>
+                </td><td class="dbTableEntry">
+                  
+<p>
+                  If a form is readonly (as opposed to read/write),
+                  then by default, all subelements of the form become
+                  readonly, which means they cannot be edited, nor
+                  modify the topic map.
+                  </p>
+
+                  
+<p>
+                  A form becomes readonly, either by setting the
+                  <tt class="symbol">readonly</tt> attribute to true or if
+                  one of the lock variables (please refer to the
+                  <tt class="symbol">lock</tt> attribute) cannot be locked.
+                  </p>
+
+                  
+<p>
+                  Note that <tt class="literal">"false"</tt> overrides the
+                  setting on the form, making the subelement not
+                  readonly, even if the form is readonly. If the form
+                  is not readonly, then the value of the readonly
+                  attribute of each subelement determines whether the
+                  element should be readonly (if true) or read/write
+                  (if false). The attribute evaluates to false if the
+                  variable referenced is empty/undefined, or if the
+                  literal string <tt class="literal">"false"</tt> is given.
+                  </p>
+                
+</td>
+</tr>
+</table>
+      
+    
+<h3>
+<a name="N10413">invoke</a>
+</h3>
+<p>
+        Generates a hidden form field that will cause the connected
+        action to be triggered when the form is submitted. The action
+        will always be triggered, except when the
+        <tt class="symbol">invoke</tt> tag is a child of a
+        <tt class="symbol">button</tt> tag, in which case it will only be
+        invoked when the button is pressed.
+        </p>
+      
+
+      
+<h4>Attributes</h4>
+        
+        
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Value</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">action</td><td class="dbTableEntry">
+                  Yes
+                </td><td class="dbTableEntry">Action name</td><td class="dbTableEntry">
+                  The name of the action which should be executed
+                  when the form is submitted.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">params</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s) or qname(s) or JSP attributes</td><td class="dbTableEntry">
+                Additional parameters to the action.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">value</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s)</td><td class="dbTableEntry">
+                The value of the form control; will be received by the
+                triggered action.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">runIfNoChanges</td><td class="dbTableEntry">No</td><td class="dbTableEntry">JSP attribute or (true | false)</td><td class="dbTableEntry">If set to false, the action will not run if no
+                other actions run. The default is true.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">readonly</td><td class="dbTableEntry">No</td><td class="dbTableEntry">
+                  Variable or <tt class="literal">"false"</tt>
+                </td><td class="dbTableEntry">
+                  If the component is readonly it will be ignored and
+                  produce no HTML output at all.
+                  Whether the invoke is readonly depends on the readonly
+                  attribute of the invoke and the readonly state of the form.
+                  For details, please read about the readonly attribute of
+                  the form tag.
+                </td>
+</tr>
+</table>
+      
+    
+<h3>
+<a name="N1024A">list</a>
+</h3>
+<p>
+          Generates a selection list representation with the help of
+          the list template for choosing one or multiple values. The
+          list may be a drop-down list, single-select list,
+          multi-select list, radio-button list, or checkbox list.
+        </p>
+      
+      
+<h4>Attributes</h4>
+        
+        
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Value</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">action</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">Action name</td><td class="dbTableEntry">
+                  The name of the action which should be executed
+                  when the form is submitted.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">collection</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">Variable name or JSP attribute</td><td class="dbTableEntry">
+                  The candidates for the object's values.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">selected</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name or JSP attribute</td><td class="dbTableEntry">
+                  The currently set value.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">params</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Variable name(s) or qname(s) or JSP attributes</td><td class="dbTableEntry">
+                Additional parameters to the action.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">type</td><td class="dbTableEntry">No</td><td class="dbTableEntry">(dropdown | scrolling | multiselect | radio | checkbox)</td><td class="dbTableEntry">
+                  Sets which type of menu should be used when
+                  presenting the selection list. If 'type' is not set,
+                  "dropdown" will be the default behaviour.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">id</td><td class="dbTableEntry">No</td><td class="dbTableEntry">Unique ID</td><td class="dbTableEntry">Specifies a unique id for the tag that will be
+                used as the value of an ID attribute in the generated
+                output. This id value can later be used to look up the
+                content generated by the tag.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">unspecified</td><td class="dbTableEntry">No</td><td class="dbTableEntry">String</td><td class="dbTableEntry">Specifies what the label of the "no choice"
+                element in the list should be. If set to "none" there
+                will be no "no choice" element. If <tt class="symbol">type</tt> is
+                <tt class="symbol">multiselect</tt> this attribute has no effect.
+                </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">readonly</td><td class="dbTableEntry">No</td><td class="dbTableEntry">
+                  Variable or <tt class="literal">"false"</tt>
+                </td><td class="dbTableEntry">
+                  
+<p>If the list is readonly, the selected element
+                  in the list will be displayed as plain text, and the
+                  list will not be editable.
+                  </p>
+
+                  
+<p>
+                  Whether the list is readonly depends on the readonly
+                  attribute of the actionid and the readonly state of
+                  the form.  For details, please read about the
+                  readonly attribute of the form tag.
+                  </p>
+                
+</td>
+</tr>
+</table>
+      
+    
+
+  
+<h2>
+<a name="N10496">3. Templates</a>
+</h2>
+    
+    
+<p>
+      Some information about the templates used by the form tag
+      library. To ease understandability each tag maps to exactly one
+      template file (the default name of the template file maps to the
+      name of the tag).
+    </p>
+
+      
+<p>
+        The templates used by the tag library are Velocity
+        <sup><a href="#footnote3">[3]</a></sup>
+        based. This means that the syntax used in the template files
+        must be compliant with the Velocity Template Language (<a href="http://jakarta.apache.org/velocity/vtl-reference-guide.html">VTL</a>).
+      </p>
+
+      
+<p>
+        If a default installation is used, the templates will reside
+        in the ontopia.jar file, but it is possible to override this and
+        place the templates whereever you like. The following
+        summarizes the configuration trail: First lookup in your web
+        application descriptor file
+        (<tt>${WEB_APP}/WEB-INF/web.xml</tt>) for the
+        context parameter <tt class="symbol">velocity_properties</tt>. The
+        value of this property tells you where the velocity property
+        file is located (default:
+        <tt>${WEB_APP}/WEB-INF/config/velocity.properties</tt>).
+        Inside the velocity properties file there has to be property
+        named <tt class="symbol">file.resource.loader.path</tt>, this
+        describes relative to the web application context directory in
+        which directory the templates are located.
+      </p>
+      
+<p>
+        Note also that there is a very close correspondence between the
+        use of the tags in pages and the action configuration. This file
+        is usually found at
+        <tt>${WEB_APP}/WEB-INF/config/actions.xml</tt>,
+        but this may vary with the configuration of the framework.
+      </p>
+      
+   
+
+<h2>Appendix: Footnotes</h2>
+<dl>
+<dt>
+<a name="footnote1">[1]</a>
+</dt>
+<dd>If you are using the old Navigator tag libraries
+      you can also use the old <tt class="symbol">logic:context</tt> tag.</dd>
+      
+      
+        
+        
+      
+      
+        
+        
+          
+            
+              
+                
+                
+                
+                
+              
+            
+            
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+                  
+<dt>
+<a name="footnote2">[2]</a>
+</dt>
+<dd>The fully qualified class name is <tt class="classname">
+                  net.ontopia.topicmaps.webed.servlets.ProcessServlet
+                  </tt>
+</dd>
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+            
+          
+        
+      
+    
+      
+        
+        
+      
+      
+        
+        
+          
+            
+              
+                
+                
+                
+                
+              
+            
+            
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+            
+          
+        
+      
+    
+      
+        
+        
+      
+      
+        
+        
+          
+            
+              
+                
+                
+                
+                
+              
+            
+            
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+            
+          
+        
+      
+    
+      
+        
+        
+      
+      
+        
+        
+          
+            
+              
+                
+                
+                
+                
+              
+            
+            
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+            
+          
+        
+      
+    
+      
+        
+        
+      
+      
+        
+        
+          
+            
+              
+                
+                
+                
+                
+              
+            
+            
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+            
+          
+        
+      
+    
+      
+        
+        
+      
+      
+        
+        
+          
+            
+              
+                
+                
+                
+                
+              
+            
+            
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+                          
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+            
+          
+        
+      
+    
+      
+        
+        
+      
+
+      
+        
+        
+          
+            
+              
+                
+                
+                
+                
+              
+            
+            
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+              
+                
+                
+                
+                
+              
+            
+          
+        
+      
+    
+          
+<dt>
+<a name="footnote3">[3]</a>
+</dt>
+<dd>More information about the Jakarta Velocity project can
+            be found on the <a href="http://jakarta.apache.org/velocity/">homepage</a>
+</dd>
+        
+</dl>
+</body>
+</html>

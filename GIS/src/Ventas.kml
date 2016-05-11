@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<Folder>
+		<name>Ventas Mex</name>
+		<open>1</open>
+		<Placemark>
+			<name>Puebla</name>
+			<styleUrl>#m_ylw-pushpin</styleUrl>
+			<Point>
+				<extrude>1</extrude>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-98.2071,19.04014,50000</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Monterrey</name>
+			<styleUrl>#m_ylw-pushpin</styleUrl>
+			<Point>
+				<extrude>1</extrude>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-100.31443,25.654984,175000</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Guadalajara</name>
+			<styleUrl>#m_ylw-pushpin</styleUrl>
+			<Point>
+				<extrude>1</extrude>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-103.3496,20.6597,168000</coordinates>
+			</Point>
+		</Placemark>
+                		<Placemark>
+			<name>Cancun</name>
+			<styleUrl>#m_ylw-pushpin</styleUrl>
+			<Point>
+				<extrude>1</extrude>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-86.8515,21.1589,68000</coordinates>
+			</Point>
+		</Placemark>
+                		<Placemark>
+			<name>Mexico</name>
+			<styleUrl>#m_ylw-pushpin</styleUrl>
+			<Point>
+				<extrude>1</extrude>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-99.1292,19.4623,220000</coordinates>
+			</Point>
+		</Placemark>
+	<Placemark>
+		<name>Demo1</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Polygon>
+			<extrude>1</extrude>
+			<tessellate>1</tessellate>
+			<altitudeMode>relativeToGround</altitudeMode>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+					    -99.10,19.47,220000
+                                            -99.16,19.47,220000
+                                            -99.16,19.41,220000
+                                            -99.10,19.41,220000
+                                            -99.10,19.47,220000 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+
+
+	</Folder>
+</Document>
+</kml>

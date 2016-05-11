@@ -1,0 +1,1 @@
+-Dhttp.proxyHost=proxyti -Dhttp.proxyPort=8080

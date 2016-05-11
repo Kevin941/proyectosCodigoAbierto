@@ -1,0 +1,1532 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Ontopia Navigator Framework</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Ontopia Navigator Framework</h1>
+<h2 class="subtitle">Developer's Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>
+This document explains how to develop your own web applications using
+the Ontopia Navigator Framework. It describes the architecture and main
+concepts of the Navigator Framework, how to configure the Navigator, and
+introduces the tag libraries used in web application development.
+</p>
+
+
+<p>
+It is assumed that the reader is familiar with the use of the
+operating system under which the navigator is to run, as well as the
+basics of HTML. Working knowledge of topic maps is also assumed.
+</p>
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10026">1. Introduction</a>
+</li>
+<ul>
+<li>
+<a href="#N10034">1.1. The architecture of the framework</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10058">1.2. The tag libraries</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1008A">1.3. Finding topics and topic maps</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N100B3">2. Writing the example application</a>
+</li>
+<ul>
+<li>
+<a href="#N100BE">2.1. The structure of the application</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N100DB">2.2. Setting up the application</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10135">2.3. The start page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1014D">2.4. The standards page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-std-page">2.5. The page for each standard</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N1020B">3. More advanced subjects</a>
+</li>
+<ul>
+<li>
+<a href="#N10213">3.1. Grouping</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1024C">3.2. Reusing code fragments with inclusion</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10271">3.3. Rendering the ancestors of a topic</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10291">3.4. Using dynamic values with the tag libraries</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102A7">3.5. Understanding lexical scope</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-rdbms">3.6. Using the RDBMS backend</a>
+</li>
+<ul>
+<li>
+<a href="#sect-txn-jsp-1.1">3.6.1. The joys of JSP 1.1</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+<li>
+<a href="#N1033B">4. Performing common tasks</a>
+</li>
+<ul>
+<li>
+<a href="#sect-context-utils">4.1. Accessing the values of variables from Java code</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1035E">4.2. Integration with JSP attributes</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N103B3">4.3. Accessing Ontopia variables from the JSP EL</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+
+
+
+
+
+
+
+
+<h2>
+<a name="N10026">1. Introduction</a>
+</h2>
+
+
+
+<p>
+The idea behind the Ontopia Navigator Framework is that although the
+Omnigator can display any topic map and has a nice user interface, it
+is unlikely that all those building web sites using topic maps will
+want to use the Omnigator as the web site presenting their topic maps
+to the world.  Most likely, those building topic map web sites will
+wish to have them look as much like ordinary web sites as possible.
+</p>
+
+
+<p>
+Using the navigator framework it is easy to develop new topic
+map-based web sites, and these web sites need not look anything like
+the Omnigator. In fact, they can have any user interface at all. The
+navigator framework does not generate any HTML; this is left for your
+web application to do. The result is that you have complete control
+over the layout and structure of your application.
+</p>
+
+
+<p>
+This document will show you how to create web applications using the
+Ontopia Navigator Framework. This introductory section will explain
+the architecture and stucture of the framework, while the following
+section will show the basics of making web applications. The final
+sections covers some of the more advanced areas of the framework.
+</p>
+
+
+<h3>
+<a name="N10034">1.1. The architecture of the framework</a>
+</h3>
+
+
+
+<p>
+The Ontopia Navigator Framework is based on the J2EE (Java 2,
+Enterprise Edition) platform, and should run in any compliant J2EE
+application server which supports JSP 1.1 or higher. It has been
+tested with many application servers, and should not cause problems
+when tried on a new server.
+</p>
+
+
+<p>
+Web pages written using the navigator framework are written as JSP
+(JavaServer Pages). JSP is a Java technology that lets you write web
+pages as HTML with embedded Java code. The Java code is evaluated to
+produce either output in the page, or desirable side-effects on the
+server (such as updates in a topic map or a database). JSP pages can
+also use tags implemented in Java, which can produce output and
+control the execution of pages. JSP is easy to learn, efficient in
+use, and creates well-performing web applications.
+</p>
+
+
+<p>
+The navigator framework mainly consists of a set of tag libraries
+that make it possible to write JSP pages that consist of nothing but
+HTML and JSP tags. This makes the pages easy to read and maintain; the
+tags being something like an 'XSLT for topic maps'. The application
+when written consists of a set of JSP pages, plus possibly some Java
+classes that have been plugged in to provide extra functionality.
+</p>
+
+
+<p>
+When running, the architecture of the web application is as shown
+below.
+</p>
+
+
+<p align="center">
+
+
+<img align="center" src="nav-arch.png">
+</p>
+<p align="center">
+<b>Figure 1. A Navigator Application</b>
+</p>
+
+
+<p>
+The navigator framework uses the topic map registry to access the
+topic maps it works with. This means that it is completely independent
+of where the topic maps come from and which topic map implementation
+they use. How to configure the registry is explained in
+<cite><a href="config.html">The Ontopia Navigator -
+Configuration Guide</a></cite>.
+</p>
+
+
+
+
+<h3>
+<a name="N10058">1.2. The tag libraries</a>
+</h3>
+
+
+
+<p>
+The tags in the navigator tag libraries operate in an execution
+context. This context contains a number of variable bindings, which
+are mappings from variable names to values. These values are always
+collections of objects, which may be topic map objects, strings, or
+other kinds of objects.
+</p>
+
+
+<p>
+A JSP page written using these tag libraries works by extracting
+information from the current topic map and storing it in variables in
+the execution context. The page then uses the information in the
+variables to generate the content that makes up the rendered page that
+the user will see.
+</p>
+
+
+<p>
+The tags have been separated into two different tag libraries,
+organized by the functionality they provide:
+</p>
+
+
+<dl>
+<dt>The 'tolog' tag library</dt>
+<dd>This tag library makes up nearly the entire framework and
+consists of tags which use tolog queries to extract information from
+the topic map and produce output. There are tags for setting
+variables, doing tests and loops, and writing output.</dd>
+<dt>The 'template' tag library</dt>
+<dd>The template tags provide a simple templating system that can be
+used to avoid having to add repetitive formatting HTML to all JSP
+pages. These tags are not in any way topic map-aware, and the rest of
+the framework does not require them, so if you want to use a different
+template system, you can.</dd>
+</dl>
+
+
+<p>
+The document <cite><a href="tolog-taglib.html">The Navigator
+Tag Libraries: Reference Documentation</a></cite> contains
+detailed information about all the tags. Please consult it to find
+tags not mentioned in this tutorial, and more comprehensive
+information about those mentioned.  The following section gives a
+tutorial on how to use the tags in these tag libraries.
+</p>
+
+
+
+<h3>
+<a name="N1008A">1.3. Finding topics and topic maps</a>
+</h3>
+
+
+
+<p>
+The navigator framework uses the topic map registry of the topic map
+engine to find out what topic maps are available, and also to look up
+individual topic maps by ID. The IDs are assigned by the registry, and
+for topic maps loaded from files they are the file name (without
+path). For topic maps residing in the RDBMS backend the ID will be
+<tt class="literal">"RDBMS-XXX"</tt>, where <tt class="symbol">XXX</tt> is the ID
+of the topic map in the <tt class="symbol">tm_topic_map</tt> table. Generally,
+you can use the Omnigator to find the ID of a topic map, by looking at
+the <tt class="symbol">tm</tt> parameter in the URI of the topic map page.
+</p>
+
+
+<p>
+How to configure the topic map registry is explained in
+<cite><a href="config.html">The Ontopia Navigator -
+Configuration Guide</a></cite>, in the section on the
+<tt>tm-sources.xml</tt> file. If you have bought the
+engine product you can also find more information in the javadoc of
+the
+<tt class="classname">net.ontopia.topicmaps.entry.XMLConfigSource</tt>
+class.
+</p>
+
+
+<p>
+Note that throughout the navigator framework topic map objects are
+identified by their object IDs. These are inserted into links by the
+framework, and later read from HTTP requests by the framework. This
+enables one page to tell another which topic to display. How to do
+this will be explained later in this tutorial.
+</p>
+
+
+
+
+
+
+
+<h2>
+<a name="N100B3">2. Writing the example application</a>
+</h2>
+
+
+
+<p>
+In this section we will create a web application for the Free XML
+Tools topic map and show how it works. You can find the source code to
+it in the <tt>$TOMCAT_HOME/webapps/xmltools</tt>
+directory in your installation. Feel free to look at the source code
+while reading this section, and also to change and play around with it
+in any way you like. (After you've changed a JSP page you need only
+reload it in your browser to have it recompiled.)
+</p>
+
+
+<h3>
+<a name="N100BE">2.1. The structure of the application</a>
+</h3>
+
+
+
+<p>
+The web application must necessarily mirror the structure of the
+information in the topic map, so we'll start out by looking at the
+topic map. A useful tool for getting an overview of a topic map is the
+statistics plug-in to the Omnigator.
+</p>
+
+
+<p>
+The statistics plug-in shows us that the Free XML Tools topic map
+contains categories/subcategories, products, standards, and vendors.
+There are associations between products, and from categories,
+standards, and vendors to products. Clearly, the products are what the
+site revolves around, and the other topic types provide ways of
+finding the products.
+</p>
+
+
+<p>
+The best way to organize the site seems to be to have a start page,
+with links to pages containing lists of categories, products,
+standards, and vendors. The pages with lists can contain links to each
+individual instance, which again can have links to the topics it is
+associated with. This structure is shown in the diagram below. There
+will also be a number of cross-links within this hierarchy, shown at
+the bottom of the diagram.
+</p>
+
+
+<p align="center">
+
+
+<img align="center" src="sample-app-struct.png">
+</p>
+<p align="center">
+<b>Figure 2. Site structure</b>
+</p>
+
+
+<p>
+This should give us enough to work with, so let's move on to writing
+the actual application.
+</p>
+
+
+
+<h3>
+<a name="N100DB">2.2. Setting up the application</a>
+</h3>
+
+
+
+<p>
+To create your web application, create a directory named
+<tt>xmltools</tt> inside the <tt>webapps</tt>
+directory of your Tomcat installation. The next step is to create a
+file called <tt>index.jsp</tt> inside it, with the
+contents shown below.
+</p>
+
+
+<p align="center">
+<b>Hello, world!</b>
+</p>
+
+
+
+<code>
+<pre>
+
+&lt;title&gt;Hello, world!&lt;/title&gt;
+&lt;h1&gt;Hello, world!&lt;/h1&gt;
+&lt;p&gt;This is my first JSP page.&lt;/p&gt;
+
+</pre>
+</code>
+
+
+
+<p>
+Now we have a web page, but Tomcat will not find our web application
+before we add a <tt>web.xml</tt> file, so the next step is
+to do that. Start by making a <tt>WEB-INF</tt> directory
+inside the new <tt>xmltools</tt> directory.  Then create a
+file named <tt>web.xml</tt> inside the
+<tt>WEB-INF</tt> directory. This will contain the
+configuration information needed by the navigator framework. The
+contents of this file are shown below, with explanations in comments.
+</p>
+
+
+<p align="center">
+<b>A minimal web.xml file</b>
+</p>
+
+
+
+<pre>
+
+&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+&lt;!DOCTYPE web-app
+          PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+          "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd"&gt;
+
+&lt;web-app&gt;
+
+  &lt;display-name&gt;Free XML Tools&lt;/display-name&gt;
+  &lt;description&gt;
+    A web site with information about free XML tools.
+  &lt;/description&gt;
+
+    &lt;session-config&gt;
+      &lt;session-timeout&gt;30&lt;/session-timeout&gt;    
+    &lt;/session-config&gt;
+
+    &lt;welcome-file-list&gt;
+      &lt;welcome-file&gt;index.html&lt;/welcome-file&gt;
+      &lt;welcome-file&gt;index.jsp&lt;/welcome-file&gt;
+    &lt;/welcome-file-list&gt;
+
+&lt;/web-app&gt;
+
+</pre>
+
+
+
+
+<p>
+This file contains references to our configuration files, so we need
+to add those. First, create the
+<tt>xmltools/WEB-INF/config</tt> directory, and create a
+file called <tt>application.xml</tt> inside it, with the
+contents shown below.
+</p>
+
+
+<p align="center">
+<b>The application.xml file</b>
+</p>
+
+
+
+<pre>
+
+&lt;?xml version="1.0"?&gt;
+&lt;configuration type="application"&gt;
+  &lt;properties&gt;
+    &lt;property name="allowLoadOnRequest" value="true"/&gt;
+  &lt;/properties&gt;
+
+  &lt;classmap&gt;
+    &lt;class shortcut="nameComparator"
+           fullname="net.ontopia.topicmaps.nav.utils.comparators.NameComparator"/&gt;
+  &lt;/classmap&gt;
+&lt;/configuration&gt;
+
+</pre>
+
+
+<p>
+This tells the framework that it should load topic maps whenever they
+are requested by users (<tt class="symbol">allowLoadOnRequest</tt>) and what
+Java class it should use to sort the names of topics.
+</p>
+
+
+
+<p>
+Now, finally, you can start the Tomcat server. If you already had it
+running, please restart it. Then connect to <a href="http://localhost:8080/xmltools/">http://localhost:8080/xmltools/</a>,
+where you should see the page you just wrote. The server will compile
+the JSP page the first time you load it, and so that first time will
+be a little slow, but after that it will load instantly.
+</p>
+
+
+
+<h3>
+<a name="N10135">2.3. The start page</a>
+</h3>
+
+
+
+<p>
+We are now ready to write the application, and can start with the
+start page: <tt>index.jsp</tt>. The source code of this
+could be as shown below.
+</p>
+
+
+<p align="center">
+<b>The index.jsp page</b>
+</p>
+
+
+
+<code>
+<pre>
+
+&lt;title&gt;Free XML Tools&lt;/title&gt;
+
+&lt;h1&gt;Free XML Tools&lt;/h1&gt;
+
+&lt;p&gt;
+This is a site about free XML tools, which you can find organized by:
+&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="standards.jsp"&gt;the standards they support&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;&lt;a href="vendors.jsp"&gt;the vendors that make them&lt;/a&gt;,&lt;/li&gt;
+  &lt;li&gt;&lt;a href="categories.jsp"&gt;the categories they belong to&lt;/a&gt;, and&lt;/li&gt;
+  &lt;li&gt;&lt;a href="products.jsp"&gt;name&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+</code>
+
+
+
+<p>
+Since this page can be written statically we do not yet make any use
+of the tag libraries, but instead write a pure HTML page.
+</p>
+
+
+
+<h3>
+<a name="N1014D">2.4. The standards page</a>
+</h3>
+
+
+
+<p>
+The next step is to write the page that lists all the standards in the
+topic map. We start by creating a skeleton of the
+<tt>standards.jsp</tt> page, as shown below.
+</p>
+
+
+<p align="center">
+<b>A skeleton standards page</b>
+</p>
+
+
+
+<code>
+<pre>&lt;%@ page contentType="text/html; charset=utf-8" %&gt;
+
+&lt;%@ taglib uri='http://psi.ontopia.net/jsp/taglib/tolog' prefix='tolog' %&gt;
+
+&lt;tolog:context topicmap="xmltools-tm.xtm"&gt;
+&lt;title&gt;The standards&lt;/title&gt;
+&lt;h1&gt;The standards&lt;/h1&gt;
+
+&lt;p&gt;
+Here you can find all the standards supported or used by the tools
+on this site:
+&lt;/p&gt;
+
+&lt;%-- more code to go here --%&gt;
+
+&lt;/tolog:context&gt;
+</pre>
+</code>
+
+
+
+<p>
+The line beginning with <tt class="symbol">&lt;%@</tt> is a declaration that
+makes the tag <tt class="symbol">tolog</tt> library available in the page,
+with the given prefix. The <tt class="symbol">tolog:context</tt> tag sets up
+the execution context, and tells the framework what topic map we are
+working with.  The <tt class="symbol">topicmap</tt> attribute contains the ID
+of the topic map, as defined by the topic map registry. If the topic
+map has not already been loaded when this page is accessed, the
+<tt class="symbol">tolog:context</tt> tag will do it for us. (Note that this
+depends on the <tt class="symbol">allowLoadOnRequest</tt> property in the
+application configuration file, which is why we set that to
+<tt class="symbol">true</tt> above.)
+</p>
+
+
+<p>
+The next step is to list all the standards. Or, to put it the topic
+map way, we need to find all the instances of the class standard,
+which is represented by the topic 'standard'. The way to do this is to
+use a tolog query which finds all standards, and use it with the
+<tt class="symbol">tolog:foreach</tt> tag, which will loop over all the
+results returned by the query.
+</p>
+
+
+<code>
+<pre>
+&lt;ul&gt;
+  &lt;tolog:foreach query="instance-of($STD, TMTT_Standard) order by $STD?"&gt;
+    &lt;li&gt;Yet another standard&lt;/li&gt;
+  &lt;/tolog:foreach&gt;
+&lt;/ul&gt;
+</pre>
+</code>
+
+
+<p>
+This will give us one row for each standard, but all the rows will
+read the same, so we need to somehow output the names of the standards
+we've found. Inside the <tt class="symbol">tolog:foreach</tt> tag, all the
+variables defined by the query (in this case only
+<tt class="symbol">STD</tt>) will be available. So we can use the
+<tt class="symbol">tolog:out</tt> tag, which can output topics (by picking
+their most suitable name). Adding this gives us the code below.
+</p>
+
+
+<code>
+<pre>
+&lt;ul&gt;
+  &lt;tolog:foreach query="instance-of($STD, TMTT_Standard) order by $STD?"&gt;
+    &lt;li&gt;&lt;tolog:out var="STD"/&gt;&lt;/li&gt;
+  &lt;/tolog:foreach&gt;
+&lt;/ul&gt;
+</pre>
+</code>
+
+
+<p>
+The next step is to make a link to the page for each standard, which
+is of course easy, but we also need to pass the ID of the topic for
+the standard to that page. This can be done with an HTTP request
+parameter, and we can use the <tt class="symbol">tolog:id</tt> tag to get the
+ID, as shown below.
+</p>
+
+
+<code>
+<pre>
+&lt;ul&gt;
+  &lt;tolog:foreach query="instance-of($STD, TMTT_Standard) order by $STD?"&gt;
+    &lt;li&gt;&lt;a href="standard.jsp?id=&lt;tolog:id var="STD"/&gt;"
+          &gt;&lt;tolog:out var="STD"/&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;/tolog:foreach&gt;
+&lt;/ul&gt;
+</pre>
+</code>
+
+
+
+<h3>
+<a name="sect-std-page">2.5. The page for each standard</a>
+</h3>
+
+
+
+<p>
+We are now ready to write the pages that display information about the
+individual standards (<tt>standard.jsp</tt>). This page is
+slightly different in that it needs to get the ID of the topic from
+<tt class="symbol">id</tt> parameter of the HTTP request, and then look up
+that topic. Note that this ID is the ID of the topic that was put into
+the URI by the <tt class="symbol">tolog:id</tt> tag. Below is the JSP source
+skeleton for this page.
+</p>
+
+
+<code>
+<pre>&lt;%@ page contentType="text/html; charset=utf-8" %&gt;
+
+&lt;%@ taglib uri='http://psi.ontopia.net/jsp/taglib/tolog' prefix='tolog' %&gt;
+
+&lt;tolog:context topicmap="xmltools-tm.xtm"&gt;
+&lt;tolog:set var="standard" reqparam="id"/&gt;
+
+&lt;title&gt;&lt;tolog:out var="standard"/&gt;&lt;/title&gt;
+&lt;h1&gt;&lt;tolog:out var="standard"/&gt;&lt;/h1&gt;
+
+&lt;%-- more code to go here --%&gt;
+
+&lt;/tolog:context&gt;
+</pre>
+</code>
+
+
+<p>
+This page is rather like the previous one, except that we are now
+using the <tt class="symbol">tolog:set</tt> tag to pick out the topic from
+the request parameter (using the <tt class="symbol">reqparam</tt> attribute),
+and setting it into a variable we name <tt class="symbol">standard</tt>. This
+lets us use the <tt class="symbol">tolog:out</tt> tag to output the name of
+the standard at the top of the page.
+</p>
+
+
+<p>
+Now the question is what more we can display to the user about the
+standard they have chosen. The topic map contains the following
+information about standards:
+</p>
+
+
+<ul>
+<li>
+
+<p>Occurrences of the types specification, link collection, site
+about, and home page.</p>
+
+</li>
+<li>
+
+<p>Associations to products that use the standard.</p>
+
+</li>
+<li>
+
+<p>Associations to products that implement the standard.</p>
+
+</li>
+</ul>
+
+
+<p>
+The most reasonable way to do this seems to be to make a table of the
+occurrences, and then to list the associated products below the table.
+The code below produces the table of occurrences.
+</p>
+
+
+<code>
+<pre>
+&lt;!-- OCCURRENCES --&gt;
+&lt;tolog:if query="occurrence(%standard%, $OCC)?"&gt;
+&lt;table&gt;
+&lt;tolog:foreach query="select $OCCTYPE, $URI from
+                        occurrence(%standard%, $OCC),
+                        type($OCC, $OCCTYPE),
+                        resource($OCC, $URI)
+                      order by $OCCTYPE, $URI?"&gt;
+  &lt;tr&gt;&lt;th&gt;&lt;tolog:out var="OCCTYPE"/&gt;:
+      &lt;td&gt;&lt;a href="&lt;tolog:out var="URI"/&gt;"&gt;&lt;tolog:out var="URI"/&gt;&lt;/a&gt;
+&lt;/tolog:foreach&gt;
+&lt;/table&gt;
+&lt;/tolog:if&gt;
+</pre>
+</code>
+
+
+<p>
+We start out by checking if there are any occurrences of this topic,
+since we don't want to produce the <tt class="symbol">table</tt> element if
+there are none. We do this using the <tt class="symbol">tolog:if</tt> tag,
+which will only execute its contents if the query returns at least one
+row. Note that in this query we need to refer to the current standard,
+which is in the <tt class="symbol">standard</tt> variable. We do this by
+using the <tt class="symbol">%standard%</tt> syntax in the query.
+</p>
+
+
+<p>
+After that, all we need to do is to do a query that finds all the
+occurrences, their types, and their URIs, and we can loop over them
+with <tt class="symbol">tolog:foreach</tt> and output them. Notice that the
+<tt class="symbol">tolog:out</tt> tag just as happy to display the URI as it
+is to display topics.
+</p>
+
+
+<p>
+The next step is to list all the topics that implement the standard,
+which is done by the code below.
+</p>
+
+
+<code>
+<pre>&lt;tolog:if query="TMAT_StandardImplemented(%standard% : TMTT_Standard,
+                                          $PRODUCT : TMTT_Product)?"&gt;
+&lt;p&gt;
+This standard has been implemented by the following products:
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;tolog:foreach query="TMAT_StandardImplemented(%standard% : TMTT_Standard,
+                                          $PRODUCT : TMTT_Product)
+                      order by $PRODUCT?"&gt;
+  &lt;li&gt;&lt;a href="product.jsp?id=&lt;tolog:id var="PRODUCT"/&gt;"
+        &gt;&lt;tolog:out var="PRODUCT"/&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;
+&lt;/tolog:if&gt;</pre>
+</code>
+
+
+<p>
+There's nothing really new here, so we won't go into the details of
+how it works.
+</p>
+
+
+<p>
+Finally, we list all the products that use this standard. This is very
+similar to what we did above, as you can see from the code below.
+</p>
+
+
+<code>
+<pre>&lt;tolog:if query="TMAT_StandardsUse(%standard% : TMAR_UsedIn,
+                                   $PRODUCT : TMAR_UsedBy)?"&gt;
+&lt;p&gt;
+This standard is used by the following products:
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;tolog:foreach query="TMAT_StandardsUse(%standard% : TMAR_UsedIn,
+                                        $PRODUCT : TMAR_UsedBy)
+                      order by $PRODUCT?"&gt;
+  &lt;li&gt;&lt;a href="product.jsp?id=&lt;tolog:id var="PRODUCT"/&gt;"
+        &gt;&lt;tolog:out var="PRODUCT"/&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;
+&lt;/tolog:if&gt;</pre>
+</code>
+
+
+<p>
+We stop here, since most of the remaining pages will be very similar
+to the pages we have already shown. Writing the rest of the
+application is left as an exercise for the reader.
+</p>
+
+
+
+
+
+
+
+<h2>
+<a name="N1020B">3. More advanced subjects</a>
+</h2>
+
+
+
+<p>
+This section covers some of the more advanced aspects of writing web
+applications with the navigator framework. You do not need to
+understand these to write applications with the framework, but the
+features presented here can make the job easier, and can also lead to
+a superior result.
+</p>
+
+
+<h3>
+<a name="N10213">3.1. Grouping</a>
+</h3>
+
+
+
+<p>
+Let's imagine that we wanted to create a list of all vendors, and that
+for each vendor we wanted to list all its products. We could do this
+with two nested foreach-tags, an outer one for the vendors, and an
+inner one for the products. However, this requires us to use two
+queries instead of one (even though we can select both in a single
+query). This isn't good for performance, since it means that if there
+are 100 vendors, the inner query will be run 100 times. So instead of
+running 1 query, we run 101. 
+</p>
+
+
+<p>
+The other approach would be to do a single query that finds both, and
+then using it in a single foreach-loop. However, if we want to create
+a nested HTML list we now have to be able to tell when the vendor in
+this iteration is different from that in the previous one, and the tag
+library doesn't support that. What it <em>does</em>
+support is grouping, which solves this problem quite easily.
+</p>
+
+
+<p>
+The code below shows how to do the outer loop.
+</p>
+
+
+<code>
+<pre>&lt;%@ page contentType="text/html; charset=utf-8" %&gt;
+
+&lt;%@ taglib uri='http://psi.ontopia.net/jsp/taglib/tolog' prefix='tolog' %&gt;
+
+&lt;tolog:context topicmap="xmltools-tm.xtm"&gt;
+&lt;title&gt;The vendors&lt;/title&gt;
+&lt;h1&gt;The vendors&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;tolog:foreach query="TMAT_ProductVendor($VENDOR : TMAR_Creator,
+                                             $PRODUCT : TMTT_Product)
+                        order by $VENDOR, $PRODUCT?"&gt;
+    &lt;li&gt;&lt;a href="vendor.jsp?id=&lt;tolog:id var="VENDOR"/&gt;"
+          &gt;&lt;tolog:out var="VENDOR"/&gt;&lt;/a&gt;
+
+        &lt;%-- inner loop goes here --%&gt;
+  &lt;/tolog:foreach&gt;
+&lt;/ul&gt;
+
+&lt;/tolog:context&gt;</pre>
+</code>
+
+
+<p>
+The next step is to make the outer foreach-loop only iterate once for
+each vendor. This we do by adding a <tt class="symbol">groupBy</tt> attribute
+to it. After this, we need to add a new foreach-loop for the products,
+but we don't give it a query, since it's going to use the parent's
+query. The result is shown below.
+</p>
+
+
+<code>
+<pre>&lt;ul&gt;
+  &lt;tolog:foreach query="TMAT_ProductVendor($VENDOR : TMAR_Creator,
+                                             $PRODUCT : TMTT_Product)
+                        order by $VENDOR, $PRODUCT?" groupBy="VENDOR"&gt;
+    &lt;li&gt;&lt;a href="vendor.jsp?id=&lt;tolog:id var="VENDOR"/&gt;"
+          &gt;&lt;tolog:out var="VENDOR"/&gt;&lt;/a&gt;
+
+      &lt;ul&gt;
+      &lt;tolog:foreach&gt;
+        &lt;li&gt;&lt;a href="product.jsp?id=&lt;tolog:id var="PRODUCT"/&gt;"
+              &gt;&lt;tolog:out var="PRODUCT"/&gt;&lt;/a&gt;
+      &lt;/tolog:foreach&gt;
+      &lt;/ul&gt;
+  &lt;/tolog:foreach&gt;
+&lt;/ul&gt;</pre>
+</code>
+
+
+<p>
+Note that it is possible group on more than one variable. This allows
+you to use multiple variables set in the query in the outer loop. For
+example, if the VENDOR's subject identifier is in the variable
+<tt class="symbol">VENDOR-ID</tt>, the setting <tt class="symbol">groupBy</tt> to
+<tt class="symbol">VENDOR VENDOR-ID</tt> gives access to both variables in
+the outer loop.
+</p>
+
+
+<p>
+Note that it is also possible to have several levels of
+<tt class="symbol">foreach</tt> tags, where new variables are grouped on each
+level. For example, you can group on <tt class="symbol">COUNTRY</tt> in the
+outermost loop, then group on <tt class="symbol">PROVINCE</tt> in the next
+loop, and finally iterate over <tt class="symbol">CITY</tt> in the third
+loop.
+</p>
+
+
+
+<h3>
+<a name="N1024C">3.2. Reusing code fragments with inclusion</a>
+</h3>
+
+
+
+<p>
+Quite often applications contain fragments of code that with only
+minor variations are repeated over and over again. JSP provides three
+different mechanisms for dealing with this: static includes, dynamic
+includes, and (in JSP 2.0) tag files.
+</p>
+
+
+<p>
+Static includes are the simplest mechanism. They let you reference
+another JSP file, and the effect is as though you had copied the other
+file and pasted it into the first file. This means that the Navigator
+Framework variables used in the parent file will all be visible in the
+included file. The syntax is as follows:
+</p>
+
+
+<code>
+<pre>&lt;%@ include file="relativeFragment.jsp" %&gt;</pre>
+</code>
+
+<p>
+The other way to include a fragment is to use a dynamic include, with
+the <tt class="symbol">jsp:include</tt> tag, which belongs to the
+<tt class="symbol">jsp</tt> tag library, which is part of the JSP standard,
+and does not need to be declared. Dynamic includes are different from
+static ones in that the included file is considered a separate page
+(so you need to declare all tag libraries in it), and also in that it
+is checked for updates each time it is referenced. The variables set
+in the parent file will be visible in the referenced file. The example
+below shows the syntax.
+</p>
+
+
+<code>
+<pre>&lt;jsp:include page="relativeFragment.jsp"/&gt;</pre>
+</code>
+
+
+<p>
+The final and most powerful way to make reusable fragments is with tag
+files, which let you create your own tags using JSP fragments. This
+feature is only available in JSP 2.0, however, so whether it works for
+you depends on what server you use. It will <em>not</em>
+work in Tomcat 4.x, for example; you must use Tomcat 5.x. For more
+information, see <a href="http://today.java.net/pub/a/today/2003/11/14/tagfiles.html">this
+java.net tutorial</a>.
+</p>
+
+
+
+<h3>
+<a name="N10271">3.3. Rendering the ancestors of a topic</a>
+</h3>
+
+
+
+<p>
+A common requirement is to have a topic that is part of some
+hierarchy, and to want to show all the ancestors of that topic in
+order as you go up the tree. This is not possible in a single tolog
+query, because although the query will easily find all ancestors, it
+will not be able to rank them by distance to the starting topic.
+The solution is to use a recursive code fragment.
+</p>
+
+
+<p>
+Imagine that you have a category in a taxonomy in the variable named
+<tt class="symbol">category</tt> and you want to show all its ancestor
+categories all the way up to the root in a breadcrumb-like fashion.
+To do that, write the following in your JSP file:
+</p>
+
+
+<pre>&lt;jsp:include page="category-tree.jsp"/&gt;</pre>
+
+
+<p>
+Note that you have to use <tt class="symbol">jsp:include</tt> here, since a
+static include would cause an infinite recursion, as static includes
+are processed at compile-time. To make this work we also need
+<tt class="symbol">category-tree.jsp</tt>, which looks as follows:
+</p>
+
+
+<pre>
+&lt;%-- must redeclare taglibs inside the fragment --%&gt;
+&lt;%@ taglib uri='http://psi.ontopia.net/jsp/taglib/tolog' prefix='tolog'%&gt;
+
+&lt;%-- we move on to the parent of this topic --%&gt;
+&lt;tolog:if test="broader-narrower(%PARENT% : narrower, $PARENT : broader)?"&gt;
+ &lt;%-- the parent is the new topic --%&gt;
+ &lt;tolog:set var="topic" query="$T = %PARENT%?"/&gt; 
+
+ &lt;%-- render all the ancestors --%&gt;
+ &lt;jsp:include page="category-tree.jsp"/&gt;
+
+ &lt;%-- render the separator --%&gt;
+ |
+&lt;/tolog:if&gt;
+
+&lt;%-- we render the topic after all its ancestors --%&gt;
+&lt;a href="category.jsp?id=&lt;tolog:id var="topic"&gt;"
+  &gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+</pre>
+
+
+
+
+
+<h3>
+<a name="N10291">3.4. Using dynamic values with the tag libraries</a>
+</h3>
+
+
+
+<p>
+Sometimes one may want to get the values to be used with the tag
+libraries from Java code, for example because they may be retrieved
+from request parameters or configuration files. This can be done quite
+easily using the <tt class="symbol">&lt;%= ... %&gt;</tt> construct. Here is an
+JSP fragment which shows you how could use this:
+</p>
+
+
+<p align="center">
+<b>Using dynamic attribute values</b>
+</p>
+
+
+
+<code>
+<pre>
+  &lt;%
+    String searchFor = request.getParameter("search_for");
+    String query = "topic-name($TOPIC, $N), " +
+                   "value-like($N, \"" + searchFor + "\")?";
+  %&gt;
+
+  &lt;ul&gt;
+  &lt;tolog:foreach query="&lt;%= query %&gt;"&gt;
+    &lt;li&gt;&lt;tolog:out var="TOPIC"/&gt;
+  &lt;/tolog:foreach&gt;  
+  &lt;/ul&gt;
+</pre>
+</code>
+
+
+
+
+<h3>
+<a name="N102A7">3.5. Understanding lexical scope</a>
+</h3>
+
+
+
+<p>
+One key aspect of the tag libraries that has not been discussed so far
+is that of variable scope. This has nothing to do with scope as in
+topic maps, but is the familiar concept of scope in programming
+language theory. A <a href="http://en.wikipedia.org/wiki/Scope_(programming)">scope</a>
+in this sense is the region of the source code in which the binding of
+a variable is visible.  In other words: when you use
+<tt class="symbol">tolog:set</tt> to assign a value to the variable
+<tt class="symbol">foo</tt> its scope is the part of the source code where
+you can get the value of <tt class="symbol">foo</tt>.
+</p>
+
+
+<p>
+The tag libraries have lexical scope, also known as static scope,
+which means that every variable is only available within a fixed
+region of the source code, and that you can work out what that region
+is just by reading the source code. It does not depend on runtime
+behaviour at all.
+</p>
+
+
+<p>
+In the tag libraries, some of the tags establish new lexical scopes
+(such as <tt class="symbol">tolog:context</tt>, <tt class="symbol">tolog:if</tt>, 
+<tt class="symbol">tolog:when</tt>, <tt class="symbol">tolog:otherwise</tt>, and
+<tt class="symbol">tolog:foreach</tt>) while others are neutral with respect
+to scope. The tag library reference documents which tags create new
+lexical scopes.
+</p>
+
+
+<p>
+So to find out where a variable binding is visible, find the nearest
+ancestor tag of the <tt class="symbol">tolog:set</tt> tag that establishes a
+lexical scope. The variable will be visible within that tag, but not
+outside it. Whether a variable with the same name already exists
+within an outer scope makes no difference.
+</p>
+
+
+
+<h3>
+<a name="sect-rdbms">3.6. Using the RDBMS backend</a>
+</h3>
+
+
+
+<p>
+To use the Navigator Framework with the RDBMS backend, the main thing
+that needs to be done is to configure the
+<tt>tm-sources.xml</tt> file correctly, as described in the
+configuration guide. However, since the RDBMS backend has to support
+transactions, there are some rules for how to use the APIs that one
+can freely break with the in-memory engine, but which will cause
+problems if broken when using the RDBMS backend. This section attempts
+to explain what these are.
+</p>
+
+
+<p>
+When using the RDBMS backend, Ontopia maintains a pool of topic map
+stores, and everything that is done with a topic map is done
+using one of these stores. For Ontopia to be able to maintain
+the pool properly, topic maps have to be explicitly returned to the
+pool. This is done by calling the <tt class="methodname">close</tt>
+method on the <tt class="interfacename">TopicMapStoreIF</tt>
+interface. Note that if you use the tag libraries this happens
+automatically for the topic maps retrieved by the
+<tt class="symbol">context</tt> tag.
+</p>
+
+
+<p>
+There are some issues to be aware of here, however:
+</p>
+
+
+<ul>
+<li>
+    
+<p>Any objects retrieved through
+    <tt class="classname">ContextUtils</tt> (see <a href="#sect-context-utils">section
+        4.1</a>) come from the transaction
+    maintained by the framework for the purpose of rendering the page,
+    and will be taken care of by the <tt class="symbol">context</tt>
+    tag.</p>
+  
+</li>
+<li>
+    
+<p>Any topic maps opened explicitly, for example using
+    <tt class="interfacename">TopicMapRepositoryIF</tt>, will get
+    their own transactions. This means that trying to pass objects
+    from these transactions into the context maintained by the JSP
+    tags (for example as parameters to a tolog query) will
+    <em>not</em> work. Bizarre and hard-to-reproduce bugs
+    are likely to be the result of this.</p>
+
+    
+<p>Also, any topic maps opened explicitly will also have to be
+    closed or returned explicitly. The <tt class="symbol">context</tt> tag
+    cannot take care of this, because it is not aware of these
+    transactions.</p>
+  
+</li>
+</ul>
+
+
+<h4>
+<a name="sect-txn-jsp-1.1">3.6.1. The joys of JSP 1.1</a>
+</h4>
+
+
+
+<dl>
+<dt class="note">Note</dt>
+<dd>
+  
+<p>This section only applies to JSP 1.1 (which is an old version;
+  today JSP 1.2 and 2.0 are the most common). If you use JSP 1.1 you
+  <em>absolutely must</em> read this; if you don't, you
+  can just skip this.</p>
+
+</dd>
+</dl>
+
+
+<p>
+JSP 1.2 introduced the
+<tt class="interfacename">javax.servlet.jsp.tagext.TryCatchFinally</tt>
+interface, which allows a tag to catch exceptions thrown in its body
+or perform actions even if exceptions have been thrown. The
+<tt class="symbol">context</tt> tag implements this interface, as this is
+absolutely necessary to avoid running out of stores in the store pool
+when exceptions are thrown (as occasionally they are). 
+</p>
+
+
+<p>
+Implementing this interface causes problems for JSP 1.1, of course,
+since the JSP 1.1 jar files do not contain a class file for this
+interface. This is worked around by means of a special jar file named
+<tt>config/jsp-11/jsp12-compat.jar</tt>, which is included
+in the Ontopia distribution. This means the tags can run, but does
+<em>not</em> provide the desired try/catch/finally
+behaviour, since JSP 1.1 does not support this. The only known
+solution to this problem in JSP 1.1 is to manually add a try/finally
+to each JSP page.
+</p>
+
+
+
+
+
+<h2>
+<a name="N1033B">4. Performing common tasks</a>
+</h2>
+
+
+
+<p>
+This section describes how to solve some commonly occurring problems
+when writing applications with the tag libraries.
+</p>
+
+
+<h3>
+<a name="sect-context-utils">4.1. Accessing the values of variables from Java code</a>
+</h3>
+
+
+
+<p>
+Sometimes one wants to use the tags to collect information from the
+topic map, and then process it in ways that only Java code can do.
+This can easily be done using the utility class
+<tt class="classname">net.ontopia.topicmaps.nav2.utils.ContextUtils</tt>,
+which has utility methods for accessing the variables in the context.
+</p>
+
+
+<p>
+Below is shown a code snippet that illustrates how to use this class.
+</p>
+
+
+<p align="center">
+<b>Using ContextUtils</b>
+</p>
+
+
+
+<code>
+<pre>
+
+&lt;tolog:set var="picture" query="illustration(%topic%, $URI)?"/&gt;
+
+&lt;%-- And now we want to use Java to get at the illustration --%&gt;
+
+&lt;%
+  String ill = (String) ContextUtils.getSingleValue("picture", pageContext);
+  // do useful things with 'ill'
+%&gt;
+</pre>
+</code>
+
+
+
+
+<h3>
+<a name="N1035E">4.2. Integration with JSP attributes</a>
+</h3>
+
+
+
+<p>
+The Navigator Framework supports accessing and setting page attributes
+in a way that is similar to how <a href="http://java.sun.com/products/jsp/reference/techart/unifiedEL.html">the
+JSP Expression Language</a> works. Page attributes can be
+accessed by name (and bean property) from the <tt class="symbol">var</tt> attribute
+of the <tt class="symbol">tolog:out</tt>, <tt class="symbol">tolog:oid</tt>, and
+<tt class="symbol">tolog:id</tt> tags. This makes it easy to use the
+Navigator Framework together with other tag libraries, such as the
+JSTL tag libraries, and it also makes it possible to use the Navigator
+Framework with a Model-View-Controller (MVC) approach.
+</p>
+
+
+<p>
+How it works is perhaps best shown with an example, shown below.
+</p>
+
+
+<pre>&lt;!-- The JSP page is run by a front controller servlet
+     which creates a model object and registers it as the JSP attribute model.
+     The model object has a getCurrentTopic method, returning the current
+     topic.
+--&gt;
+
+  &lt;h1&gt;&lt;tolog:out var="model.currentTopic"/&gt;&lt;/h1&gt;
+
+</pre>
+
+
+<p>
+Basically, how this works is that variable references can not only
+refer to Ontopia variables, but also to JSP attributes. Lookups are done
+as follows:
+</p>
+
+
+<ul>
+<li>
+    
+<p>First the reference is looked up as an Ontopia variable.</p>
+  
+</li>
+<li>
+    
+<p>If this fails the reference is truncated at the first ".",
+    and the result is looked up using the PageContext.findAttribute
+    method. If this fails an error is reported.</p>
+  
+</li>
+<li>
+    
+<p>For each ".foo" after the initial reference the following is
+    applied to the result of the previous operation:</p>
+    
+<ul>
+<li>
+        
+<p>If the previous result is a Map the key "foo" is looked
+        up.</p>
+      
+</li>
+<li>
+        
+<p>Otherwise the method "getFoo" is looked up and called.</p>
+      
+</li>
+<li>
+        
+<p>If both of the above fail the result is null, otherwise
+        the next ".foo" is applied, or the value of the last returned
+        if there are no more.</p>
+      
+</li>
+</ul>
+  
+</li>
+</ul>
+
+
+<p>
+The <tt class="symbol">tolog:set</tt> tag can also be used to set JSP
+attributes; see the tag library reference documentation of the
+<tt class="symbol">scope</tt> attribute for more information.
+</p>
+
+
+
+<h3>
+<a name="N103B3">4.3. Accessing Ontopia variables from the JSP EL</a>
+</h3>
+
+
+
+<p>
+When the Navigator Framework is used together with other tag
+libraries, especially the JSTL tag libraries, there is very often a
+need to access Ontopia variables from the other tag libraries. To support
+this, the <tt class="symbol">tolog:context</tt> tag registers a Map attribute
+named "ontopia" in the request scope. This Map can be used to access all
+Ontopia variables in effect at the time of access. This means that using
+the JSP Expression Language you can access Ontopia variables using an
+expression like <tt class="symbol">${ontopia.foo}</tt>.
+</p>
+
+
+<p>
+One example of this might be the following:
+</p>
+
+
+<pre>
+  &lt;tolog:foreach query="cms:is-about(%article.topic% : cms:work, $SUBJ : cms:subject)?"&gt;
+    &lt;li&gt;&lt;a href="topic.jsp?id=&lt;c:out value="${ontopia.SUBJ.objectId}"/&gt;"
+          &gt;&lt;tolog:out var="SUBJ"/&gt;&lt;/a&gt;
+  &lt;/tolog:foreach&gt;
+</pre>
+
+
+<p>
+Here the <tt class="symbol">ontopia</tt> refers to the variable map,
+<tt class="symbol">SUBJ</tt> to the variable inside it containing a topic,
+and <tt class="symbol">objectId</tt> to the <tt class="methodname">getObjectId</tt>
+method on the topic in the variable.
+</p>
+
+
+
+
+</body>
+</html>

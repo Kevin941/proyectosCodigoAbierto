@@ -1,0 +1,3325 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Ontopoly: The Topic Map Editor</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>Ontopoly: The Topic Map Editor</h1>
+<h2 class="subtitle">User&rsquo;s Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia
+</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>This is the user guide for Ontopia&rsquo;s self-configuring, ontology-driven
+Topic Maps editor, Ontopoly. A topic map consists of both an ontology
+and an instance of that ontology; with Ontopoly, you can edit each of these.
+The ontology defines the rules for what can go into the instance, and
+these rules are used by Ontopoly to automatically generate the interface
+for creating and maintaining the instance. This document provides guidance
+for creating both ontologies and instances.</p>
+
+
+<p>Reading this document assumes some basic knowledge about Topic
+Maps. If you are not familiar with Topic Maps, try reading one of the
+simple introductions, such as <a href="http://www.ontopia.net/topicmaps/materials/tao.html">The TAO of
+Topic Maps</a>, available from the Ontopia web site. If you are
+technically minded, you might also want to look at the <a href="http://www.topicmaps.org/xtm/1.0/">XTM Specification</a> or
+the new version of ISO 13250, especially the <a href="http://www.isotopicmaps.org/sam/sam-model/">Data
+Model</a>.</p>
+
+
+<p> We welcome any suggestions you might have on ways of improving
+this User Guide. Please send them to
+<a href="mailto:dev@ontopia.net">dev@ontopia.net</a>.</p>
+
+
+<p>We hope you enjoy using Ontopoly!</p>
+
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N1004B">1. Getting started</a>
+</li>
+<ul></ul>
+<li>
+<a href="#gen-concepts">2. General concepts</a>
+</li>
+<ul>
+<li>
+<a href="#overview">2.1. Application architecture</a>
+</li>
+<ul></ul>
+<li>
+<a href="#components">2.2. Configuring and populating topic maps</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N100FC">2.3. User interface conventions</a>
+</li>
+<ul></ul>
+<li>
+<a href="#start-page">2.4. Topic Map Index Page</a>
+</li>
+<ul>
+<li>
+<a href="#open-topicmap">2.4.1. Ontopoly topic maps</a>
+</li>
+<ul></ul>
+<li>
+<a href="#open-non-topicmap">2.4.2. Opening a non-Ontopoly topic map</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N101EA">2.4.3. Creating a new Ontopoly topic map</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#N10202">2.5. Our example topic map</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#OE">3. Using the Type Configuration Pages</a>
+</li>
+<ul>
+<li>
+<a href="#onto-indexes">3.1. Type Index Pages</a>
+</li>
+<ul></ul>
+<li>
+<a href="#config-pages">3.2. Type Configuration Pages</a>
+</li>
+<ul></ul>
+<li>
+<a href="#create-tt">3.3. Configuring topic types</a>
+</li>
+<ul>
+<li>
+<a href="#tt-config-page">3.3.1. Topic Type Configuration Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#tt-config-standard-default">3.3.2. Properties of the typing topic (Default view panel)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#tt-config-standard-advanced">3.3.3. Properties of the typing topic (Advanced view panel)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#tt-config-fields-editor">3.3.4. Assigning new fields</a>
+</li>
+<ul></ul>
+<li>
+<a href="#tt-config-existing-fields">3.3.5. Editing existing fields</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#occur-types">3.4. Configuring occurrence types</a>
+</li>
+<ul>
+<li>
+<a href="#ot-config-page">3.4.1. Occurrence Type Configuration Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#occur-config-standard">3.4.2. Properties of the occurrence field (Default view panel)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#occur-config-standard-advanced">3.4.3. Properties of the occurrence field (Advanced view panel)</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#assoc-types">3.5. Configuring association types</a>
+</li>
+<ul>
+<li>
+<a href="#at-config-page">3.5.1. Association Type Configuration Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#assoc-config-standard">3.5.2. Properties of the typing topic (Default view panel)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#assoc-config-standard-advanced">3.5.3. Properties of the typing topic (Advanced view panel)</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#role-types">3.6. Configuring role types</a>
+</li>
+<ul>
+<li>
+<a href="#rt-config-page">3.6.1. Role Type Configuration Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#role-config-standard">3.6.2. Properties of the typing topic (Default view panel)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#role-config-advanced">3.6.3. Properties of the typing topic (Advanced view panel)</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#name-types">3.7. Configuring name types</a>
+</li>
+<ul>
+<li>
+<a href="#nt-config-page">3.7.1. Name Type Configuration Page (Default view panel)</a>
+</li>
+<ul></ul>
+<li>
+<a href="#nt-config-page-advanced">3.7.2. Name Type Configuration Page (Advanced view panel)</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#topic-map-config">3.8. Topic Map Description Page</a>
+</li>
+<ul>
+<li>
+<a href="#del-tm">3.8.1. Deleting a topic map</a>
+</li>
+<ul></ul>
+<li>
+<a href="#enabling-shortcuts">3.8.2. Enabling shortcuts</a>
+</li>
+<ul></ul>
+<li>
+<a href="#ontology-annotation">3.8.3. Ontology annotation</a>
+</li>
+<ul></ul>
+<li>
+<a href="#administration-mode">3.8.4. Administration mode</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#export">3.9. Exporting a topic map</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10918">3.10. Saving a topic map</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#IE">4. Using Instance Editing Pages</a>
+</li>
+<ul>
+<li>
+<a href="#inst-indexes">4.1. Topic Type Index Page</a>
+</li>
+<ul>
+<li>
+<a href="#inst-index">4.1.1. Instance Index Pages</a>
+</li>
+<ul></ul>
+<li>
+<a href="#instance-page">4.1.2. Instance Editing Page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N109AD">4.1.3. Changing a topic&rsquo;s type</a>
+</li>
+<ul></ul>
+<li>
+<a href="#topic-select-dialog">4.1.4. Assigning topics to associations</a>
+</li>
+<ul></ul>
+<li>
+<a href="#editing-occurrences">4.1.5. Editing name, occurrence, and identity fields</a>
+</li>
+<ul></ul>
+</ul>
+</ul>
+<li>
+<a href="#N10B21">5. Using Ontopoly with multiple users</a>
+</li>
+<ul></ul>
+</ul>
+
+
+
+
+
+
+
+
+<h2>
+<a name="N1004B">1. Getting started</a>
+</h2>
+
+
+
+<p>Ontopoly is built as a client/server application. As a client, you
+use your web browser, while the server is a web server bundled with the
+distribution. The server-side application is built using the
+Navigator Framework and Web
+Editor Framework, which are parts of the
+Ontopia Knowledge Suite&trade;. Ontopoly is
+accessible within Ontopia, an application that provides easy access to
+Ontopoly, Omnigator, and
+Vizigator.</p>
+
+
+<p align="center">
+<a name="ots-home-pg-fig">
+
+<img align="center" src="images/doc_home_page.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 1. Ontopia Home Page</b>
+</p>
+
+
+<p>To install and start up Ontopia, please see
+<tt>install.html</tt>. Once you have accessed Ontopia, choose
+Ontopoly from the available options.</p>
+
+
+
+<h2>
+<a name="gen-concepts">2. General concepts</a>
+</h2>
+
+
+
+<h3>
+<a name="overview">2.1. Application architecture</a>
+</h3>
+
+
+
+<p>Ontopoly&rsquo;s primary purpose is to enable the manual creation and
+maintenance of topic maps that may be based on a variety of ontologies.
+In order to be able to provide the most intuitive possible user
+interface for such a generic application, Ontopoly is
+<em>ontology-driven</em>. What this means is that the
+forms-based interface for creating and maintaining a topic map is
+generated automatically from the underlying ontology and the rules that
+are defined for it.</p>
+
+
+<p>For this reason, you need to create an ontology before you can
+edit a topic map instance in Ontopoly. Often the tasks of creating the
+ontology and editing the topic map instance (that is, populating the
+ontology) will be carried out by different people. Ontopoly is therefore
+divided into two main parts: the ontology editor and the instance
+editor. The application also has an administration interface, i.e., a
+page for adding metadata to the topic map (description, creator,
+version, etc.), validating it, etc.; and an interface for exporting to
+various interchange syntaxes.</p>
+
+
+<p>The Topic Map Index Page allows you to open an existing topic map, create
+a new one, or import one from outside Ontopoly. Once you have selected one
+of these actions, you are taken to the application pages. The overall
+architecture and the navigation paths between the various parts of the
+application are shown in <a href="#int-ovr">figure 2</a>.</p>
+
+
+<p align="center">
+<a name="int-ovr">
+
+<img align="center" src="images/interface_overview.png">
+</a>
+</p>
+<p align="center">
+<b>Figure 2. Overview of Ontopoly&rsquo;s architecture</b>
+</p>
+
+
+
+<h3>
+<a name="components">2.2. Configuring and populating topic maps</a>
+</h3>
+
+
+
+<p>Ontopoly&rsquo;s two primary functions provide a comprehensive Topic Maps
+editing environment.</p>
+
+
+<ol>
+<li>
+
+<p>
+<strong>Configuring a topic map</strong>: ontology
+and schema creation</p>
+
+<p>Ontopoly&rsquo;s Type Configuration Pages are used by the ontology
+designer to define the topic, name, association, association role, and
+occurrence types that will be available to creators of the instance
+topics. To take an example, when an author creates a topic of type
+<em>composer</em>, the Instance Editing Page will show the
+fields that apply to a <em>composer</em>, such as name, date
+of birth, and works; but when editing an <em>opera</em>, the
+fields will be different.</p>
+
+<p>As the ontology designer assigns fields (such as associations and
+occurrences) to a topic type, the designer is also creating the schema.
+The creation of the ontology and the schema are seamless and appear to
+the designer as a cohesive operation. For further detail on ontology
+creation, see <a href="#OE">section
+        3</a>.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Populating a topic map</strong>: instance
+creation</p>
+
+<p>Once an ontology is created, it can be used to guide populating
+the topic map. The Instance Editing Pages are used by the person
+authoring the topic map instance. The available topic types are provided
+from the ontology. The schema constraints give the instance author
+further support by allowing only specific association types and
+occurrence types to be used with an instance of a given topic type. For
+further detail on instance editing, see <a href="#IE">section
+        4</a>.</p>
+
+</li>
+</ol>
+
+
+
+
+<h3>
+<a name="N100FC">2.3. User interface conventions</a>
+</h3>
+
+
+
+<p>Ontopoly has a web-based interface. For a discussion of the various
+areas of the Ontopoly interface and a complete list of icons, tabs and
+buttons used in the interface, please see <a href="#appA">Appendix
+A</a>.</p>
+
+
+
+<h3>
+<a name="start-page">2.4. Topic Map Index Page</a>
+</h3>
+
+
+
+<p>Before you can create either the ontology or the instance, you
+have to open a topic map, so let&rsquo;s start there.</p>
+
+
+<p>When you first access Ontopoly from Ontopia, you are taken to the
+Topic Map Index Page, see <a href="#wel-pg-fig">figure 3</a>. On the left, is a column
+for <strong>Ontopoly Topic Maps</strong>, in the middle is the list
+of <strong>Other Topic Maps</strong> (also referred to as
+&ldquo;non-Ontopoly topic maps&rdquo;), and on the right is the area for
+creating new topic maps. Another column, <strong>Missing Topic
+Maps</strong>, will also appear on this page if an Ontopoly topic map has
+been deleted from outside Ontopoly. For more information on deleting Ontopoly
+topic maps, please see <a href="#del-tm">section
+        3.8.1</a>.</p>
+
+
+<p align="center">
+<a name="wel-pg-fig">
+
+<img align="center" src="images/doc_welcome_page.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 3. Ontopoly Topic Map Index Page</b>
+</p>
+
+
+<p>Ontopoly imports topic maps in the XTM 1.0 and 2.0, CTM, LTM, and
+TM/XML syntaxes; it will also import RDF. By default Ontopoly creates
+topic maps as XTM files in the Omnigator&rsquo;s
+<tt>topicmaps/</tt> directory. For information on
+exporting from Ontopoly, see <a href="#export">section
+        3.9</a>.</p>
+
+
+<h4>
+<a name="open-topicmap">2.4.1. Ontopoly topic maps</a>
+</h4>
+
+
+
+<p>A topic map created in Ontopoly (an <dfn>Ontopoly topic
+map</dfn>) will differ from one created outside of it (a
+<dfn>non-Ontopoly topic map</dfn>). An Ontopoly topic map carries
+along with it topics that let it interact with the Ontopoly application and
+topics that define the schema (the <dfn>system
+topics</dfn>). You can always export a topic map from Ontopoly to
+remove the system topics, but they are needed for the topic map to be
+understood within the application. (It&rsquo;s the system topics that
+make it possible for Ontopoly to automatically configure its instance
+editor for maximum ease of use.) Similarly, pre-existing non-Ontopoly topic
+maps will need these system topics to be added. Ontopoly automatically adds
+them when opening a non-Ontopoly topic map.</p>
+
+
+<p>In the situation where you are trying to load an Ontopoly topic
+map using an older versjon of the ontology, you will be forward to an
+upgrade page. If you want to perform the upgrade click the
+<strong>OK</strong> button. Otherwise click
+<strong>Cancel</strong>. Once the upgrade is done you will be
+forwarded to the Type Type Index Page.</p>
+
+
+<p align="center">
+<a name="open-topicmap-upgrade">
+
+<img align="center" src="images/open-topicmap-upgrade.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 4. Conversion page</b>
+</p>
+
+
+
+
+<h4>
+<a name="open-non-topicmap">2.4.2. Opening a non-Ontopoly topic map</a>
+</h4>
+
+
+
+<p>If you try to open a non-Ontopoly topic map, you will be forwarded
+to the conversion page, which looks something like this:</p>
+
+
+<p align="center">
+<a name="open-topicmap-convert">
+
+<img align="center" src="images/open-topicmap-convert.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 5. Conversion page</b>
+</p>
+
+
+<p>Opening a non-Ontopoly topic map converts it to an Ontopoly topic map
+and creates an index in the process (which may take several minutes).
+When you click on a non-Ontopoly topic map, you will get information
+about the conversion process. If the topic map contains features not
+supported by Ontopoly (see <a href="#appB">appendix
+        B</a>), you will see a
+warning and a list of the unsupported features that are used in the
+topic map. There are options to update your existing topic map or
+create a copy of it. After this decision, you are taken to the Topic
+Type Configuration Page.</p>
+
+
+<p>During the conversion, Ontopoly makes decisions about the ontology,
+based on what it finds in the topic map, and generates the strictest
+possible schema. Sometimes it will be stricter than necessary. For
+example, if occurrences of a particular type (say,
+<em>email</em>) never occur more than once for any
+<em>person</em> topic, then Ontopoly may create a rule allowing
+a maximum of one <em>email</em> occurrence per
+<em>person</em> topic. You may want to relax the rule,
+however, using Ontopoly&rsquo;s ontology editor, in order to allow for the
+possibility of multiple <em>email</em> occurrences in the
+future. For this reason you should always examine the ontology generated
+by Ontopoly when importing an external topic map, and adjust it to reflect
+the true intent behind the topic map.</p>
+
+
+
+
+<h4>
+<a name="N101EA">2.4.3. Creating a new Ontopoly topic map</a>
+</h4>
+
+
+
+<p>Use the <em>Name</em> field in the right hand column of
+the page to create a new topic map. After naming the topic map, you are
+taken to the Topic Type Configuration Page. The name you enter will be
+used for the name of the topic map and will appear in the left-hand
+column on the Topic Map Index Page when subsequently accessed. (You will be able to change it later, if you
+like, see <a href="#topic-map-config">section
+        3.8</a>.) The name will also be
+used to generate a file name, with the extension
+<tt>.xtm</tt> being added automatically.</p>
+
+
+
+
+
+
+
+<h3>
+<a name="N10202">2.5. Our example topic map</a>
+</h3>
+
+
+
+<p>A simple topic map example will be used throughout the next two
+sections to illustrate Ontopoly&rsquo;s functionality. It is a topic map
+that captures information about artists, the albums they have made, and
+tracks on the album. We've called it <cite>Jill&rsquo;s
+Music</cite> and it&rsquo;s based on an ontology called
+<cite>MyMusic</cite>; both are included in the Ontopoly
+distribution.</p>
+
+
+<p>So, why wait? Go on now to section <a href="#OE">section
+        3</a> and start
+creating your first topic map in Ontopoly!</p>
+
+
+
+
+<h2>
+<a name="OE">3. Using the Type Configuration Pages</a>
+</h2>
+
+
+
+
+<p>Each topic map you create will be about some domain of knowledge,
+such as your corporate intranet, medical research, recording artists,
+the works of Shakespeare, etc. A topic map identifies subjects and the
+relationships between those subjects. Each of the subjects will be of a
+certain type, e.g., Puccini and Verdi are composers, La Scala and Fenice
+are opera houses, Milan and Venice are cities, etc.</p>
+
+
+<p>Using Ontopoly&rsquo;s Type Configuration Pages, you will create the
+<dfn>typing topics</dfn> that will control your topic map: topic,
+association, occurrence, role and name types. You will also create the rules
+for how the typing topics are used together.</p>
+
+
+<p>To provide a practical introduction to Ontopoly&rsquo;s
+functionality, we&rsquo;ve created an ontology for a music organization
+topic map, <cite>MyMusic</cite>, and an example topic map that
+uses that ontology, <cite>Jill&rsquo;s Music</cite>.</p>
+
+
+<p>Here are the topic types we will be working with:</p>
+
+
+<blockquote>
+
+<pre>Album
+Artist
+   Group
+   Individual Artist
+Track</pre>
+
+</blockquote>
+
+
+<p>The indentation indicates that Group and Individual Artist are subtypes
+(or subclasses) of Artist.</p>
+
+
+<p>In addition, we have defined the following association
+types:</p>
+
+
+<blockquote>
+
+<pre>Album created by
+Belongs to album
+Is a Member of</pre>
+
+</blockquote>
+
+
+<h3>
+<a name="onto-indexes">3.1. Type Index Pages</a>
+</h3>
+
+
+
+<p>When you open an existing or newly created topic map, you are
+taken to the Topic Type Index Page, see <a href="#tt1">figure 6</a>. Here
+you&rsquo;ll see menu buttons for each kind of typing topic: topic
+types, occurrence types, association types, role types, and name types.
+The <strong>Ontology</strong> tab is available on every
+page in Ontopoly. Clicking on it will always bring you to the Topic Type
+Index Page. From there you can quickly access the corresponding Type
+Index Pages for other kinds of typing topics, which are typically used
+less often.</p>
+
+
+<p>All of the Type Index Pages are more-or-less the same. Each one
+presents a tree of existing types and a field for creating a new type.
+The types are displayed as a type hierarchy and includes buttons for
+expanding and collapsing the tree structure.</p>
+
+
+<p>Clicking on any of the typing topics (or creating a new one) takes
+you to the appropriate Configuration Page, as described below.</p>
+
+
+<p align="center">
+<a name="tt1">
+
+<img align="center" src="images/doc_onto_topic_types_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 6. Topic Type Index Page</b>
+</p>
+
+
+<p>Creating an ontology is an iterative process. Through
+Ontopoly&rsquo;s interface, you can navigate easily between the Type Index
+Pages and the Type Configuration Pages. In the following we describe
+each kind of Type Configuration Page in turn, but in your work you will
+find yourself moving back and forth throughout the process.</p>
+
+
+
+<h3>
+<a name="config-pages">3.2. Type Configuration Pages</a>
+</h3>
+
+
+<p>There are five kinds of types in Topic Maps: topic types,
+occurrence types, association types, role types, and name types. Each
+of these has its own kind of Type Configuration Page, which is
+accessed via the links at the top on the Type Index Pages. Each Type
+Configuration Page is unique, but some fields are common to all of
+them (see <a href="#tt-config-1">figure 7</a>):</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Name</strong>: Editable name of the typing
+topic.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Subject identifier</strong>: The (Published) Subject
+Identifier of the typing topic. Its value must be a URI. The
+<img align="center" src="images/expand_all.gif" title="Add field"> icon following this field indicates that you can create
+more than one. A subject identifier is not required, but is good
+practice. For more information on using PSIs, please see the <a href="http://www.oasis-open.org/committees/download.php/3050/pubsubj-pt1-1.02-cs.pdf">OASIS
+Recommendations</a>.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Description</strong>: Field for defining and
+documenting the topic type. We recommend that you use this field
+extensively to capture your intentions regarding the role of this type
+in your ontology.</p>
+
+</li>
+</ul>
+
+
+<p>The following two fields appear on the Advanced view panel for
+all types:</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Read-only</strong>: You may create typing topics that
+can only be read. The instance author will be able to choose such a
+topic type and read what is in it, but no instances may be
+created.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Hidden</strong>: In some cases topic types should only
+be seen by the ontology designer, and that&rsquo;s the perfect use of
+this choice as the topic will not be available in the instance
+editor.</p>
+
+</li>
+</ul>
+
+
+<p>The following sections provide more detail on each kind of Type
+Configuration Page.</p>
+
+
+
+<h3>
+<a name="create-tt">3.3. Configuring topic types</a>
+</h3>
+
+
+<p>The Topic Type Index is shown in <a href="#tt1">figure 6</a>. From here
+you can enter a name for a new topic type in the field and then click
+<strong>Create</strong>, or you can choose an existing topic type
+to view or edit. Our example already contains an ontology which has been
+partially populated, so we will go straight to the Topic Type
+Configuration Page for a pre-existing type,
+<em>Artist</em>.</p>
+
+
+<h4>
+<a name="tt-config-page">3.3.1. Topic Type Configuration Page</a>
+</h4>
+
+
+<p>Configuration pages control what the instance authors will see as
+they create topics of a given type. Let&rsquo;s look at the Topic Type
+Configuration Page in <a href="#tt-config-1">figure 7</a>. </p>
+
+
+<p>The main portion of the page is divided into three parts: the
+top part lists the core properties of the typing topic (its name,
+subject identifier and description fields plus abstract, superclass
+and subclass fields which are specific to topic types); the lower part
+of the page lists those properties, or &ldquo;fields&rdquo; (i.e.,
+names, identifiers, occurrences, and associations), that will apply to
+instances of the type; the right part contains operations, that can be
+performed on the topic type, and links to other relevant pages.</p>
+
+
+<p>The properties that are common to all typing topics and thus
+occur on all Configuration Pages were described above in <a href="#config-pages">section
+        3.2</a>. This applies to <strong>Name</strong>,
+<strong>Subject identifier</strong>,
+<strong>Description</strong>, <strong>Read-only</strong>, and
+<strong>Hidden</strong>. The first three fields are shown in the
+Default view panel and the last two on the Advanced view panel. The
+following additional properties are specific to topic types:</p>
+
+
+
+<h4>
+<a name="tt-config-standard-default">3.3.2. Properties of the typing topic (Default view panel)</a>
+</h4>
+
+
+
+<p align="center">
+<a name="tt-config-1">
+
+<img align="center" src="images/doc_topic_types_config.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 7. Topic Type Configuration Page - default properties</b>
+</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Abstract</strong>: Check this box if you
+want to use this typing topic as a model for other topics, but don't
+want a user to create any instances of it directly. Typically, an
+abstract topic will be a supertype in a hierarchy of topics. In our
+example, we have a two-tier hierarchy where <em>Artist</em> is
+the supertype and <em>Individual Artist</em> and
+<em>Group</em> are subtypes. We will not want authors to
+create instances of <em>Artist</em>, only of its subtypes.
+However, having the <em>Artist</em> supertype is useful
+because, once we define it, its subtypes will inherit all of its fields.
+If one subtype requires fields not needed by the other subtypes, those
+fields can be added at subtype level.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Superclass</strong>: A drop down list of topics from
+which to choose a supertype (i.e., a parent in the type hierarchy) for
+the current topic. (In our example there is no supertype, because
+<em>Artist</em> is at the top of the hierarchy and thus has no
+parent.)</p>
+
+</li>
+<li>
+
+<p>
+<strong>Subclass</strong>: A list of topics of which
+this topic is the supertype (i.e., parent in the type hierarchy). In our
+example, although <em>Artist</em> has no supertype, it does
+have two subtypes, each of which is highlighted as a link that can take
+you to the corresponding Type Configuration Page. After the last
+subtype, there is a <img align="center" src="images/create.gif" title="Create"> icon that can be used to create another
+topic type which will automatically become a subtype of the current
+topic type.</p>
+
+
+<p>Note that the type hierarchy can be constructed from two
+directions: upwards (by assigning the supertype of each topic type), or
+downwards (by specifying its subtypes). You can also use a combination
+of the two approaches. This hierarchy can be made visible on the Topic
+Type Index Page by clicking on <strong>Expand all nodes</strong>
+(see <a href="#tt1">figure 6</a>).</p>
+
+</li>
+</ul>
+
+
+
+<h4>
+<a name="tt-config-standard-advanced">3.3.3. Properties of the typing topic (Advanced view panel)</a>
+</h4>
+
+
+
+<p align="center">
+<a name="tt-config-2">
+
+<img align="center" src="images/doc_topic_types_config_advanced.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 8. Topic Type Configuration Page - advanced properties</b>
+</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Large instance set</strong>: Some topic types have
+such a large set of instances that you do not want the user to be able
+to display the entire list, because this would take too long to
+render, and the pages would be too big. Checking this box makes
+Ontopoly turn off the listing feature, and would require the user to
+search for instance topics instead.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Hierarchical associations</strong>: Here you can
+select a number of association types that together form a hierarchy of
+the instances of this topic type. The only association types which can
+be selected here are those which on the Association Type Configuration
+Page (see <a href="#at-config-page">section
+        3.5.1</a>) are defined as being
+hierarchical. The effect of this setting is to get topics of this type
+presented in a tree view on the Instance Index Page (see <a href="#inst-index">section
+        4.1.1</a>) and in the Topic Selection Dialog (see <a href="#topic-select-dialog">section
+        4.1.4</a>).</p>
+
+</li>
+<li>
+
+<p>
+<strong>Hierarchy definition query</strong>: Sometimes you
+will want to define your own hierarchy for the instances of a topic
+type without using the default hierarchy pattern. For those situations
+you can specify a tolog query that retrieves the preferred
+hierarchy. The query should return two columns, which contains all the
+parent/child combinations in the hierarchy/tree. The first column must
+contain the parents and the second column must contain the
+children. Topics with no parents and no children must return null in
+the parent column and itself in the child column. The query should
+also sort first by the parent column and then by the child column. The
+query can take one parameter, <tt class="parameter">%topicType%</tt>,
+which is the topic type itself. There are no restrictions on the
+column names. <span class="remark">[<b>Remark: </b>This is not yet supported.]</span>
+</p>
+
+</li>
+</ul>
+
+
+
+<h4>
+<a name="tt-config-fields-editor">3.3.4. Assigning new fields</a>
+</h4>
+
+
+
+<p align="center">
+<a name="fig-tt-config-fields-editor">
+
+<img align="center" src="images/doc_topic_types_fields_editor.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 9. Topic Type Configuration Page - default properties</b>
+</p>
+
+
+<p>In the lower part of the Topic Type Configuration Page (in the
+default view) you can define and add fields to the topic for use in
+the Instance Editing Pages. The fields shown here are the fields that
+are already assigned to the topic type. The
+<strong>Names</strong>, <strong>Occurrences</strong>,
+<strong>Associations</strong>, and <strong>Identities</strong>
+links at the top will allow you to assign new fields and the <img align="center" src="images/create.gif" title="Create">
+icon will let you create a new field by creating a new ontology
+type. New fields will be placed at the bottom of the fields
+list.</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Names</strong>: Clicking this label will display a
+list of available name types on the right side. From this list you can
+assign a new field for the given name type by clicking the
+<img align="center" src="images/assign-field.gif" title="Assign field"> icon. Only name types not already assigned to this
+topic type will be shown in the list. By default, there is just one
+name type: <em>Name</em>, which is for general-purpose,
+&ldquo;untyped&rdquo; names. In our sample topic map the
+<em>Name</em> name is already assigned, but we get another
+name <em>Nickname</em> that we can assign from the
+list.</p>
+
+
+<p>You can create new name types by clicking the <img align="center" src="images/create.gif" title="Create">
+icon. This will also assign a new name field and then take you to the
+Name Type Configuration Page, see <a href="#name-types">section
+        3.7</a>.</p>
+
+
+<p align="center">
+<a name="fig-tt-config-fields-editor-names">
+<img align="center" src="images/doc_topic_types_fields_editor_names.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 10. </b>
+</p>
+
+</li>
+<li>
+
+<p>
+<strong>Occurrences</strong>: Clicking this label will
+display a list of available occurrence types on the right side. From
+this list you can assign a new field for the given occurrence type by
+clicking the <img align="center" src="images/assign-field.gif" title="Assign field"> icon. Only occurrence types not already
+assigned to this topic type will be shown in the list. By default,
+there are three predefined occurrence types:
+<em>Creator</em>, <em>Description</em>, and
+<em>Version</em>. In our sample topic map only
+<em>Creator</em> and <em>Version</em> shows up
+in the list as <em>Description</em> has already been
+assigned.</p>
+
+
+<p>You can create new occurrence types by clicking the <img align="center" src="images/create.gif" title="Create">
+icon. This will also assign a new occurrence field and then take you
+to the Occurrence Type Configuration Page, see <a href="#occur-types">section
+        3.4</a>.</p>
+
+
+<p align="center">
+<a name="fig-tt-config-fields-editor-occurrences">
+<img align="center" src="images/doc_topic_types_fields_editor_occurrences.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 11. </b>
+</p>
+
+</li>
+<li>
+
+<p>
+<strong>Associations</strong>: Clicking this label will
+display a list of available association types on the right side. The
+list will also show information about what kind of topic can be found
+at the other end of the associations. From this list you can assign a
+new field for the given association type by clicking the
+<img align="center" src="images/assign-field.gif" title="Assign field"> icon. Only association types not already assigned to
+this topic type will be shown in the list. By default there are no
+predefined association types. In our sample topic map
+<em>Belongs to album</em>, <em>Created
+album</em>, <em>Has/had as Members</em> and
+<em>Is/was a Member of</em> shows up in the
+list. <em>Contains track</em> and <em>Album created
+by</em> has already been assigned.</p>
+
+
+<p>You can create new association types by clicking the <img align="center" src="images/create.gif" title="Create">
+icon. This will also assign a new role field and an association field
+and then take you to the Association Type Configuration Page, see <a href="#assoc-types">section
+        3.5</a>.</p>
+
+
+<p>In the case where a topic might play both roles, such as
+<em>parent</em> and <em>child</em> in a
+<em>parent-child</em> association, each role (field) should
+be selected in turn so that both are available fields on the Instance
+Editing Page.</p>
+
+
+<p align="center">
+<a name="fig-tt-config-fields-editor-associations">
+<img align="center" src="images/doc_topic_types_fields_editor_associations.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 12. </b>
+</p>
+
+</li>
+<li>
+
+<p>
+<strong>Identities</strong>: Clicking this label will
+display a list of available identity types on the right side. From
+this list you can assign a new field for the given identity type by
+clicking the <img align="center" src="images/assign-field.gif" title="Assign field"> icon. Only identity types not already
+assigned to this topic type will be shown in the list. By default,
+there are three predefined identity types: <em>Subject
+identifier</em>, <em>Subject locator</em>, and
+<em>Item identifier</em>. In our sample topic map only
+<em>Subject locator</em> and <em>Item
+identifier</em> shows up in the list as <em>Subject
+identifier</em> has already been assigned.</p>
+
+
+<p>You cannot create new identity types at this time.</p>
+
+
+<p>If topics of this type represent information resources (which
+would probably be the case for the topic type
+<em>Document</em>, for example), the type can be assigned a
+<em>Subject locator</em> field, otherwise the type can
+(and, in many cases, should) be assigned a <em>Subject
+identifier</em> field. For more information on the use of
+subject identifiers and subject locators, see the <a href="http://www.oasis-open.org/committees/download.php/3050/pubsubj-pt1-1.02-cs.pdf">OASIS
+Recommendations</a>.</p>
+
+
+
+
+<p align="center">
+<a name="fig-tt-config-fields-editor-identities">
+<img align="center" src="images/doc_topic_types_fields_editor_identities.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 13. </b>
+</p>
+
+</li>
+</ul>
+
+
+
+<h4>
+<a name="tt-config-existing-fields">3.3.5. Editing existing fields</a>
+</h4>
+
+
+<p>Now let&rsquo;s move on down to the existing fields. As you can
+see from the figure below the <em>Artist</em> topic type has
+five fields assigned. Each field is displayed in a separate table
+row.</p>
+
+
+<p align="center">
+<a name="fig-tt-config-fields-editor-existing">
+<img align="center" src="images/doc_topic_types_fields_editor_existing.png" width="50%">
+</a>
+</p>
+<p align="center">
+<b>Figure 14. </b>
+</p>
+
+
+<p>At the left you find the <img align="center" src="images/dnd.gif" title="Drag and drop to reorder"> icon. Use this icon to reorder
+the fields. Drag the icon on top of the field that you want the
+dragged field to be ordered after. Note that in order to make a field
+become the first field you have to first drag it on top of the first
+field and then afterwards drag the first field on top of the new
+second field.</p>
+
+
+<p>The <img align="center" src="images/goto-details.gif" title="Edit field details"> icon will let you edit the topic that
+represents the field. Clicking this icon will navigate to the instance
+page of the field. This page will reveal more detailed information
+about the field.</p>
+
+
+<p>Next is the field label. The label is a link that lets you
+navigate to the name type, occurrence type, association type or
+identity type topics declared by the field.</p>
+
+
+<p>To the right of the field label is the value type of the
+field. This will tell you what kind of values can be assigned to this
+field. In our example the <em>Name</em> is a name string,
+the <em>Subject identifier</em> is a URI, and the
+<em>Description</em> is a string. The association fields
+shows the kind of topics that can be associated through the field. The
+<em>Contains track</em> can contain
+<em>Track</em>s and the <em>Album created
+by</em> can contain <em>Artist</em>s. If the value
+type is <em>Many</em> then multiple topic types can be
+associated through that field. Hold the mouse over the
+<em>Many</em> label to see which topic types that
+is.</p>
+
+
+<p>The drop-down list shows the cardinality choices for the number
+of times the field can or must be used in the Instance Editing
+Page. There are four possible choices: <em>Exactly
+one</em>, <em>One or more</em>, <em>Zero or
+more</em>, and <em>Zero or one</em>.</p>
+
+
+<p>Each line ends with the <img align="center" src="images/remove.gif" title="Remove field"> icon, which is used to
+remove fields, i.e. unassign them. Removing a field will make it once
+more available as a option to reassign. If the icon is shown
+instead of the remove icon then it means that the field has been
+assigned to a supertype. Clicking the icon will navigate to the
+supertype that declares the field. The field can then be removed there
+instead.</p>
+
+
+<p>We now know how to add fields to a topic type. However, most of
+these fields have to be defined by the ontology designer through the use
+of the other Configuration Pages, so let&rsquo;s move on.</p>
+
+
+
+
+<h3>
+<a name="occur-types">3.4. Configuring occurrence types</a>
+</h3>
+
+
+<p>Occurrences can refer to resources external to the topic map, such
+as a web page, or they can be internal to the topic map, in which case
+they can be thought of as attributes (or properties) of the subject that
+the topic represents. You can create new occurrence types or choose one
+for edit from the Occurrence Type Index, see <a href="#ot1">figure 15</a>,
+which will take you to the Occurrence Type Configuration Page, see <a href="#occur-config-page-1">figure 16</a>.</p>
+
+
+<p align="center">
+<a name="ot1">
+
+<img align="center" src="images/doc_onto_occur_types.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 15. Occurrence Type Index Page</b>
+</p>
+
+
+<h4>
+<a name="ot-config-page">3.4.1. Occurrence Type Configuration Page</a>
+</h4>
+
+
+
+<p>The Occurrence Type Configuration Page for
+<em>Description</em> looks as follows:</p>
+
+
+<p align="center">
+<a name="occur-config-page-1">
+
+<img align="center" src="images/doc_occur_config_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 16. Occurrence Type Configuration Page - default properties</b>
+</p>
+
+
+<p>The core properties of the occurrence type topic are shown in
+the upper part of the page; the lower part contains the information
+about how fields of this type will be used when editing instances. The
+properties of the occurrence field is displayed in the grey
+<strong>Occurrence field</strong> field box. This box represents
+the field that is assigned to topic types. The actual topic types that
+is assigned the field (and indirectly the occurrence type) can be seen
+in the <strong>Used by</strong> field.</p>
+
+
+<p>Core properties common to all typing topics are described in
+<a href="#config-pages">section
+        3.2</a>.</p>
+
+
+
+<h4>
+<a name="occur-config-standard">3.4.2. Properties of the occurrence field (Default view panel)</a>
+</h4>
+
+
+
+<ul>
+<li>
+
+<p>
+<strong>Name</strong>: This is the name of the field. The
+value will be used to display the label of the field in the user
+interface. If no value is given the name of the occurrence type will
+be used.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Data type</strong>: This field describes the value
+type of the occurrence field. The value type can be any of the
+following:</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>String</strong>: a string value (the
+default).</p>
+
+
+</li>
+<li>
+
+<p>
+<strong>URI</strong>: a web address.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Date</strong>: a date value, matching the
+<tt class="symbol">YYYY-MM-DD</tt> pattern. Values can be selected using a
+calendar widget.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Datetime</strong>: a datetime value, matching the
+<tt class="symbol">YYYY-MM-DD hh:mm:ss</tt> pattern. Instance authors are
+given a calendar widget.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Number</strong>: a numeric value, either an integer
+(like <tt class="symbol">42</tt>) or a decimal (like <tt class="symbol">-4.2</tt>),
+with an optional negative sign in front.</p>
+
+</li>
+<li>
+
+<p>
+<strong>HTML</strong>: an HTML document or an HTML
+fragment. HTML content will be edited using a rich text editor.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Image</strong>: an image. Images can be uploaded via
+a file upload widget.</p>
+
+</li>
+</ul>
+
+</li>
+<li>
+
+<p>
+<strong>Used by</strong>: If the occurrence field has been
+assigned by any topic types, they are listed here, highlighted as
+links to their Configuration Pages.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Cardinality</strong>: The field specifies the
+cardinality of the field. The cardinality specifies the number of
+times the field can or must be used in the Instance Editing
+Page. There are four possible choices: <em>Exactly
+one</em>, <em>One or more</em>, <em>Zero or
+more</em>, and <em>Zero or one</em>. The default is
+<em>Zero or more</em>.</p>
+
+</li>
+</ul>
+
+
+<p>As the occurrence fields are ones in which the author will be
+providing content rather than picking topic names or role labels, it
+is necessary for the ontology designer to describe the dimensions that
+the field will be given on the Instance Editing Page. Two fields are
+provided for this purpose:</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Width</strong>: in characters (the default is
+50)</p>
+
+</li>
+<li>
+
+<p>
+<strong>Depth</strong>: in rows (the default is 1)</p>
+
+</li>
+</ul>
+
+
+
+<h4>
+<a name="occur-config-standard-advanced">3.4.3. Properties of the occurrence field (Advanced view panel)</a>
+</h4>
+
+
+
+<p align="center">
+<a name="occur-config-page-1-advanced">
+
+<img align="center" src="images/doc_occur_config_1_advanced.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 17. Occurrence Type Configuration Page - default properties</b>
+</p>
+
+
+<p>The occurrence type's Advanced view panel contains only the two
+standard <em>Read-only</em> and
+<em>Hidden</em> fields.</p>
+
+
+
+
+
+<h3>
+<a name="assoc-types">3.5. Configuring association types</a>
+</h3>
+
+
+
+<p>Associations describe a relationship that can or must exist
+between topics. You can create new association types or choose one for
+edit from the Association Type Index, see <a href="#at1">figure 18</a>, which
+will take you to the Association Type Configuration Page, see <a href="#assoc-config-page-1">figure 20</a>
+</p>
+
+
+<p align="center">
+<a name="at1">
+
+<img align="center" src="images/doc_onto_assoc_types_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 18. Association Type Index Page</b>
+</p>
+
+<p>Most associations are binary, that is, there are two role
+players, such as in parent-child or employer-employee
+relationships. You can also create associations with only one role
+player, or with three or more role players. We will focus on binary
+associations for the scope of this document.</p>
+
+
+<p>Binary associations are bi-directional. For example, an association
+named <em>composed-by</em> might sound like it is only
+uni-directional, i.e., Tosca is composed by Puccini. However, it also
+represents the relationship expressed as, for example, Puccini composed
+Tosca. Topic Maps accomplishes this bi-directionality, unambiguously, by
+assigning roles to the players. The relationship expressed in
+<a href="#assoc-bidirectional">figure 19</a> can be described as, &ldquo;In the
+composed-by relationship, the role of composer is played by Puccini and
+the role of work is played by Tosca.&rdquo;</p>
+
+
+
+
+<p align="center">
+<a name="assoc-bidirectional">
+
+<img align="center" src="images/doc_assoc_bidirectional.png">
+</a>
+</p>
+<p align="center">
+<b>Figure 19. Associations are bi-directional</b>
+</p>
+
+<p>Ontopoly&rsquo;s Association Type Configuration Page helps you to
+define the association type, roles their role types and their
+corresponding role player types, and the labels for role fields as
+seen from the perspective of each role player.</p>
+
+
+<h4>
+<a name="at-config-page">3.5.1. Association Type Configuration Page</a>
+</h4>
+
+
+
+<p>The Association Type Configuration Page for
+<em>Album created by</em> looks as follows:</p>
+
+
+<p align="center">
+<a name="assoc-config-page-1">
+
+<img align="center" src="images/doc_assoc_config_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 20. Association Type Configuration Page - default properties</b>
+</p>
+
+
+<p>The core properties of the association type are again shown in
+the upper part of the page; the lower part contains information
+relating to the role fields declared for the associaion type.</p>
+
+
+<p>Core properties common to all typing topics are described in
+<a href="#config-pages">section
+        3.2</a>.</p>
+
+
+
+<h4>
+<a name="assoc-config-standard">3.5.2. Properties of the typing topic (Default view panel)</a>
+</h4>
+
+
+
+<p>The Association Type Configuration Page contains one new
+checkbox in the top portion of the form,
+<strong>Symmetric</strong>, and an association field labelled
+<strong>Association field</strong>.</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Symmetric</strong>: A symmetric relation is one
+which is the same from both (or all) directions. The teacher/pupil
+relation is not symmetric, because the two participants are doing
+different things, whereas the is-neighbour relation is symmetric,
+since there&rsquo;s no difference between the two neighbours. In one
+sense, you can say the participants in a symmetric relationship are
+equal, which does not hold for created-by, killed-by, eaten-by, but
+does hold for works-with, is-a-friend-of, is-a-sibling-of,
+is-the-spouse-of, etc.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Association field</strong>: This is the relation
+between the association type and its association fields. Inside each
+association field, of which there is normally only one, there is
+another field called <strong>Roles</strong> that references the
+individual role fields. The role field box represents the field that
+is assigned to topic types. The actual topic types that is assigned
+the field (and indirectly the role type and association type) can be
+seen in the Used by field. In our example the association type has one
+association field which has two role fields.</p>
+
+</li>
+</ul>
+
+
+<h5>
+<a name="assoc-config-roles">3.5.2.1. Roles</a>
+</h5>
+
+
+
+<p>In general, there is one role box for each role player. In most
+cases, there will be two role players and therefore two role boxes. In
+symmetric associations (and unary associations), there is only one role
+box. It is also possible to have more than two role players (in what are
+known as &ldquo;n-ary associations&rdquo;); an example of a ternary
+association (one with three role players) would be a perpetrator, a
+victim, and a cause of death in a "killed / killed-by"
+association.</p>
+
+
+<p>Each role box has four fields:</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Name</strong>: You can define a string as the label
+that will be seen from the perspective of this role. For example, in a
+parent-child relationship, from the perspective of the parent role, the
+label might be "is the parent of", while from the perspective of the
+child role, the label would be "is the child of".</p>
+
+</li>
+<li>
+
+<p>
+<strong>Role type</strong>: The values available in the drop-down
+correlate to role type topics. You can create new role types directly
+from this page by using the <img align="center" src="images/create.gif" title="Create"> icon, which will take you to a new
+Role Type Configuration Page, see <a href="#role-types">section
+        3.6</a>.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Used by</strong>: Use the drop-down list to
+choose the appropriate topic type to play this role. Note that this is a
+repeatable field as multiple topic types may play the same role. New
+topic types can be created directly from this page using the <img align="center" src="images/create.gif" title="Create">
+icon. Once you choose <strong>Confirm</strong>, the drop-down box is
+replaced by a link to the chosen topic type. The <img align="center" src="images/expand_all.gif" title="Add field"> icon
+generates another drop-down box for additional choices.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Cardinality</strong>: The field specifies the
+cardinality of the field. The cardinality specifies the number of
+times the field can or must be used in the Instance Editing
+Page. There are four possible choices: <em>Exactly
+one</em>, <em>One or more</em>, <em>Zero or
+more</em>, and <em>Zero or one</em>. The default is
+<em>Zero or more</em>.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Interface control</strong>: Choose between providing
+instance authors with a drop-down list of valid topic types, or a search
+box, or a browse window, or an auto-complete input field.</p>
+
+</li>
+</ul>
+
+
+<p>Once you have created an association type, visit the Topic Type
+Configuration Pages of the topics that play roles to make sure the
+cardinality for the use of the association is correct. These should be
+reviewed from the perspective of each role player as they may differ,
+e.g., a student goes to one school (<em>Exactly one</em>), but
+a school may have many students (<em>One or more</em>).</p>
+
+
+
+
+<h4>
+<a name="assoc-config-standard-advanced">3.5.3. Properties of the typing topic (Advanced view panel)</a>
+</h4>
+
+
+
+<p align="center">
+<a name="assoc-config-page-1-advanced">
+
+<img align="center" src="images/doc_assoc_config_1_advanced.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 21. Association Type Configuration Page - advanced properties</b>
+</p>
+
+
+<p>
+This section allows you to configure an association type as being
+hierarchical. To do this, you must also set the role types correctly,
+so that Ontopoly knows which role is the parent role and which is the
+child role. The purpose of this to enable Ontopoly to show you the
+hierarchy formed by these associations. 
+</p>
+
+
+<p>
+An example might be the hierarchy formed by the geographical
+"contained in" association. The parent role here would be "container"
+and the child role would be "containee". Setting this up would allow
+you to browse your collection of geographic places as a tree on the
+Instance Index Page (see <a href="#inst-index">section
+        4.1.1</a>) and in the
+Topic Selection Dialog (see <a href="#topic-select-dialog">section
+        4.1.4</a>).
+Another example might be the broader/narrower relationship from
+taxonomies and thesauri, which you can find in the UK Government
+Category List, which comes with Ontopoly.
+</p>
+
+
+<p>Note that to register an association type as hierarchical one
+must add the <em>Hierarchical Relation Type</em> topic
+type to the association type. At the moment this can only be done in
+Administrator mode, and using the <strong>Add or remove topic
+type</strong> action item on the right side of the page.
+</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Superordinate for</strong>: Here you specify
+the role type that is the parent role.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Subordinate for</strong>: Here you specify the
+role type that is the child role.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Hierarchical for</strong>: Not all players should be
+part of a hierarchy, so here you can specify the topic types for which
+this associaion type should be considered hierarchical.</p>
+
+</li>
+</ul>
+
+
+
+
+
+<h3>
+<a name="role-types">3.6. Configuring role types</a>
+</h3>
+
+
+
+<p>Role types are used in associations to represent the semantics
+of why a topic participates in an association. For role types one
+either selects an existing topic type (e.g. "opera") or one creates a
+topic that represents a more specific role (e.g. "composer"),
+i.e. something that describes what it means for a topic to be part of
+the role. As you can see one might choose a role type that represents
+what the player does as opposed to what the person inherently
+is. Beethoven is a person, but he is also composer because he composed
+something. Topic types should be universally valid for the topic. Role
+types on the other hand can, and often should, be more context
+dependent. Role types should be as generic as possible so that they
+can easily be reused across association types. For example, whether
+you have a "composer/opera", "author/book", or "artist/painting"
+association, the roles the topics play in all three of these examples
+might be "creator" and "creation", even though the association types
+could be different.</p>
+
+
+<p>You can create new role types or choose one for edit from the
+Role Type Index page, see <a href="#rt1">figure 22</a>, which will take you
+to the Role Type Configuration Page, see <a href="#role-config-page-1">figure 23</a>. </p>
+
+
+<p align="center">
+<a name="rt1">
+
+<img align="center" src="images/doc_onto_role_types_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 22. Role Type Index Page</b>
+</p>
+
+
+<h4>
+<a name="rt-config-page">3.6.1. Role Type Configuration Page</a>
+</h4>
+
+
+
+<p>In our sample topic map there is only one topic,
+<em>Member</em>, that is specifically registered as a role
+type. All other role types used in the topic map are topic types. The
+Role Type Configuration Page for <em>Member</em> looks as
+follows:</p>
+
+
+<p align="center">
+<a name="role-config-page-1">
+
+<img align="center" src="images/doc_role_config_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 23. Role Type Configuration Page - default properties</b>
+</p>
+
+
+<p>Core properties common to all typing topics are described in
+<a href="#config-pages">section
+        3.2</a>.</p>
+
+
+
+<h4>
+<a name="role-config-standard">3.6.2. Properties of the typing topic (Default view panel)</a>
+</h4>
+
+
+<p>There are not really any new properties here. The first three
+are core properties common to all typing topics. The <strong>Role
+field</strong> represents the relation between the role type and the
+role fields in which it has been declared. The properties of the role
+field we have already seen in <a href="#assoc-config-roles">section
+        3.5.2.1</a>.</p>
+
+
+
+<h4>
+<a name="role-config-advanced">3.6.3. Properties of the typing topic (Advanced view panel)</a>
+</h4>
+
+
+
+<p align="center">
+<a name="role-config-page-1-advanced">
+
+<img align="center" src="images/doc_role_config_1_advanced.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 24. Role Type Configuration Page - advanced properties</b>
+</p>
+
+
+<p>The two new fields on this page are the inverse of the
+<strong>Superordinate role type</strong> and <strong>Subordinate
+role type</strong> fields we saw in <a href="#assoc-config-standard-advanced">section
+        3.5.3</a>.</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Superordinate role type for</strong>: Here you specify
+the association type for which this role type is the parent role.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Subordinate role type for</strong>: Here you specify the
+association type for which this role type is the child role.</p>
+
+</li>
+</ul>
+
+
+
+
+<h3>
+<a name="name-types">3.7. Configuring name types</a>
+</h3>
+
+
+<p>Name types are used to define the names of topics in various
+contexts. Frequently used name types include <strong>nickname</strong> and <strong>short</strong>, but one of the most popular uses is to
+provide the name of the topic in multiple languages. You can create new
+name types or choose one for edit from the Name Type Index, see <a href="#nt1">figure 25</a>, which will take you to the Name Type Configuration
+Page, see <a href="#name-config-page-1">figure 26</a>
+</p>
+
+
+<p align="center">
+<a name="nt1">
+
+<img align="center" src="images/doc_onto_name_types_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 25. Name Type Index Page</b>
+</p>
+
+
+<h4>
+<a name="nt-config-page">3.7.1. Name Type Configuration Page (Default view panel)</a>
+</h4>
+
+
+
+<p>The Name Type Configuration Page for
+<em>Nickname</em> looks as follows:</p>
+
+
+<p align="center">
+<a name="name-config-page-1">
+
+<img align="center" src="images/doc_name_config_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 26. Name Type Configuration Page - default properties</b>
+</p>
+
+<p>Core properties common to all typing topics are described in
+<a href="#config-pages">section
+        3.2</a>.</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Name</strong>: This is the name of the field. The
+value will be used to display the label of the field in the user
+interface. If no value is given the name of the name type will
+be used.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Used by</strong>: If the name field has been
+assigned by any topic types, they are listed here, highlighted as
+links to their Configuration Pages.</p>
+
+</li>
+<li>
+
+<p>
+<strong>Cardinality</strong>: The field specifies the
+cardinality of the field. The cardinality specifies the number of
+times the field can or must be used in the Instance Editing
+Page. There are four possible choices: <em>Exactly
+one</em>, <em>One or more</em>, <em>Zero or
+more</em>, and <em>Zero or one</em>. The default is
+<em>Zero or more</em>.</p>
+
+</li>
+</ul>
+
+
+
+<h4>
+<a name="nt-config-page-advanced">3.7.2. Name Type Configuration Page (Advanced view panel)</a>
+</h4>
+
+
+
+<p align="center">
+<a name="name-config-page-1-advanced">
+
+<img align="center" src="images/doc_name_config_1_advanced.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 27. Name Type Configuration Page - default properties</b>
+</p>
+
+
+<p>There are no new properties in the advanced view outside of the
+core commmon properties described in <a href="#config-pages">section
+        3.2</a>.</p>
+
+
+
+
+
+<h3>
+<a name="topic-map-config">3.8. Topic Map Description Page</a>
+</h3>
+
+
+
+<p>Once you are within a topic map, you can choose to enter
+descriptive information about it. Use the
+<strong>Description</strong> tab to access the Description Page (see
+<a href="#config">figure 28</a>).</p>
+
+
+<p>This page can be used to change the name of the topic map, but the
+file name will remain the same as assigned when creating it.</p>
+
+
+<p align="center">
+<a name="config">
+
+<img align="center" src="images/doc_config_page.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 28. Topic Map Description Page</b>
+</p>
+
+
+<p>There are four editable fields:</p>
+
+
+<ul>
+<li>
+
+<p>
+<strong>Name</strong>: the name of the topic map</p>
+
+</li>
+<li>
+
+<p>
+<strong>Description</strong>: a description of the topic map
+as a whole</p>
+
+</li>
+<li>
+
+<p>
+<strong>Creator</strong>: the person, group, or company
+creating the ontology or topic map</p>
+
+</li>
+<li>
+
+<p>
+<strong>Version</strong>: a user-designated version
+number</p>
+
+</li>
+</ul>
+
+
+
+
+
+
+<h4>
+<a name="del-tm">3.8.1. Deleting a topic map</a>
+</h4>
+
+
+
+<p>The <strong>Delete</strong> button on the Description Page
+removes the topic map from the list of Ontopoly Topic Maps and physically
+removes the file from the disk.</p>
+
+
+<dl>
+<dt class="note">Note</dt>
+<dd>
+
+<p>Ontopoly keeps track of your Ontopoly topic maps. Manually deleting an
+Ontopoly topic map from the file system (as opposed to using the
+<strong>Delete</strong> button on the Description Page) will
+result in the display of a <strong>Missing Topic Maps</strong>
+column on the Topic Map Index Page. Therefore, it is best practice only to
+delete Ontopoly topic maps through the <strong>Delete</strong> button
+on the <strong>Description</strong> tab.</p>
+
+</dd>
+</dl>
+
+
+<p>Clicking the <strong>Delete</strong> button will open up a
+confirmation window. Choose <strong>OK</strong> to delete the
+topic map. You will then be taken to the start page (see <a href="#appB">appendix
+        B</a>). Clicking the <strong>Cancel</strong> button
+will cancel the operation and close the confirmation window.</p>
+
+
+<p align="center">
+<a name="del-tm-confirm">
+
+<img align="center" src="images/doc_config_page_delete_confirm.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 29. Deletion confirmation window</b>
+</p>
+
+
+
+
+<h4>
+<a name="enabling-shortcuts">3.8.2. Enabling shortcuts</a>
+</h4>
+
+
+
+<p>The <strong>Enable shortcuts</strong> action item on
+right-hand side of the Description Page (<a href="#config">figure 28</a>)
+will enable some useful shortcuts in the user interface. The field
+labels in the editing pages will become links. The <img align="center" src="images/goto-details.gif" title="Edit field details"> icon
+will let you go directly to the topic that represents the
+field. Clicking the field label will navigate to the name type,
+occurrence type, association type or identity type topics declared by
+the field. You can later disable shortcuts by clicking the button
+again.</p>
+
+
+<p>Here is an example of what an editing page looks like with
+shortcuts enabled:</p>
+
+
+<p align="center">
+<a name="enable-shortcuts-topictype">
+
+<img align="center" src="images/doc_topic_types_config_shortcuts.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 30. Topic Type Configuration Page with shortcuts enabled</b>
+</p>
+
+
+
+
+<h4>
+<a name="ontology-annotation">3.8.3. Ontology annotation</a>
+</h4>
+
+
+
+<p>
+The <strong>Enable ontology annotation</strong> action item on
+right-hand side of the Description Page (<a href="#config">figure 28</a>)
+turns on ontology annotation, which is a very powerful feature, but
+one that can be a little confusing at first. The basic idea is that
+the normal Ontopoly (without this feature) allows you to say anything
+you want about instance topics, but for typing topics you are pretty
+much restricted to names, subject identifiers, and the description
+field. This may not sound like much of a problem, but there are a lot
+of useful things that can be done if you can annotate your ontology
+topics.
+</p>
+
+
+<p>
+Generally, ontology annotation enables you to build more dynamic
+applications, by moving logic out of your code and into the topic
+map. To take a trivial example, imagine building a search page for
+your topic map. On this page you'll need to display things like "found
+X people", "found Y documents", etc, and to do this you need to
+display the plural names of the topic types. You can of course do this
+with a big multi-way test (if current topic type is "person", display
+"people"). But the easiest way is to make a name type "Plural name"
+and to give each topic type such a name.
+</p>
+
+
+<p>
+With ontology annotation this is easy. Once you turn ontology
+annotation on, the topic types "Topic type", "Association type", etc
+show up in the list of topic types. This lets you give them fields in
+the same way as normal topic types, and you can edit them in the
+normal way.
+</p>
+
+
+<p>This what the Topic Types Index Page looks like with annotation
+enabled. The ontology types are displayed in italic.</p>
+
+
+<p align="center">
+<a name="enable-annotation-topictype">
+
+<img align="center" src="images/doc_onto_topic_types_annotation.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 31. Topic Type Index Page with annotation enabled</b>
+</p>
+
+
+
+
+
+<h4>
+<a name="administration-mode">3.8.4. Administration mode</a>
+</h4>
+
+
+
+<p>
+The <strong>Enable administration mode</strong> action item on
+right-hand side of the Description Page (<a href="#config">figure 28</a>)
+turns on admistration mode, which is an extremely powerful feature as
+it gives you access to everything in the topic map, including the
+Ontopoly model itself.
+</p>
+
+
+<dl>
+<dt class="warning">Warning</dt>
+<dd>
+<p>Be careful when using this feature.</p>
+</dd>
+</dl>
+
+
+<p>As you can see there is a lot of new topic types visible on the
+Topic Types Index Page when administration mode is enabled:</p>
+
+
+<p align="center">
+<a name="enable-administration-topictype">
+
+<img align="center" src="images/doc_onto_topic_types_administration.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 32. Topic Type Index Page with administration mode enabled</b>
+</p>
+
+
+
+
+
+
+<h3>
+<a name="export">3.9. Exporting a topic map</a>
+</h3>
+
+
+
+<p>The Export Page (see <a href="#export-page">figure 33</a>) is accessed
+via the <strong>Admin</strong> tab. The desired export format
+(LTM, XTM 1.0, XTM 2.0, or RDF) is chosen via radio buttons.</p>
+
+
+<p align="center">
+<a name="export-page">
+
+<img align="center" src="images/doc_export_page.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 33. Export Page</b>
+</p>
+
+
+<p>You can choose to export the topic map with or without the system
+topics (those topics that make up the constraints or rules for using the
+ontology). In general, other downstream applications such as browsers
+will neither understand nor need the schema topics. The export is done
+to a browser window and can be saved from there.</p>
+
+
+
+<h3>
+<a name="N10918">3.10. Saving a topic map</a>
+</h3>
+
+
+
+<p>Any modifications made in an editing page will be sent to the
+server immediately and written into the topic map. The application is
+AJAX based, so modification are sent to the server as soon as they are
+made. If an error occurs, the user may be redirected to a page showing
+the errors instead of the intended destination.</p>
+
+
+<p>The back button will work in the way it generally does on the
+web, and will return to the previous page or to the previous state of
+the current page. Note that previous page may be slightly out of date
+if any changes were made to the topic since it was displayed the first
+time.</p>
+
+
+<dl>
+<dt class="warning">Important</dt>
+<dd>
+
+<p>Changes to your topic map are <em>not</em>
+automatically persisted to disk on the server unless you are using
+Ontopoly with the relational database backend of the Ontopia Knowledge
+Suite. With the free version of Ontopoly, which operates in-memory, it is
+necessary to press the <strong>Save</strong> button in order to
+save the topic map to disk: pressing the
+<strong>Confirm</strong> does <em>not</em> save to
+disk; it merely submits the current page and updates the topic map
+<em>in memory</em>.</p>
+
+</dd>
+</dl>
+
+
+
+
+<h2>
+<a name="IE">4. Using Instance Editing Pages</a>
+</h2>
+
+
+
+<p>The Instance Editing Pages are used to create instance topics
+conforming to the ontology and constraints developed using the Type
+Configuration Pages.</p>
+
+
+<h3>
+<a name="inst-indexes">4.1. Topic Type Index Page</a>
+</h3>
+
+
+
+<p>When you choose the <strong>Instances</strong> tab, you will
+land at the instance index of all topic types. If your ontology includes
+a type hierarchy, you will be able to show the complete tree by clicking
+on <strong>Expand all nodes</strong>, with the result as shown in
+<a href="#inst-topic-types-index">figure 34</a>. Topic types that are allowed
+to have instances are shown as links.</p>
+
+
+<p align="center">
+<a name="inst-topic-types-index">
+
+<img align="center" src="images/doc_inst_topic_types_1.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 34. Topic Type Index Page</b>
+</p>
+
+
+<p>From this index, you can choose a topic type to see a list of
+instance topics of that type (see <a href="#inst-single-type-index">figure 35</a>).</p>
+
+
+<h4>
+<a name="inst-index">4.1.1. Instance Index Pages</a>
+</h4>
+
+
+
+<p align="center">
+<a name="inst-single-type-index">
+
+<img align="center" src="images/doc_inst_topic_types_2.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 35. Instance Index Page</b>
+</p>
+
+
+<p>Choose an existing instance topic from the Instance Index, or
+<strong>Create</strong> a new instance, to access the Instance
+Editing Page.</p>
+
+
+
+<h4>
+<a name="instance-page">4.1.2. Instance Editing Page</a>
+</h4>
+
+
+
+<p>The Instance Editing Page is used to edit individual instance
+topics, and is the most central page in Ontopoly, since most editing will
+happen here. The contents on the page are entirely determined by the
+ontology and schema for the topic type (see <a href="#tt-config-page">section
+        3.3.1</a> for more on the Topic Type Configuration
+Page). All the allowable fields for a topic type are available on the
+Instance Editing Page, along with the allowable values for those
+fields.</p>
+
+
+<p align="center">
+<a name="inst-topic">
+
+<img align="center" src="images/doc_inst_topic_types_3.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 36. Instance Editing Page</b>
+</p>
+
+
+<p>When editing a topic there may be validation errors. These
+usually occur when values are missing or when there are too many
+values for a given field. The error messages shows up right above the
+individual field. The topic map can be saved while there are
+validation errors.</p>
+
+
+<p align="center">
+<a name="instance-field-validation-error">
+
+<img align="center" src="images/doc_required_edits.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 37. Field with validation error</b>
+</p>
+
+
+
+<h4>
+<a name="N109AD">4.1.3. Changing a topic&rsquo;s type</a>
+</h4>
+
+
+
+<p>Frequently, it is easier to create a new instance from another
+instance, rather than going back to the Instance Index Page. However
+the next instance to be created might be of a different type than the
+current one. In such cases, the instance author can use the
+<strong>Change the topic type</strong> choice in the
+Action Items Panel immediately upon accessing the new Instance Editing
+Page, picking the new type from the drop-down box.</p>
+
+
+<p>There are other times when changing the topic type will be useful.
+For example, in an employee database, employees might be typed by their
+status, such as probationary, tenured, retired, etc. As their status
+changes, their topic type might change as well.</p>
+
+
+<p>Changing a topic&rsquo;s type can lead to a number of knock-on
+effects that require action. For illustration purposes in <a href="#change-type">figure 38</a>, the <em>Individual Artist</em>
+type topic <em>Sir Paul McCartney</em> has been changed to
+an <em>Album</em> type topic. Now a new set of fields will
+be displayed for the topic. Some of the fields are the same:
+<em>Name</em>, <em>Subject identifier</em> and
+<em>Description</em>, while <em>Contains
+track</em> and <em>Album created by</em> replaces
+<em>Nickname</em>, <em>Is/was a Member of</em>
+and <em>Created album</em>. The user interface now
+complains that information is missing in the <em>Contains
+track</em>. Note that the information from the old fields are
+still stored on the topic, but the fields are not presented in the
+user interface. Changing the topic type back to <em>Individual
+artist</em> will again show the original fields with the
+original values.</p>
+
+
+<p align="center">
+<a name="change-type">
+
+<img align="center" src="images/doc_change_type.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 38. Messages when changing a topic&rsquo;s type</b>
+</p>
+
+
+
+<h4>
+<a name="topic-select-dialog">4.1.4. Assigning topics to associations</a>
+</h4>
+
+
+
+<p>You can create new topics by clicking the <img align="center" src="images/create.gif" title="Create"> icon. If
+there are multiple topic types that can participate in the
+association, then you will be presented with a context menu, like the
+one below, where you can select the topic type of the new
+instance.</p>
+
+
+<p align="center">
+<a name="association-create-player-context-menu">
+
+<img align="center" src="images/association-create-player-context-menu.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 39. Create player context menu</b>
+</p>
+
+
+<p>A new instance will then be created and associated to the
+current topic. A popup window will then open and let you edit some
+basic information about the new instance. Close the popup by clicking
+the <strong>OK</strong> button or the <strong>X</strong> in
+the top right corner.</p>
+
+
+<p align="center">
+<a name="association-create-player">
+
+<img align="center" src="images/association-create-player.png" width="75%">
+</a>
+</p>
+<p align="center">
+<b>Figure 40. Create player popup window</b>
+</p>
+
+
+<p>
+By default topics at the other end of associations are selected using
+drop-down boxes, but this can be changed in the configuration of the
+association type in the <strong>Interface control</strong>
+field. The alternative for interface control are: <strong>Drop-down
+list</strong>, <strong>Search dialog</strong>, <strong>Browse
+dialog</strong>, and <strong>Auto-complete</strong>.</p>
+
+
+<p>This is what the default drop-down list looks like. You may have
+to press <img align="center" src="images/add.gif" title="Add new value"> before it shows up.</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/drop-down-list.png">
+</p>
+<p align="center">
+<b>Figure 41. A drop-down list</b>
+</p>
+
+
+<p>The interface controls <strong>Search dialog</strong> and
+<strong>Browse dialog</strong> use a popup dialog where the user
+can either search for the topic to associate with, or browse for it.</p>
+
+
+<p>If we change the example topic map so that to select an album
+created by an artist you have to use the dialog, the instance editing
+page from <a href="#inst-topic">figure 36</a> would have a little search
+button instead of the drop-down box.</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/search-button.png">
+</p>
+<p align="center">
+<b>Figure 42. The search button</b>
+</p>
+
+
+<p> Pressing the <img align="center" src="images/search.gif" title="Find topic"> icon would open a new window as shown in
+the figure below.
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/search-dialog.png">
+</p>
+<p align="center">
+<b>Figure 43. The search dialog</b>
+</p>
+
+
+<p>
+Here you can do a search, and create associations to the topics you
+find, or you can click "Browse" and see a list of the topics you could
+create an association to. Below is shown the screen you get in this
+case by clicking "Browse". This is also the dialog you would get if
+the interface control had been <strong>Browse dialog</strong>.
+</p>
+
+
+<p>
+Note that it's possible to control what shows on the browse screen by
+configuring the topic type. It's possible to make the topics be shown
+in a hierarchy, or to make it impossible to display the list of topics
+(because the list is too big). See <a href="#tt-config-standard-advanced">section
+        3.3.3</a> for more information.
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/browse-dialog.png">
+</p>
+<p align="center">
+<b>Figure 44. The browse dialog</b>
+</p>
+
+
+<p>
+If the interface control is <strong>Auto-complete</strong> you
+will get an input text field. You may have to press <img align="center" src="images/add.gif" title="Add new value">
+before the input field shows up. Below you can see an example of what
+this interface control looks like. Once you start typing a list of
+matching topics show up in a list below the input field. Note that the
+auto-complete field runs a full-text query to retrieve the topics to
+display in the list. (Note: the syntax of a full-text query currently
+depends on the full-text engine used. This is likely to change in the
+future.)
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/auto-complete.png">
+</p>
+<p align="center">
+<b>Figure 45. The auto-complete input box</b>
+</p>
+
+
+
+
+<h4>
+<a name="editing-occurrences">4.1.5. Editing name, occurrence, and identity fields</a>
+</h4>
+
+
+
+<p>Names are always entered in a standard text input field.</p>
+
+
+<dl>
+<dt class="warning">Important</dt>
+<dd>
+<p>The new field value is sent to the server as soon as
+the field looses its focus, so make sure, that when you're done
+editing, to click outside of the input box or press the Tab key to
+move to another field. This rule applies to all text input boxes in
+the application.</p>
+</dd>
+</dl>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/name-field.png">
+</p>
+<p align="center">
+<b>Figure 46. Name field</b>
+</p>
+
+
+<p>As mentioned in <a href="#occur-config-standard">section
+        3.4.2</a>, an
+occurrence field have a data type. The default is
+<em>String</em>. Occurrences with the data types
+<em>String</em> and <em>Number</em> are
+displayed as a standard input text field. Here is an example:
+</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/occurrence-datatype-default.png">
+</p>
+<p align="center">
+<b>Figure 47. String and numeric occurrences</b>
+</p>
+
+
+<p>Identity fields and occurrences with the data type
+<em>URI</em> are displayed as an input text field, but
+with an <img align="center" src="images/goto.gif" title="Goto topic type that assigns field"> icon next to it. Clicking the icon will open the URI in
+the web browser.</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/occurrence-datatype-uri.png">
+</p>
+<p align="center">
+<b>Figure 48. URI occurrences (and identity fields)</b>
+</p>
+
+
+<p>Occurrences with the data types <em>Date</em> and
+<em>Datetime</em> are displayed as a standard input text
+field, but with a date picker widget attached.</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/occurrence-datatype-date.png">
+</p>
+<p align="center">
+<b>Figure 49. Date and datetime occurrences</b>
+</p>
+
+
+<p>HTML occurrences can be edited using an embedded HTML editor
+(currently <a href="http://tinymce.moxiecode.com/">TinyMCE</a>). This editor
+provides rich formatting capabilities, but allows you to edit the
+actual HTML document.</p>
+
+
+<dl>
+<dt class="warning">Warning</dt>
+<dd>
+<p>Note that this component will not automatically save
+your edits. Instead click the <img align="center" src="images/save-icon.png" title="Save"> to have your changes saved
+to the server.</p>
+</dd>
+</dl>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/occurrence-datatype-html.png">
+</p>
+<p align="center">
+<b>Figure 50. HTML occurrences</b>
+</p>
+
+
+<p>Image occurrence fields lets you upload images and display them
+in the instance editor. Click the <strong>Choose...</strong>
+button to get a file chooser widget that lets you select an image file
+from the file system. Once the file has been selected, click the
+<strong>Upload</strong> to uploaded the image and create an
+occurrence for it.</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/occurrence-datatype-image-upload.png">
+</p>
+<p align="center">
+<b>Figure 51. Uploading an image</b>
+</p>
+
+
+<p>Here is an example of what the user interface looks like after
+an image has been uploaded:</p>
+
+
+<p align="center">
+  
+  
+<img align="center" src="images/occurrence-datatype-image.png">
+</p>
+<p align="center">
+<b>Figure 52. Image occurrences</b>
+</p>
+
+
+
+
+
+
+
+
+
+<h2>
+<a name="N10B21">5. Using Ontopoly with multiple users</a>
+</h2>
+
+
+
+<p>Although Ontopoly ships in a single-user configuration, there is
+support for multiple users under the hood. This support consists
+of:</p>
+
+
+<ul>
+<li>
+
+<p>Support for storing the topic map in a relational database using
+the RDBMS backend. This enables Ontopoly to scale to much larger topic
+maps, avoids having to explicitly save the topic map, and ensures that
+multiple users can work against the same topic map without causing data
+to become corrupt. To make use of this support the OKS Enterprise
+Edition is required.</p>
+
+</li>
+<li>
+
+<p>Support for concurrent editing. This support is always enabled in
+all Ontopoly versions, and ensures through locking that two different
+users cannot edit the same topic at the same time.</p>
+
+</li>
+</ul>
+
+
+
+
+
+<h2>
+<a name="appA">A. User interface conventions</a>
+</h2>
+
+
+<p>This section describes general aspects of Ontopoly&rsquo;s user
+interface.</p>
+
+
+<h3>
+<a name="N10B4C">1. Ontopoly page layout</a>
+</h3>
+
+
+<p>Most Ontopoly pages have a similar layout. The major sections are
+identified in <a href="#genlayout">figure 53</a> and described below.</p>
+
+
+<p align="center">
+<a name="genlayout">
+
+<img align="center" src="images/general_layout-annotated.png" width="100%">
+</a>
+</p>
+<p align="center">
+<b>Figure 53. Page layout</b>
+</p>
+
+
+<h3>
+<a name="N10B67">1.1. Application navigation</a>
+</h3>
+
+
+
+<p>In the upper right hand corner of all Ontopoly pages and on the
+Ontopia Home Page, there is an application navigation bar.</p>
+
+
+<p align="center">
+<b>Table 1. Application navigation bar</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Item</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Home</strong></td><td class="dbTableEntry">Returns you to the Ontopia Home Page.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Manage</strong></td><td class="dbTableEntry">Accesses the Omnigator Manage page.
+<dl>
+<dt class="note">Note</dt>
+<dd>
+
+<p>This item will eventually take the user to an common Manage Page,
+that can be used for Ontopoly or Omnigator.</p>
+
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Feedback</strong></td><td class="dbTableEntry">As you use Ontopoly, we hope that you will use this feedback form to
+send us comments as they occur to you. However, please do not use the
+<strong>feedback</strong> mechanism to report bugs. Ontopia provides a
+direct link to Ontobugs.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Support</strong></td><td class="dbTableEntry">If you need an answer to a question, please use this form or send
+email to <a href="mailto:support@ontopia.net">support@ontopia.net</a>.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>About</strong></td><td class="dbTableEntry">Information about the version of Ontopoly currently in use.</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N10BE5">1.2. Tabbed navigation</a>
+</h3>
+
+
+<p>Once inside a topic map, there are four major tabs.</p>
+
+
+<p align="center">
+<b>Table 1. Tabbed items</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Item</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Description</strong></td><td class="dbTableEntry">Page where descriptive information about the current topic map as
+a whole can be captured, see <a href="#topic-map-config">section
+        3.8</a>.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Admin</strong></td><td class="dbTableEntry">Use this page to export the topic map into a preferred
+serialization syntax, see
+<a href="#export">section
+        3.9</a>.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Ontology</strong></td><td class="dbTableEntry">Set of pages for configuring the ontology, i.e., defining the
+topic, occurrence, association, role, and name type topics. When in
+Ontology area, a secondary set of buttons occur that provide discrete
+access to the preferred page, e.g., topic type, association type, etc.,
+see <a href="#OE">section
+        3</a>.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Instances</strong></td><td class="dbTableEntry">Set of pages for creating and editing instances of topic types
+defined in the Ontology, see <a href="#IE">section
+        4</a>.</td>
+</tr>
+</table>
+
+<p>The items in the tabs are also repeated at the bottom of each page
+upon which the tabs occur.</p>
+
+
+
+<h3>
+<a name="N10C46">1.3. Editing box</a>
+</h3>
+
+
+
+<p>There are three items in the Editing Box:</p>
+
+
+<p align="center">
+<b>Table 1. Editing box items</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Item</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Open...</strong></td><td class="dbTableEntry">Takes you back to the Topic Map Index Page. If you do not save
+before you use this button, all edits since your previous save will
+<strong>not</strong> be written to disk.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><strong>Save</strong></td><td class="dbTableEntry">Saves the current topic map to disk. <dl>
+<dt class="note">Note</dt>
+<dd>
+<p>Only available
+for in-memory topic maps.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Search box and <strong>Find</strong> button</td><td class="dbTableEntry">Use to find the uses of a term within the open topic map.
+</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N10C99">1.4. Topic title</a>
+</h3>
+
+
+
+<p>The name of the current topic type or topic instance appears in
+red.</p>
+
+
+
+<h3>
+<a name="N10CA2">1.5. Action items panel</a>
+</h3>
+
+
+
+<p>The item choices available in grey boxes on the right hand side of
+the screen are dependent on the type of page you are viewing. The
+following table includes all possible items as a reference.</p>
+
+
+<p align="center">
+<b>Table 1. Action items</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Item</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Topic types</tt></td><td class="dbTableEntry">Shows the topic types of this topic. If there are multiple
+types you can switch between them by clicking the link for each topic
+type.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Views</tt></td><td class="dbTableEntry">Shows the field views declared for fields assigned to this
+topic type. If there are multiple views you can switch between them by
+clicking the link for each view.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>View instances of this type</tt></td><td class="dbTableEntry">Moves you from a Type Configuration Page to an Instance Index
+Page. Provides the index of instances of the current type.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>View instances of same type</tt></td><td class="dbTableEntry">Moves you from a Type Configuration Page to an Instance Index
+Page. Provides the index of instances of the topic type of the current
+type.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Edit the type of this instance</tt></td><td class="dbTableEntry">Moves you from an Instance Editing Page to a Type Configuration
+Page. Provides the Topic Type Configuration Page for the type of the
+current instance.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">
+
+<p>
+<tt>New instance</tt> field</p>
+
+</td><td class="dbTableEntry">
+
+<p>Available on the Topic, Association, Occurrence, Role,
+and Name Type Pages. Supply a name to create a new one of the same type.
+You will be taken to the appropriate Type Configuration Page, which will
+have the <strong>Name</strong> you fill in here.</p>
+
+<p>Also available on Instance Editing Pages. You will be taken to a
+new Instance Editing Page, which will have the <strong>Name</strong>
+you fill in here.</p>
+
+</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Create new [typing_topic] type</tt></td><td class="dbTableEntry">Lets you create a new topic of the same type as the current
+topic, or a full copy of the current topic. Provides a blank Type
+Configuration Page for the current kind of typing topic (i.e., topic,
+occurrence, association, role, or name). Similar to the previous, but
+is accessed from a Type Configuration Page.  No
+<strong>Name</strong> is filled in if this is not a copy.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Change the topic type</tt> drop-down
+list</td><td class="dbTableEntry">Available from Instance Editing Pages, it provides an easy way to
+change the type of the current topic. You will be notified of fields
+used on the current topic that are not available when you change type,
+so that you can make the necessary decisions and edits.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">
+
+<p>
+<tt>Delete this topic</tt>
+</p>
+</td><td class="dbTableEntry">Deletes the current topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">
+
+<p>
+<tt>Browse this topic in Omnigator</tt>
+</p>
+
+</td><td class="dbTableEntry">Opens a new browser window at the Topic Page for the current
+topic in the Omnigator. As you make changes to the current topic, you
+will be able to see the changes in the Omnigator window following a
+browser refresh. If you move away from the topic in Ontopoly, the Omnigator
+will remain on the original topic even after refreshing the
+browser.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">
+
+<p>
+<tt>View this topic in Vizigator</tt>
+</p>
+
+</td><td class="dbTableEntry">Opens a new browser window with the current topic as the focus
+topic in Vizigator.</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N10D5C">1.6. Topic fields</a>
+</h3>
+
+
+<p>The fields specific to the topic being edited are dynamic. How
+to assign new field and how to unassign them are covered in detail in
+sections <a href="#OE">section
+        3</a> and <a href="#IE">section
+        4</a>.</p>
+
+
+
+<h3>
+<a name="N10D6B">1.7. Ontology typing topics access</a>
+</h3>
+
+
+
+<p>Not shown in <a href="#genlayout">figure 53</a>, but available on all the
+Type Index Pages is a secondary navigation bar to facilitate navigation
+from one Type Index Page to another (see <a href="#ot1">figure 15</a> for an
+example).</p>
+
+
+<p align="center">
+<b>Table 1. Access to typing topics</b>
+</p>
+<table width="100%" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Item</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Topic Types</tt></td><td class="dbTableEntry">Access to the Topic Type Index.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Occurrence Types</tt></td><td class="dbTableEntry">Access to the Occurrence Type Index</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Association Types</tt></td><td class="dbTableEntry">Access to the Association Type Index</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt> Role Types</tt></td><td class="dbTableEntry">Access to the Role Type Index</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt>Name Types</tt></td><td class="dbTableEntry">Access to the Name Type Index</td>
+</tr>
+</table>
+
+
+
+
+<h3>
+<a name="N10DD1">2. Icons</a>
+</h3>
+
+
+
+<p>The icons described in the table below occur throughout all Ontopoly
+pages.</p>
+
+
+<p align="center">
+<b>Table 1. Icon conventions</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Icon</th><th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/expand.gif" title="Expand"></td><td class="dbTableEntry">Expand</td><td class="dbTableEntry">The boxed plus sign expands the under the current topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/collapse.gif" title="Collapse"></td><td class="dbTableEntry">Collapse</td><td class="dbTableEntry">The boxed minus sign collapses the hierarchy under the current
+topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/boxed.gif" title="Blank Box"></td><td class="dbTableEntry">Blank box</td><td class="dbTableEntry">The empty box precedes a topic that does not have any children
+in the hierarchy, and so, cannot be expanded or collapsed.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/goto.gif" title="Goto topic type that assigns field"></td><td class="dbTableEntry">Goto</td><td class="dbTableEntry">The right double arrow icon is always used to navigate to
+another page. If the icon is located next to a text field that
+contains a URI, the client browser will open the page pointed to by
+the address. In the fields editor on the Topic Type Configuration Page
+the icon is used to navigate to the topic type that declared the
+field. This means that the field is an inherited field.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/dnd.gif" title="Drag and drop to reorder"></td><td class="dbTableEntry">Reorder</td><td class="dbTableEntry">Used to change the order of fields in the Topic Type
+Configuration Page, and to change the order of field values on the
+instance editing page.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/expand_all.gif" title="Add field"></td><td class="dbTableEntry">Show input field</td><td class="dbTableEntry">
+
+<p>On an Instance Editing Page, the circled plus sign is used to
+show a new input field so that one can add a new field value.</p>
+
+</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/remove.gif" title="Remove field"></td><td class="dbTableEntry">Hide input field</td><td class="dbTableEntry">
+
+<p>When used on the Instance Editing Page, the circled minus sign is
+used to hide the input field.</p>
+
+
+<p>When used on the Topic Type Configuration Page, it is used to
+remove a value from an existing field or the use of the field
+itself.</p>
+</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/remove-value.gif" title="Remove field"></td><td class="dbTableEntry">Remove value</td><td class="dbTableEntry">
+
+<p>When used on the Instance Editing Page, the small circled minus
+sign is used to remove values from fields. In the fields editor on the
+Topic Type Configuration Page the icon is used to unassign fields from
+the topic type.</p>
+
+</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/create.gif" title="Create"></td><td class="dbTableEntry">Create</td><td class="dbTableEntry">The circled asterisk is always used to create a new topic. Where
+it occurs will control what type of topic is created at that point.
+Where a choice of topic types is available, a pop-up menu will be
+presented.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><img align="center" src="images/help.gif" title="Contextual help"></td><td class="dbTableEntry">Contextual help</td><td class="dbTableEntry">The question mark in a green circle provides access to this User
+Guide.</td>
+</tr>
+</table>
+
+
+
+<h3>
+<a name="N10EA0">3. Keyboard navigation</a>
+</h3>
+
+
+
+<p>Ontopoly has no special support for keyboard navigation. In other
+words, the keyboard navigation is as provided by your browser. This
+means the following:</p>
+
+
+<dl>
+<dt>Opera</dt>
+<dd>
+
+
+<p>First tab key press puts the cursor into the first control on
+the page. Following tab presses go to following controls, including
+buttons.  Drop-down lists can be navigated with the arrow keys, and
+pressing a letter will jump to the first item whose name begins with
+that letter.</p>
+
+</dd>
+<dt>Firefox</dt>
+<dd>
+
+
+<p>As for Opera, except that links are included in the tab
+cycle.</p>
+
+</dd>
+<dt>Internet Explorer</dt>
+<dd>
+
+
+<p>As for Firefox, except that URL bar is first in tab cycle.</p>
+
+</dd>
+</dl>
+
+
+
+
+<h2>
+<a name="appB">B. Scope of use</a>
+</h2>
+
+
+
+<p>Ontopoly is designed for creating and editing topic maps conforming
+to ISO/IEC 13250:2003.</p>
+
+
+<p>The initial release of Ontopoly does not have support for all of the
+features defined in the ISO standard. As more is known of user
+requirements, some of these features may be added. We encourage users to
+provide feedback using the
+<strong>Feedback</strong> button available on all Ontopoly pages.
+Unsupported features and usage constraints currently include:</p>
+
+
+<dl>
+<dt>Scope</dt>
+<dd>
+
+
+<p>Not supported.</p>
+
+</dd>
+<dt>Variant names</dt>
+<dd>
+
+
+<p>Not supported.</p>
+
+</dd>
+<dt>Reification</dt>
+<dd>
+
+
+<p>Not supported.</p>
+
+</dd>
+<dt>Merging</dt>
+<dd>
+
+
+<p>Not supported.</p>
+
+</dd>
+</dl>
+
+
+
+
+
+<h2>
+<a name="N10F22">C. About this document</a>
+</h2>
+
+
+
+<p>This user guide provides a general theory of operation of Ontopoly.
+It gives an introduction to its use and guidance on how to access the
+various functions of the product, but is not meant to be an exhaustive
+reference manual. Portions of this document serve as the target of links
+from the contextual help within the product.</p>
+
+
+<p>This document is focused on the use of Ontopoly and does not provide
+training on the development of ontologies and topic maps in general. To
+read more about those subjects, please see the
+<a href="http://www.ontopia.net/">Ontopia Website</a>,
+particularly the areas on <strong>topic
+mapping</strong>.</p>
+
+
+
+</body>
+</html>

@@ -1,0 +1,725 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>TMRAP</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>TMRAP</h1>
+<h2 class="subtitle">Developer's Guide</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Abstract</h2>
+
+<p>
+This document introduces the TMRAP web services interface to Ontopia
+and shows how to develop solutions using it. It introduces both the
+plain HTTP interface and the SOAP interface.
+</p>
+
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N10022">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-reference">2. Method reference</a>
+</li>
+<ul>
+<li>
+<a href="#sect-get-topic">2.1. get-topic</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10182">2.2. get-topic-page</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1021C">2.3. get-tolog</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10297">2.4. tolog-update</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N102EB">2.5. add-fragment</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1034E">2.6. delete-topic</a>
+</li>
+<ul></ul>
+</ul>
+<li>
+<a href="#sect-http">3. The HTTP interface</a>
+</li>
+<ul></ul>
+<li>
+<a href="#sect-soap">4. The SOAP interface</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10427">5. Security Considerations</a>
+</li>
+<ul></ul>
+</ul>
+
+
+
+
+
+
+
+<h2>
+<a name="N10022">1. Introduction</a>
+</h2>
+
+
+
+<p>
+TMRAP is a web service interface to Ontopia which makes it possible to
+retrieve Topic Maps fragments from a remote Topic Maps server and also
+to modify the topic maps stored on the server. The interface consists
+of a number of methods which can be accessed either using plain HTTP
+or using SOAP. The functionality is the same in both cases; the only
+difference is in how the methods are accessed.
+</p>
+
+
+<p>
+The methods provided by TMRAP are:
+</p>
+
+
+<dl>
+<dt>get-topic</dt>
+<dd>
+      
+      
+<p>Returns a Topic Maps fragment describing a single
+      topic. This is useful to get more information about specific
+      topics with known identities.</p>
+    
+</dd>
+<dt>get-topic-page</dt>
+<dd>
+      
+      
+<p>Returns information about web pages for viewing/editing a
+      given topic on the server. This is useful for creating links to
+      topics in an application that runs on a different server.</p>
+    
+</dd>
+<dt>get-tolog</dt>
+<dd>
+      
+      
+<p>Allows tolog queries to be run on the server, and returns
+      the query results either as structured XML or as a Topic Maps
+      fragment.</p>
+    
+</dd>
+<dt>tolog-update</dt>
+<dd>
+      
+      
+<p>Runs a tolog update statement on the server, modifying one
+      topic map.</p>
+    
+</dd>
+<dt>add-fragment</dt>
+<dd>
+      
+      
+<p>Adds a Topic Maps fragment to a topic map on the server.</p>
+    
+</dd>
+<dt>delete-topic</dt>
+<dd>
+      
+      
+<p>Deletes a specific topic from a topic map on the server.</p>
+    
+</dd>
+</dl>
+
+
+<p>
+The next part of this guide describes the methods in detail, and is
+followed by a section that describes how to use the two different
+TMRAP interfaces (SOAP and plain HTTP).
+</p>
+
+
+<p>
+More background on the purpose and design of TMRAP can be found in
+<a href="http://dx.doi.org/10.1007/11676904_5">the TMRA'05
+paper</a> that introduced version 1.0 of TMRAP. 
+<a href="http://www.informatik.uni-leipzig.de/~tmra05/PRES/LMGa.pdf">The slides from the presentation</a> may also be useful.
+</p>
+
+
+
+
+<h2>
+<a name="sect-reference">2. Method reference</a>
+</h2>
+
+
+
+<p>
+This section presents each of the TMRAP methods in more detail,
+showing all of the parameters and behaviours. What is described here
+applies to both the plain HTTP interface and the SOAP interface. In
+order to understand how the methods here are invoked using the
+two interfaces, see <a href="#sect-http">section
+        3</a> and <a href="#sect-soap">section
+        4</a>.
+</p>
+
+
+<p>
+For many of the methods it's possible to specify which syntax the
+result should be returned in. The identifiers used for the syntaxes
+supported by Ontopia are given below.
+</p>
+
+
+<dl>
+<dt>application/x-xtm</dt>
+<dd>
+    
+    
+<p>This is for the XTM 1.0 syntax, which is always the
+    default.</p>
+  
+</dd>
+<dt>text/x-tmxml</dt>
+<dd>
+    
+    
+<p>This is for the TM/XML syntax, about which more
+    below.</p>
+  
+</dd>
+<dt>text/x-ltm</dt>
+<dd>
+    
+    
+<p>This is the identifier for the LTM syntax.</p>
+  
+</dd>
+<dt>text/x-ctm</dt>
+<dd>
+    
+    
+<p>This is the identifier for the CTM syntax.</p>
+  
+</dd>
+</dl>
+
+
+<p>
+The TM/XML syntax is an XML syntax for Topic Maps that is easier to
+process with XSLT than XTM is, and so may be more convenient to use
+when the TMRAP client is not using Topic Maps software. Like TMRAP,
+TM/XML is described in <a href="http://dx.doi.org/10.1007/11676904_19">a TMRA'05 paper</a>,
+for which there is also <a href="http://www.informatik.uni-leipzig.de/~tmra05/PRES/GB.pdf">slides</a>. A short background and introduction can also be found
+in <a href="http://www.garshol.priv.no/blog/18.html">this blog
+posting</a>.
+</p>
+
+
+
+<h3>
+<a name="sect-get-topic">2.1. get-topic</a>
+</h3> 
+
+
+
+<p>
+This method returns a topic map fragment representing the topic
+identified by the parameters to the method. The parameters to the
+method are shown in the table below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Parameter</th><th class="dbTableHeaderEntry">Req.?</th><th class="dbTableHeaderEntry">Repeat?</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">item</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">An item identifier of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">subject</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">A subject locator of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">identifier</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">A subject identifier of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The ID of a topic map being queried.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">syntax</td><td class="dbTableEntry">no</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The syntax in which to return the topc map fragment. The
+  default is XTM, but TM/XML is also supported (and LTM is not). Note
+  that the values supplied must be the syntax identifiers defined
+  above.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">view</td><td class="dbTableEntry">no</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The view to use when creating the fragment. The default (and
+  only permitted value in this version) is 'stub'.</td>
+</tr>
+</table>
+
+
+<p>
+Fragments can be retrieved in two different ways: if the
+<tt class="parameter">topicmap</tt> parameter is given the identified
+topic maps are queried, but if it is not the topic maps currently
+loaded on the server will be queried. The fragment will represent a
+single topic formed from all the topics matching one of the three URI
+parameters in some queried topic map. (The server may have to merge
+topics in order to produce this result, but it will
+<em>not</em> modify the topic maps on the server.)
+</p>
+
+
+<p>
+The fragment returned for a topic contains all its identifiers, names,
+occurrences, and associations, but only identifiers are given for
+topics referenced from these.
+</p>
+
+
+
+
+<h3>
+<a name="N10182">2.2. get-topic-page</a>
+</h3>
+
+
+
+<p>
+This method returns a topic map fragment for a topic that describes it
+in terms useful for linking to the topic on the TMRAP server from some
+other web application. For more information on how this method can be
+used, see <a href="http://www.ontopia.net/topicmaps/materials/Towards%20Seamless%20Knowledge.ppt">the
+original TMRAP presentation</a>. The parameters to the method are
+listed below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Parameter</th><th class="dbTableHeaderEntry">Req.?</th><th class="dbTableHeaderEntry">Repeat?</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">item</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">An item identifier of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">subject</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">A subject locator of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">identifier</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">A subject identifier of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The ID of a topic map being queried.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">syntax</td><td class="dbTableEntry">no</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The syntax in which to return the topic map fragment. The
+  default (and only supported value) is XTM. Note that the values
+  supplied must be the syntax identifiers defined above.</td>
+</tr>
+</table>
+
+
+<p>
+The set of topics found is produced in the same way as for the
+<tt class="symbol">get-topic</tt> method (see <a href="#sect-get-topic">section
+        2.1</a>), but the topics are not merged.  Instead,
+a small topic map describing the topics and the web pages they can be
+accessed through is returned. The topic map is best explained with an
+example. Let's say we start the Tomcat server in the Ontopia
+distribution, load <tt>opera.ltm</tt>, and ask for the
+topic page for Russia. The result would be the following topic map
+(except the IDs, which have been edited to make them more readable).
+</p>
+
+
+<pre>#PREFIX tmrap @"http://psi.ontopia.net/tmrap/"
+
+[ontopia : tmrap:server = "Ontopia local installation"]
+
+[opera : tmrap:topicmap = "The Italian Opera Topic Map"]
+   {opera, tmrap:handle, [[opera.ltm]]}
+tmrap:contained-in(ontopia :  tmrap:container, opera : tmrap:containee)
+tmrap:contained-in(opera : tmrap:container, view : tmrap:containee)
+tmrap:contained-in(opera : tmrap:container, edit : tmrap:containee)
+
+[view : tmrap:view-page
+   %"http://localhost:8080/omnigator/models/topic_complete.jsp?tm=opera.ltm&amp;id=458"]
+[edit : tmrap:edit-page
+   %"http://localhost:8080/ontopoly/enter.ted?tm=opera.ltm&amp;id=458"]
+
+[russia = "Russia"
+    @"http://www.topicmaps.org/xtm/1.0/country.xtm#RU"]</pre>
+
+
+<p>
+This topic map describes the server, the topic map, the topic, and the
+pages on which the topic can be accessed by a user.
+</p>
+
+
+
+
+<h3>
+<a name="N1021C">2.3. get-tolog</a>
+</h3>
+
+
+
+<p>
+The <tt class="symbol">get-tolog</tt> method allows you to run a tolog query
+on the server and receive the result as a Topic Maps fragment. Later
+versions of TMRAP will also support getting the query result as a
+table structure. The supported parameters are shown below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Parameter</th><th class="dbTableHeaderEntry">Req.?</th><th class="dbTableHeaderEntry">Repeat?</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">tolog</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The tolog query.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The ID of the topic map being queried.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">syntax</td><td class="dbTableEntry">no</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The syntax in which to return the topc map fragment. The
+  default (and only supported value) is XTM. Note that the values
+  supplied must be the syntax identifiers defined above.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">view</td><td class="dbTableEntry">no</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The view to use when creating topic fragments. The default
+  (and only supported value) is 'stub'.</td>
+</tr>
+</table>
+
+
+<p>
+There is one constraint on the tolog queries supported by this method:
+they must produce a one-column result consisting only of topics. The
+topics are then returned in a fragment in the same way as with the
+get-topic method (see <a href="#sect-get-topic">section
+        2.1</a>), except that
+the topics returned are not merged.
+</p>
+
+
+
+
+<h3>
+<a name="N10297">2.4. tolog-update</a>
+</h3>
+
+
+
+<p>
+The <tt class="symbol">tolog-update</tt> method runs a tolog update statement
+on the server against the specified topic map, modifying it in place.
+The return value is simply the number of rows modified. The supported
+parameters are shown below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Parameter</th><th class="dbTableHeaderEntry">Req.?</th><th class="dbTableHeaderEntry">Repeat?</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">tolog</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The tolog statement.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The ID of the topic map being modified.</td>
+</tr>
+</table>
+
+
+<p>
+The statement is run against the topic map. The modifications are
+committed.
+</p>
+
+
+
+
+<h3>
+<a name="N102EB">2.5. add-fragment</a>
+</h3>
+
+
+
+<p>
+The add-fragment method allows a Topic Maps fragment to be added to a
+topic map on the server. The parameters are listed below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Parameter</th><th class="dbTableHeaderEntry">Req.?</th><th class="dbTableHeaderEntry">Repeat?</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The ID of the topic map being added to.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">syntax</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The syntax of the fragment to be added. The only supported
+  values are CTM, LTM, and XTM. Note that the values supplied must be the
+  syntax identifiers defined above.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">fragment</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The actual fragment.</td>
+</tr>
+</table>
+
+
+<p>
+The given fragment is imported into the topic map.
+</p>
+
+
+
+
+<h3>
+<a name="N1034E">2.6. delete-topic</a>
+</h3>
+
+
+
+<p>
+The delete-topic method allows a topic to be deleted from a topic map
+on the server. The parameters are listed below.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Parameter</th><th class="dbTableHeaderEntry">Req.?</th><th class="dbTableHeaderEntry">Repeat?</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">item</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">An item identifier of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">subject</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">A subject locator of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">identifier</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">URI</td><td class="dbTableEntry">A subject identifier of the requested topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">string</td><td class="dbTableEntry">The ID of a topic map being queried.</td>
+</tr>
+</table>
+
+
+<p>
+The set of topics is found using the same method as with
+<tt class="symbol">get-topic</tt> (see <a href="#sect-get-topic">section
+        2.1</a>) and
+all topics are deleted from their respective topic maps. The method of
+deletion is the same as for the <tt class="methodname">removeTopic</tt>
+method of the
+<tt class="classname">net.ontopia.topicmaps.utils.DeletionUtils</tt>
+class.
+</p>
+
+
+
+
+
+<h2>
+<a name="sect-http">3. The HTTP interface</a>
+</h2>
+
+
+
+<p>
+In Ontopia distribution the plain HTTP interface is included as a
+servlet (implemented by the Java class
+<tt class="classname">net.ontopia.topicmaps.utils.tmrap.RAPServlet</tt>).
+This servlet can be made available in any web application by adding
+the appropriate mappings in the <tt>web.xml</tt> file, and
+this has been done in the <tt class="symbol">/tmrap/</tt> web application in
+the Ontopia distribution. This means that each TMRAP method is available
+in plain HTTP style at the URL
+<tt class="symbol">http://localhost:8080/tmrap/tmrap/method-name</tt>.
+</p>
+
+
+<p>
+The general principle of the mapping is that each method has a
+separate URL (with the method name as the last part), and that the
+parameters to the method are provided as plain HTTP request
+parameters. Methods that do not change state on the server are
+accessed with <tt class="symbol">GET</tt> while methods that do change state
+are accessed with <tt class="symbol">POST</tt>. So to access method
+<tt class="symbol">get-foo</tt> with the parameter <tt class="symbol">bar</tt> set
+to <tt class="symbol">baz</tt> you would send a <tt class="symbol">GET</tt> request
+to <tt class="symbol">http://localhost:8080/tmrap/tmrap/get-foo?bar=baz</tt>.
+</p>
+
+
+<p>
+As an example, let's say we've got Ontopia running, and we want
+information about Russia. We go into <tt>opera.ltm</tt>
+using the Omnigator, so that the topic map is loaded on the server.
+To get information about Russia using TMRAP we could use the following
+very simple Python script.
+</p>
+
+
+<pre>import urllib
+
+BASE = "http://localhost:8080/tmrap/tmrap/"
+psi = "http://www.topicmaps.org/xtm/1.0/country.xtm%23RU"
+
+inf = urllib.urlopen(BASE + "get-topic?identifier=" + psi)
+print inf.read()
+inf.close()</pre>
+
+
+<p>
+Note that in the PSI above the '#' character has been escaped. This is
+because the fragment part of a URI is never transmitted to the server,
+and so we need to escape this to turn it into part of the request
+parameter, instead of a fragment to the URI.
+</p>
+
+
+<p>
+Anyway, running this Python script produces the following output
+(slightly edited to reduce the length of the lines):
+</p>
+
+
+<pre>[larsga@dhcp-98 larsga]$ python tst.py 
+&lt;?xml version="1.0" encoding="utf-8" standalone="yes"?&gt;
+&lt;topicMap xmlns="http://www.topicmaps.org/xtm/1.0/" 
+          xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;topic id="id458"&gt;
+    &lt;instanceOf&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/geography/#country"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;subjectIdentity&gt;
+      &lt;subjectIndicatorRef xlink:href="http://www.topicmaps.org/xtm/1.0/country.xtm#RU"/&gt;
+      &lt;topicRef xlink:href="file:/.../WEB-INF/topicmaps/geography.xtmm#russia"/&gt;
+    &lt;/subjectIdentity&gt;
+    &lt;baseName&gt;
+      &lt;baseNameString&gt;Russia&lt;/baseNameString&gt;
+    &lt;/baseName&gt;
+  &lt;/topic&gt;
+  &lt;association&gt;
+    &lt;instanceOf&gt;
+      &lt;subjectIndicatorRef xlink:href="http://psi.ontopia.net/geography/#located-in"/&gt;
+    &lt;/instanceOf&gt;
+    &lt;!-- ...rest omitted... --&gt;
+</pre>
+
+
+<p>
+In other words, the plain HTTP interface really is quite plain, and
+should also be relatively straightforward to use.
+</p>
+
+
+
+
+<h2>
+<a name="sect-soap">4. The SOAP interface</a>
+</h2>
+
+
+
+<p>The SOAP interface to TMRAP has been created using Apache Axis2,
+the second-generation SOAP implementation from the Apache
+Foundation. This interface is also located in the
+<tt class="symbol">/tmrap/</tt> web application in the Ontopia distribution.
+You can access this web application with a web browser to see the
+available web services and get the WSDL describing the SOAP
+interface.</p>
+
+
+<p>To access a SOAP interface you need a SOAP client for your
+platform. The use of SOAP clients vary so widely with the platform
+and specific client used that we make no attempt to document their use
+here. The best way to get started is to use your SOAP development
+framework to generate client stubs from the WSDL file.</p>
+
+
+
+
+
+<h2>
+<a name="N10427">5. Security Considerations</a>
+</h2>
+
+
+
+<p>As it is possible to both modify the topic map and extract any
+information from it via TMRAP there are definite security concerns
+with providing an full TMRAP interface to the open internet. It is
+possible to configure the web server in such a way as to block some of
+the requests, or to require authentication in order to access some or
+all of the requests.</p>
+
+
+<p>The most common requirement is to block the
+<tt class="methodname">add-fragment</tt> and
+<tt class="methodname">delete-topic</tt> methods, as these allow
+modification of the topic map. To do this, simply add the following at
+the end of the <tt>web.xml</tt> for the
+<tt>tmrap</tt> web application:</p>
+
+
+<pre>
+  &lt;security-constraint&gt;
+    &lt;display-name&gt;Blocked TMRAP requests&lt;/display-name&gt;
+    &lt;web-resource-collection&gt;
+      &lt;web-resource-name&gt;Blocked TMRAP requests&lt;/web-resource-name&gt;
+      &lt;url-pattern&gt;/tmrap/add-fragment&lt;/url-pattern&gt;
+      &lt;url-pattern&gt;/tmrap/delete-topic&lt;/url-pattern&gt;
+    &lt;/web-resource-collection&gt;
+    &lt;auth-constraint&gt;
+      &lt;role-name&gt;user&lt;/role-name&gt;
+    &lt;/auth-constraint&gt;
+  &lt;/security-constraint&gt;
+</pre>
+
+
+<p>The security role <tt class="symbol">user</tt> is not defined, but this
+is not necessary, so long as the purpose is simply to block access to
+these requests.</p>
+
+
+</body>
+</html>

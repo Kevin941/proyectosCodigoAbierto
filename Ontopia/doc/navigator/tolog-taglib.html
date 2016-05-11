@@ -1,0 +1,2825 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Navigator Tag Libraries</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Navigator Tag Libraries</h1>
+<h2 class="subtitle">Reference Documentation</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N1001C">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1004B">2. General</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10071">3. The tolog tags</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N1075E">4. The templating tags</a>
+</li>
+<ul></ul>
+</ul> 
+
+
+
+
+
+
+
+<h2>
+<a name="N1001C">1. Introduction</a>
+</h2> 
+ 
+
+
+<p>
+The general principle behind this tag library is that there is at all
+times an execution context, which contains a number of variable
+definitions. The values of variables are always collections of
+objects. The tags can set new variable values, extract information
+from old ones, and do simple conditionals and loops.
+</p>
+
+
+<p>
+The framework consists of the following tag libraries:
+</p>
+
+
+<ul>
+<li>
+
+<p>
+The tolog tag library is heavily based on tolog, which is used for all
+extraction of information from the topic map, and tolog variables are
+made available as tag library variables, and vice versa. (Note that
+this tag library entirely replaces the old logic, tm, value, and
+output tag libraries.)
+</p>
+
+</li>
+<li>
+
+<p>
+The template tag library provides a simple page templating mechanism
+that makes it possible to create single HTML templates for an entire
+application and have each page insert content into named slots in this
+template.
+</p>
+
+</li>
+</ul>
+
+
+<p>
+The tags are embedded in an HTML document according to ordinary JSP
+usage and the output-producing ones write their output directly into
+the template. For a tutorial introduction to the tag libraries, see
+<cite><a href="navguide.html">The Ontopia Navigator Framework:
+Developer's Guide</a></cite>.
+</p>
+
+
+<dl>
+<dt class="note">Note</dt>
+<dd>
+
+<p>The tolog tag library obsoletes several of <a href="taglib2.html">the old tag libraries</a>. Their use is now
+strongly discouraged, but they will continue to be supported as long
+as they have users.</p>
+
+</dd>
+</dl>
+
+
+
+
+
+<h2>
+<a name="N1004B">2. General</a>
+</h2>
+
+
+
+<p>
+The root tag must always be the <a href="#tolog-context"><a href="#tolog-context">tolog:context</a></a> tag.
+</p>
+
+
+<p>
+All variables are set within a scope, that is, a region on the page in
+which they are accessible. The page contains a hierarchy of such
+scopes, with the one established by the <a href="#tolog-context"><a href="#tolog-context">tolog:context</a></a> tag as the root. Each <a href="#tolog-foreach"><a href="#tolog-foreach">tolog:foreach</a></a>, <a href="#tolog-if"><a href="#tolog-if">tolog:if</a></a>, <a href="#tolog-when"><a href="#tolog-when">tolog:when</a></a>, and <a href="#tolog-otherwise"><a href="#tolog-otherwise">tolog:otherwise</a></a> tag
+creates a new scope inside itself.  Variables are visible from where
+they are bound down to the end of the containing scope.
+</p>
+
+
+<p>
+Variable names are required to match the following regular expression:
+<tt class="literal">[A-Za-z_][A-Za-z0-9_-]*</tt>.
+</p>
+
+
+
+
+<h2>
+<a name="N10071">3. The tolog tags</a>
+</h2>
+<h3>Index</h3>
+<ul>
+<li>
+<a href="#tolog-choose">tolog:choose</a>
+</li>
+<li>
+<a href="#tolog-context">tolog:context</a>
+</li>
+<li>
+<a href="#N106BB">tolog:declare</a>
+</li>
+<li>
+<a href="#tolog-foreach">tolog:foreach</a>
+</li>
+<li>
+<a href="#N10619">tolog:id</a>
+</li>
+<li>
+<a href="#tolog-if">tolog:if</a>
+</li>
+<li>
+<a href="#N1057D">tolog:oid</a>
+</li>
+<li>
+<a href="#tolog-otherwise">tolog:otherwise</a>
+</li>
+<li>
+<a href="#N101AA">tolog:out</a>
+</li>
+<li>
+<a href="#tolog-query">tolog:query</a>
+</li>
+<li>
+<a href="#tolog-set">tolog:set</a>
+</li>
+<li>
+<a href="#tolog-when">tolog:when</a>
+</li>
+</ul>
+<h3>
+<a name="tolog-choose">tolog:choose</a>
+</h3>
+<p>Container for <a href="#tolog-when"><a href="#tolog-when">tolog:when</a></a> and <a href="#tolog-otherwise"><a href="#tolog-otherwise">tolog:otherwise</a></a> tags; used for complex tests.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+This tag executes its children until the first <a href="#tolog-when"><a href="#tolog-when">tolog:when</a></a> child succeeds; if none of the <a href="#tolog-when"><a href="#tolog-when">tolog:when</a></a> children succeed the <a href="#tolog-otherwise"><a href="#tolog-otherwise">tolog:otherwise</a></a> is executed, if present. At least one
+<a href="#tolog-when"><a href="#tolog-when">tolog:when</a></a> or <a href="#tolog-otherwise"><a href="#tolog-otherwise">tolog:otherwise</a></a> child
+must be present. The <tt class="symbol">tolog:choose</tt> tag does not
+introduce a new lexical scope.
+</p>
+
+
+
+<h4>Attributes</h4> 
+
+
+
+<p>
+This tag has no attributes.
+</p>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below links to different JSP pages depending on the type
+of the topic in the <tt class="symbol">topic</tt> variable. This sort of
+construct is used on general search pages and suchlike.
+</p>
+
+
+<p align="center">
+<b>Using tolog:choose</b>
+</p>
+
+
+<pre>&lt;%-- 'topic' is already set --%&gt;
+&lt;tolog:choose&gt;
+  &lt;tolog:when query="instance-of(%topic%, composer)?"&gt;
+    &lt;a href="composer.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:when query="instance-of(%topic%, opera)?"&gt;
+    &lt;a href="opera.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:when query="instance-of(%topic%, country)?"&gt;
+    &lt;a href="country.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:otherwise&gt;
+    &lt;tolog:out var="topic"/&gt; &lt;%-- no link here --%&gt;
+  &lt;/tolog:otherwise&gt;
+&lt;/tolog:choose&gt;
+</pre>
+
+
+
+<h3>
+<a name="tolog-context">tolog:context</a>
+</h3>
+<p>Creates the context the other tags need to run.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+Sets up the Navigator Framework ready for execution. It may load a
+topic map, if necessary, as well as the application configuration.
+Finally, it establishes a lexical scope, but does not set any
+variables.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">false</td><td class="dbTableEntry">topic map ID</td><td class="dbTableEntry">The ID of the topic map to work on</td>
+</tr>
+</table>
+
+
+
+<h4>Example</h4> 
+ 
+
+
+<p>
+Below is a trivial example of the use of this tag.
+</p>
+
+
+<p align="center">
+<b>Using tolog:context</b>
+</p>
+
+
+<pre>&lt;tolog:context topicmap="opera.ltm"&gt;
+  &lt;%-- use other tags to produce content here --%&gt;
+&lt;/tolog:context&gt;</pre>
+
+
+
+<h3>
+<a name="N106BB">tolog:declare</a>
+</h3>
+<p>Used to make tolog declarations available to all queries
+in the same <a href="#tolog-context"><a href="#tolog-context">tolog:context</a></a>.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+This tag makes it possible to declare tolog URI prefixes, module
+imports, and inference rules once in a single page, and then reuse
+them in other queries below their first declaration. Note that the
+declarations will be visible throughout the entire <a href="#tolog-context"><a href="#tolog-context">tolog:context</a></a> tag in which the tag occurs below the point
+at which it occurs.
+</p>
+
+
+<p>
+The <tt class="symbol">tolog:declare</tt> tag does not introduce a new lexical
+scope.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+
+<p>
+This tag has no attributes.
+</p>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below first defines a URI prefix, then makes use of it in
+a query below.
+</p>
+
+
+<p align="center">
+<b>Using tolog:declare</b>
+</p>
+
+
+<pre>&lt;tolog:declare&gt;
+using xtm for i"http://www.topicmaps.org/xtm/1.0/#"
+&lt;/tolog:declare&gt;
+
+&lt;p&gt;The &lt;tolog:out var="class"/&gt; class has the following
+subclasses:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;tolog:foreach query="
+  xtm:superclass-subclass(%class% : xtm:superclass, $SUB : xtm:subclass)?"&gt;
+  &lt;li&gt;&lt;tolog:out var="SUB"/&gt;&lt;/li&gt;
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;</pre>
+
+
+
+<h3>
+<a name="tolog-foreach">tolog:foreach</a>
+</h3>
+<p>Runs a tolog query and iterates over the result.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+The tag runs a tolog query, and executes its contents once for each
+row in the result set. For each iteration, the values of the tolog
+variables in that row are made available as navigator variables inside
+the tag. (The tag creates a new lexical scope for these variables.)
+</p>
+
+
+<p>
+The tag also supports grouping (such as when displaying all countries,
+and for each a list of the cities in each country), which is done by
+having two tolog:foreach tags nested within each other. The outermost
+one will have a <tt class="symbol">query</tt> attribute and a
+<tt class="symbol">groupBy</tt> attribute indicating which variable to group
+by (in the example, country). It will iterate over the groups (in the
+example, the countries). The innermost foreach tag will not have any
+attributes, and will iterate over the elements in each group (in the
+example, the cities).
+</p>
+
+
+<p>
+It is possible to have more than one level of grouping, which is
+achieved by having intermediate foreach elements which have a
+<tt class="symbol">groupBy</tt> attribute, but no <tt class="symbol">query</tt>
+attribute. So if we were to list all countries, with their provinces,
+and the cities within each province, the outermost foreach would have
+a query and group on country, while the next foreach would have no
+query and group on province, while the innermost foreach would have no
+attributes at all.
+</p>
+
+
+<p>
+The foreach tag sets three variables on each iteration, described
+below. These variables are independent of any grouping done by the
+tag.
+</p>
+
+
+<dl>
+<dt>sequence-first</dt>
+<dd>This variable will be true if this is the first iteration
+      of the foreach tag, otherwise it will be false.</dd>
+<dt>sequence-last</dt>
+<dd>This variable will be true if this is the last iteration
+      of the foreach tag, otherwise it will be false.</dd>
+<dt>sequence-number</dt>
+<dd>This variable will contain the number of this iteration of
+      the foreach tag, starting with 1.</dd>
+</dl>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">No</td><td class="dbTableEntry">tolog query</td><td class="dbTableEntry">The query to run (or the name of a query declared with
+      <a href="#tolog-query"><a href="#tolog-query">tolog:query</a></a>).</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">separator</td><td class="dbTableEntry">No</td><td class="dbTableEntry">string</td><td class="dbTableEntry">A string to be inserted between each iteration.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">groupBy</td><td class="dbTableEntry">No</td><td class="dbTableEntry">variable name(s)</td><td class="dbTableEntry">The name(s) of the variable(s) to group on. If not
+      present the tag will not do grouping. The variable names are
+      separated by whitespace only.</td>
+</tr>
+</table>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below shows a list of all composer topics in the topic
+map.
+</p>
+
+
+<p align="center">
+<b>Simple use of tolog:foreach</b>
+</p>
+
+
+<pre>&lt;ul&gt;
+&lt;tolog:foreach query="instance-of($composer, composer)?"&gt;
+  &lt;%-- the composer variable is now set by the :foreach tag --%&gt;
+  &lt;li&gt;&lt;tolog:out var="composer"/&gt;&lt;/li&gt; 
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;</pre>
+
+
+
+<p>
+The next example shows a list of composers, and for each composer all
+the operas he<sup><a href="#footnote1">[1]</a></sup> has composed. This is done in a
+single query using grouping.
+</p>
+
+
+<p align="center">
+<b>Using tolog:foreach with groupBy</b>
+</p>
+
+
+<pre>&lt;ul&gt;
+&lt;tolog:foreach query="composed-by($COMPOSER : composer, $OPERA : opera)
+                      order by $COMPOSER?" 
+               groupBy="COMPOSER"&gt;
+
+  &lt;%-- the COMPOSER variable is now set by the :foreach tag,
+       but not OPERA; repeated once for each COMPOSER --%&gt;
+
+  &lt;li&gt;&lt;tolog:out var="COMPOSER"/&gt;
+    &lt;ul&gt;
+      &lt;tolog:foreach&gt;
+        &lt;%-- OPERA is now set; repeated once for each OPERA with the
+             current COMPOSER --%&gt;
+        &lt;li&gt;&lt;tolog:out var="OPERA"/&gt;
+      &lt;/tolog:foreach&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;</pre>
+
+
+
+<p>
+The next example lists all operas composed by Puccini with commas in
+between their names, except between the last two, which are separated
+by "and". In addition, the number of each opera in the sequence is
+added in parentheses behind its name.
+</p>
+
+
+<p align="center">
+<b>Using the sequence-* variables</b>
+</p>
+
+
+<pre>&lt;tolog:foreach query="composed-by(puccini : composer, $OPERA : work)?"&gt;
+  &lt;tolog:choose&gt;
+     &lt;tolog:when var="sequence-first"&gt;&lt;/tolog:when&gt;
+     &lt;tolog:when var="sequence-last"&gt; and &lt;/tolog:when&gt;
+     &lt;tolog:otherwise&gt;, &lt;/tolog:otherwise&gt;
+  &lt;/tolog:choose&gt;
+  &lt;tolog:out value="OPERA"/&gt; (&lt;tolog:out value="sequence-number"/&gt;)
+&lt;/tolog:foreach&gt;</pre>
+
+
+
+<h3>
+<a name="N10619">tolog:id</a>
+</h3>
+<p>Outputs a symbolic ID of a topic map object.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+This tag gets a value either by running a query or picking it out of a
+variable and then outputs its symbolic ID, provided it is a topic map
+object.  It is an error if the value is not a topic map object. The
+tag must be empty.
+</p>
+
+
+<p>
+The symbolic ID is found by searching for a source locator for the
+object of the form <tt class="symbol">foo#bar</tt> where <tt class="symbol">foo</tt>
+is the same URI as the base address of the topic map store. The ID
+will then be <tt class="symbol">bar</tt>, which would correspond to the ID of
+the topic/object in an XTM/LTM file. If no matching source locator is
+found the object ID will be used instead.
+</p>
+
+
+<p>
+If the <tt class="symbol">query</tt> attribute is used it is an error for the
+query to return a result set with more than one column. If the query
+produces more than one row only the first row is used.
+</p>
+
+
+<p>
+If the <tt class="symbol">var</tt> attribute is set to a variable that either
+is not set, does not contain anything, or contains null it is an error.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">No</td><td class="dbTableEntry">tolog query</td><td class="dbTableEntry">The query to run (or the name of a query declared with
+      <a href="#tolog-query"><a href="#tolog-query">tolog:query</a></a>). Either this or
+      <tt class="symbol">var</tt> must be set.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">var</td><td class="dbTableEntry">No</td><td class="dbTableEntry">variable name or JSP attribute</td><td class="dbTableEntry">The name of the variable whose value is to be output.
+      Note that if the variable contains more than one value a random
+      value is picked. If no variable is found, a JSP attribute will
+      be looked up, and bean properties accessed. (Either this attribute or
+      <tt class="symbol">query</tt> must be set.)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">fallback</td><td class="dbTableEntry">No</td><td class="dbTableEntry">string</td><td class="dbTableEntry">A fallback value to be displayed if the <tt class="symbol">query</tt>
+      result is empty or the <tt class="symbol">var</tt> variable is not set.</td>
+</tr>
+</table>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below uses the already bound <tt class="symbol">composer</tt>
+variable to create a link to the topic in that variable.
+</p>
+
+
+<p align="center">
+<b>Using tolog:id in a link</b>
+</p>
+
+
+<pre>&lt;p&gt;
+This opera was composed by &lt;a href="composer.jsp?id=&lt;tolog:id
+var="composer"/&gt;"&gt;&lt;tolog:out var="composer"/&gt;&lt;/a&gt;.&lt;/p&gt;</pre>
+
+
+
+<h3>
+<a name="tolog-if">tolog:if</a>
+</h3>
+<p>Executes its contents depending on the value of a variable
+or the result of a query.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+This tag either tests the value of a variable or the result of a
+query. The variable is considered true if it is set and contains
+values other than null. The query is considered true if it produces at
+least one result row. If a query is run, navigator variables for each
+tolog variable bound in the first row will be set. Later rows, if any,
+will be ignored.
+</p>
+
+
+<p>
+The <tt class="symbol">tolog:if</tt> tag introduces a new lexical scope.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">No</td><td class="dbTableEntry">tolog query</td><td class="dbTableEntry">The query to run (or the name of a query declared with
+      <a href="#tolog-query"><a href="#tolog-query">tolog:query</a></a>). Either this or
+      <tt class="symbol">var</tt> must be set.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">var</td><td class="dbTableEntry">No</td><td class="dbTableEntry">variable name</td><td class="dbTableEntry">The name of the variable whose value is to be tested.
+      (Either this attribute or <tt class="symbol">query</tt> must be
+      set.)</td>
+</tr>
+</table>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below loops over all operas in the topic map, outputting
+for each the name and, if set, the premiere date.
+</p>
+
+
+<p align="center">
+<b>Using tolog:if with a variable</b>
+</p>
+
+
+<pre>&lt;ul&gt;
+&lt;tolog:foreach query="instance-of($opera, opera),
+                      { premiere-date($opera, $date) }?"&gt;
+  &lt;%-- 'opera' and 'date' will be set here, but 'date' may be null --%&gt;
+  &lt;li&gt;&lt;tolog:out var="opera"/&gt;
+    &lt;tolog:if var="date"&gt;(&lt;tolog:out var="date"/&gt;)&lt;/tolog:if&gt;
+  &lt;/li&gt; 
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;</pre>
+
+
+
+<p>
+The example below does the same thing, except that it runs a separate
+query to check the premiere date for each opera.
+</p>
+
+
+<p align="center">
+<b>Using tolog:if with a query</b>
+</p>
+
+
+<pre>&lt;ul&gt;
+&lt;tolog:foreach query="instance-of($opera, opera)?"&gt;
+  &lt;%-- 'opera' will be set here --%&gt;
+  &lt;li&gt;&lt;tolog:out var="opera"/&gt;
+    &lt;tolog:if query="premiere-date(%opera%, $date)?"&gt;
+      &lt;%-- if there is no date we won't get here; if we get here
+           'date' will be set --%&gt;
+      &lt;tolog:out var="date"/&gt;
+    &lt;/tolog:if&gt;
+  &lt;/li&gt; 
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;</pre>
+
+
+
+<h3>
+<a name="N1057D">tolog:oid</a>
+</h3>
+<p>Outputs the object ID of a topic map object.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+This tag gets a value either by running a query or picking it out of a
+variable and then outputs its object ID, provided it is a topic map
+object.  It is an error if the value is not a topic map object. The
+tag must be empty.
+</p>
+
+
+<p>
+Note that the object ID of a topic map object is
+<em>not</em> the same as its ID in an XTM or LTM file.
+The ID in a file is likely to be meaningful, but the object ID is a
+meaningless identifier assigned automatically by the topic map engine.
+(At present this will be a number.)
+</p>
+
+
+<p>
+If the <tt class="symbol">query</tt> attribute is used it is an error for the
+query to return a result set with more than one column. If the query
+produces more than one row only the first row is used.
+</p>
+
+
+<p>
+If the <tt class="symbol">var</tt> attribute is set to a variable that either
+is not set, does not contain anything, or contains null it is an error.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">No</td><td class="dbTableEntry">tolog query</td><td class="dbTableEntry">The query to run (or the name of a query declared with
+      <a href="#tolog-query"><a href="#tolog-query">tolog:query</a></a>). Either this or
+      <tt class="symbol">var</tt> must be set.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">var</td><td class="dbTableEntry">No</td><td class="dbTableEntry">variable name or JSP attribute</td><td class="dbTableEntry">The name of the variable whose value is to be output.
+      Note that if the variable contains more than one value a random
+      value is picked. If no variable is found, a JSP attribute will
+      be looked up, and bean properties accessed. (Either this attribute or
+      <tt class="symbol">query</tt> must be set.)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">fallback</td><td class="dbTableEntry">No</td><td class="dbTableEntry">string</td><td class="dbTableEntry">A fallback value to be displayed if the <tt class="symbol">query</tt>
+      result is empty or the <tt class="symbol">var</tt> variable is not set.</td>
+</tr>
+</table>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+
+<p>
+The example below uses the already bound <tt class="symbol">composer</tt>
+variable to create a link to the topic in that variable.
+</p>
+
+
+<p align="center">
+<b>Using tolog:oid in a link</b>
+</p>
+
+
+<pre>&lt;p&gt;
+This opera was composed by &lt;a href="composer.jsp?id=&lt;tolog:oid
+var="composer"/&gt;"&gt;&lt;tolog:out var="composer"/&gt;&lt;/a&gt;.&lt;/p&gt;</pre>
+
+
+
+<h3>
+<a name="tolog-otherwise">tolog:otherwise</a>
+</h3>
+<p>Used within <a href="#tolog-choose"><a href="#tolog-choose">tolog:choose</a></a> at the end for
+a clause that will be executed if no <a href="#tolog-when"><a href="#tolog-when">tolog:when</a></a> tags
+are executed.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+Used within <a href="#tolog-choose"><a href="#tolog-choose">tolog:choose</a></a> (and only there) at the end
+as a kind of 'else' or 'default branch', which will be executed if
+none of the <a href="#tolog-when"><a href="#tolog-when">tolog:when</a></a> tags in the <a href="#tolog-choose"><a href="#tolog-choose">tolog:choose</a></a> are executed.
+</p>
+
+
+<p>
+The <tt class="symbol">tolog:otherwise</tt> tag introduces a new lexical scope.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+
+<p>
+This tag has no attributes.
+</p>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below links to different JSP pages depending on the type
+of the topic in the <tt class="symbol">topic</tt> variable. This sort of
+construct is used on general search pages and suchlike. Note the
+tolog:otherwise at the end, which is used to just display the name of
+the topic with no link if it's not of one of the recognized types.
+</p>
+
+
+<p align="center">
+<b>Using tolog:choose</b>
+</p>
+
+
+<pre>&lt;%-- 'topic' is already set --%&gt;
+&lt;tolog:choose&gt;
+  &lt;tolog:when query="instance-of(%topic%, composer)?"&gt;
+    &lt;a href="composer.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:when query="instance-of(%topic%, opera)?"&gt;
+    &lt;a href="opera.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:when query="instance-of(%topic%, country)?"&gt;
+    &lt;a href="country.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:otherwise&gt;
+    &lt;tolog:out var="topic"/&gt; &lt;%-- no link here --%&gt;
+  &lt;/tolog:otherwise&gt;
+&lt;/tolog:choose&gt;
+</pre>
+
+
+
+<h3>
+<a name="N101AA">tolog:out</a>
+</h3>
+<p>Outputs a value from a variable or a query.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+This tag gets a value either by running a query or picking it out of a
+variable and then outputs it. The table below shows what is output for
+different kinds of values. The tag must be empty.
+</p>
+
+
+<p align="center">
+<b>Table 3.1. Outputs for different types</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Output</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">string</td><td class="dbTableEntry">output as is</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">locator</td><td class="dbTableEntry">external form is output</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic</td><td class="dbTableEntry">most suitable named picked and output</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">basename</td><td class="dbTableEntry">string value is output</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">variant</td><td class="dbTableEntry">string value or external form of locator is output</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">occurrence</td><td class="dbTableEntry">string value or external form of locator is output</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">other</td><td class="dbTableEntry">result of calling <tt class="methodname">toString</tt> is
+  output</td>
+</tr>
+</table>
+
+
+<p>
+If the <tt class="symbol">query</tt> attribute is used it is an error for the
+query to return a result set with more than one column. If the query
+produces more than one row only the first row is used.
+</p>
+
+
+<p>
+If the <tt class="symbol">var</tt> attribute is set to a variable that either
+is not set, does not contain anything, or contains null it is an error.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">No</td><td class="dbTableEntry">tolog query</td><td class="dbTableEntry">The query to run (or the name of a query declared with
+      <a href="#tolog-query"><a href="#tolog-query">tolog:query</a></a>). Either this or
+      <tt class="symbol">var</tt> must be set.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">var</td><td class="dbTableEntry">No</td><td class="dbTableEntry">variable name or JSP attribute</td><td class="dbTableEntry">The name of the variable whose value is to be output.
+      Note that if the variable contains more than one value a random
+      value is picked. If no variable is found, a JSP attribute will
+      be looked up, and bean properties accessed. (Either this
+      attribute or <tt class="symbol">query</tt> must be set.)</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">scope</td><td class="dbTableEntry">No</td><td class="dbTableEntry">variable name</td><td class="dbTableEntry">Specifies the scope to be used when selecting names for
+      topics; has no effect on other objects.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">fallback</td><td class="dbTableEntry">No</td><td class="dbTableEntry">string</td><td class="dbTableEntry">A fallback value to be displayed if the <tt class="symbol">query</tt>
+      result is empty or the <tt class="symbol">var</tt> variable is not set.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">escape</td><td class="dbTableEntry">No</td><td class="dbTableEntry">true | false</td><td class="dbTableEntry">If true (which is the default) the output has any
+      reserved XML/HTML characters escaped; this can be turned off by
+      setting the value to false.</td>
+</tr>
+</table>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below shows a list of all composer topics in the topic
+map using the <tt class="symbol">var</tt> attribute.
+</p>
+
+
+<p align="center">
+<b>Simple use of tolog:out</b>
+</p>
+
+
+<pre>&lt;ul&gt;
+&lt;tolog:foreach query="instance-of($composer, composer)?"&gt;
+  &lt;%-- the out tag will pick the best name for the composer topic and
+       output it --%&gt;
+  &lt;li&gt;&lt;tolog:out var="composer"/&gt;&lt;/li&gt; 
+&lt;/tolog:foreach&gt;
+&lt;/ul&gt;</pre>
+
+
+
+<p>
+The example below shows how the <tt class="symbol">query</tt> attribute can
+be used to pick the value to output. The query counts the number of
+topics in the topic map, and the <tt class="symbol">tolog:out</tt> tag will
+print this number.
+</p>
+
+
+<p align="center">
+<b>Using tolog:out with a query</b>
+</p>
+
+
+<pre>&lt;p&gt;
+This topic map contains 
+&lt;tolog:out query="select count($T) from topic($T)?"/&gt;
+topics.&lt;/p&gt;</pre>
+
+
+
+<p>
+The example below shows how to use the <tt class="symbol">fallback</tt>
+attribute to output a fallback value if a <tt class="symbol">query</tt> result
+is empty or a <tt class="symbol">var</tt> variable is not set.
+</p>
+
+
+<p align="center">
+<b>Using a fallback value for tolog:out</b>
+</p>
+
+
+<pre>&lt;p&gt;
+&lt;tolog:out var="person"/&gt;'s date of birth is 
+&lt;tolog:out query="p:date-of-birth(%person%, $dob)" fallback="not set"/&gt;.&lt;/p&gt;
+&lt;%-- returns: &lt;p&gt;John's date of birth is 1974-08-12.&lt;/p&gt;
+          or: &lt;p&gt;Mick's date of birth is not set.&lt;/p&gt; --%&gt;</pre>
+
+
+
+<h3>
+<a name="tolog-query">tolog:query</a>
+</h3>
+<p>Defines a named query which can later be referenced from
+other tolog tags.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+This tag captures the output from its contents and stores it as a
+named tolog query in the page context. The query can later be
+referenced by name from other tolog tags in their
+<tt class="symbol">query</tt> attributes.
+</p>
+
+
+<p>
+The <tt class="symbol">tolog:query</tt> tag does not introduce a new lexical
+scope.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">name</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">tolog query name</td><td class="dbTableEntry">The name under which the query is to be stored.</td>
+</tr>
+</table>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below uses a named query to avoid having to repeat the
+same query twice. The query lists all cities within a country, and is
+used first to check if the country has any cities, in which case a
+list of them is written out.
+</p>
+
+
+<p align="center">
+<b>Reusing a named query</b>
+</p>
+
+
+<pre>
+&lt;tolog:query name="q-cities"&gt;
+located-in(%country% : container, $CITY : containee),
+instance-of($CITY, city)
+order by $CITY?
+&lt;/tolog:query&gt;
+
+&lt;tolog:if query="q-cities"&gt;
+&lt;p&gt;&lt;tolog:out var="country"&gt; contains these cities:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;tolog:foreach query="q-cities"&gt;
+    &lt;li&gt;&lt;tolog:out var="CITY"/&gt;&lt;/li&gt;
+  &lt;/tolog:foreach&gt;
+&lt;/ul&gt;
+&lt;/tolog:if&gt;
+</pre>
+
+
+
+<h3>
+<a name="tolog-set">tolog:set</a>
+</h3>
+<p>Used to set navigator framework variables.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+Sets the value of a navigator framework variable. This is generally
+used when working with the Web Editor Framework, or to interact with
+non-Ontopia tags and code. The tolog:set set tag must always be empty.
+</p>
+
+
+<p>
+If a tolog query is used it must produce exactly one column in the
+result set. The variable set will be given the name in the
+<tt class="symbol">var</tt> attribute (if present) or the name of the tolog
+variable (if <tt class="symbol">var</tt> is not present). Each row in the
+result set will contribute one element to the collection to be bound
+to the variable.
+</p>
+
+
+<p>
+The <tt class="symbol">reqparam</tt> attribute can be used to get topics from
+HTTP request parameters. The request parameter must contain an object
+ID or a symbolic ID, which will be looked up in the topic map, and the
+corresponding object set as the value of the variable. If the
+<tt class="symbol">reqparam</tt> attribute is used the <tt class="symbol">var</tt>
+attribute must be present. (If the request parameter has multiple
+values the same procedure is applied to each value.)
+</p>
+
+
+<p>
+The <tt class="symbol">scope</tt> attribute can be used to set values as JSP
+container attributes instead of as Navigator Framework variables. See
+the documentation for this attribute for details.
+</p>
+
+
+<p>
+The <tt class="symbol">value</tt> attribute can be used instead of the
+<tt class="symbol">query</tt> attribute to compute the value to be set. This
+attribute takes a <a href="http://java.sun.com/j2ee/1.4/docs/tutorial/doc/JSPIntro7.html">JSP
+expression</a> as its value, and the JSP expression computes the
+value of the variable. See the attribute documentation for details.
+</p>
+
+
+<p>
+Finally, the tag can be used with only the <tt class="symbol">var</tt>
+attribute and the variable will then be set to the string value of the
+content of the tag. If the tag is empty it the variable will be set to
+the empty collection.
+</p>
+
+
+<p>
+The <tt class="symbol">tolog:set</tt> tag does not introduce a new lexical
+scope.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">no</td><td class="dbTableEntry">tolog query</td><td class="dbTableEntry">The query which produces the value put into the variable
+      (or the name of a query declared with <a href="#tolog-query"><a href="#tolog-query">tolog:query</a></a>).</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">var</td><td class="dbTableEntry">no</td><td class="dbTableEntry">variable name</td><td class="dbTableEntry">The name of the variable to set. If not given the name
+      will be that of the variable in the tolog query.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">reqparam</td><td class="dbTableEntry">no</td><td class="dbTableEntry">HTTP request parameter name</td><td class="dbTableEntry">If given, the variable set will be set to the topic map
+      object whose ID is the value of the named HTTP request parameter
+      to the page. If the request parameter is not given the variable
+      will be bound to an empty value.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">scope</td><td class="dbTableEntry">no</td><td class="dbTableEntry">application | session | request | page | ontopia</td><td class="dbTableEntry">Controls where the variable is set. If value is
+      <tt class="literal">ontopia</tt> (which is the default) the variable is
+      set as a Navigator Framework variable. If not, it is set as a
+      JSP container attribute, and not as a Navigator Framework
+      variable at all.  The values other than <tt class="literal">ontopia</tt>
+      indicate which scope in the JSP container the attribute is to be
+      set in.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">value</td><td class="dbTableEntry">no</td><td class="dbTableEntry"><a href="http://java.sun.com/j2ee/1.4/docs/tutorial/doc/JSPIntro7.html">JSP
+      expression</a></td><td class="dbTableEntry">The JSP expression computes the value to be set. Note
+      that when scope is <tt class="literal">ontopia</tt> values that are arrays
+      will be converted to collections, collections will stay as
+      collections, and anything else (including null) will become
+      singleton collections. (This is done because Navigator Framework
+      variables are always bound to collections and never to single
+      values.)</td>
+</tr>
+</table>
+
+
+<p>
+Note that either <tt class="symbol">query</tt>, <tt class="symbol">value</tt>, or
+<tt class="symbol">reqparam</tt> must be set, or the tag must have content,
+which will become the string value of the variable.
+</p>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below sets the variable 'composers' to the collection of
+all composer topics in the topic map.
+</p>
+
+
+<p align="center">
+<b>Using tolog:set with many values</b>
+</p>
+
+
+<pre>&lt;tolog:set var="composers"
+           query="instance-of($COMPOSER, composer)?"/&gt;</pre>
+
+
+
+<p>
+The next example sets the 'composer' topic into the variable 'composer'.
+</p>
+
+
+<p align="center">
+<b>Using tolog:set with one value</b>
+</p>
+
+
+<pre>&lt;tolog:set query='source-locator($composer, "#composer")?'/&gt;</pre>
+
+
+
+<h3>
+<a name="tolog-when">tolog:when</a>
+</h3>
+<p>Conditional test, almost identical to <a href="#tolog-if"><a href="#tolog-if">tolog:if</a></a>, but only used within <a href="#tolog-choose"><a href="#tolog-choose">tolog:choose</a></a>.</p> 
+
+
+
+<h4>Description</h4> 
+ 
+
+
+<p>
+Used within <a href="#tolog-choose"><a href="#tolog-choose">tolog:choose</a></a> (and only there) for
+conditional testing. The first tolog:when within a <a href="#tolog-choose"><a href="#tolog-choose">tolog:choose</a></a> whose test evaluates to true will have its
+children executed; after this, no more tolog:whens will be tested.
+</p>
+
+
+<p>
+tolog:when has the same attributes as <a href="#tolog-if"><a href="#tolog-if">tolog:if</a></a> and
+the same rules are used to establish whether the test evaluates to
+true or false.   
+</p>
+
+
+<p>
+The <tt class="symbol">tolog:when</tt> tag introduces a new lexical scope.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">No</td><td class="dbTableEntry">tolog query</td><td class="dbTableEntry">The query to run (or the name of a query declared with
+      <a href="#tolog-query"><a href="#tolog-query">tolog:query</a></a>). Either this or
+      <tt class="symbol">var</tt> must be set.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">var</td><td class="dbTableEntry">No</td><td class="dbTableEntry">variable name</td><td class="dbTableEntry">The name of the variable whose value is to be tested.
+      (Either this attribute or <tt class="symbol">query</tt> must be
+      set.)</td>
+</tr>
+</table>
+
+
+
+<h4>Examples</h4> 
+ 
+
+
+<p>
+The example below links to different JSP pages depending on the type
+of the topic in the <tt class="symbol">topic</tt> variable. This sort of
+construct is used on general search pages and suchlike.
+</p>
+
+
+<p align="center">
+<b>Using tolog:choose</b>
+</p>
+
+
+<pre>&lt;%-- 'topic' is already set --%&gt;
+&lt;tolog:choose&gt;
+  &lt;tolog:when query="instance-of(%topic%, composer)?"&gt;
+    &lt;a href="composer.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:when query="instance-of(%topic%, opera)?"&gt;
+    &lt;a href="opera.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:when query="instance-of(%topic%, country)?"&gt;
+    &lt;a href="country.jsp?id=..."&gt;&lt;tolog:out var="topic"/&gt;&lt;/a&gt;
+  &lt;/tolog:when&gt;
+  &lt;tolog:otherwise&gt;
+    &lt;tolog:out var="topic"/&gt; &lt;%-- no link here --%&gt;
+  &lt;/tolog:otherwise&gt;
+&lt;/tolog:choose&gt;
+</pre>
+
+
+
+
+
+
+<h2>
+<a name="N1075E">4. The templating tags</a>
+</h2>
+<p>
+These tags are used to implement JSP page templating, which can be
+used to avoid having to repeat the page layout structure in every
+single JSP page. They can also be used to implement a full
+Model-View-Skin system.
+</p>
+<h3>Index</h3>
+<ul>
+<li>
+<a href="#N10890">get</a>
+</li>
+<li>
+<a href="#N10766">insert</a>
+</li>
+<li>
+<a href="#template-put">put</a>
+</li>
+<li>
+<a href="#N10902">split</a>
+</li>
+</ul>
+<h3>
+<a name="N10890">get</a>
+</h3>
+<p>Used in template pages to define slots into which content
+will be inserted by pages using the template.</p> 
+
+
+
+
+<h4>Context interaction</h4> 
+
+
+
+<p>This tag makes no assumption about its ancestors.</p>
+
+
+<p>This tag may have content if it outputs a slot from a
+<tt class="symbol">put</tt> tag that had a <tt class="symbol">split</tt>
+child. If not it must be empty.</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">name</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">String</td><td class="dbTableEntry">The name of the slot whose contents are to be inserted to
+      replace this tag when the template is used.</td>
+</tr>
+</table> 
+
+
+
+<h4>Execution</h4>
+
+
+
+<p>
+When the template is used the contents of the named slot (as produced
+by the using page) are looked up and inserted in place of this tag. If
+no content has been filled into the slot the tag will not output
+anything. 
+</p>
+
+
+<p>
+If the slot referred to was from a <tt class="symbol">put</tt> tag that had a
+<tt class="symbol">split</tt> child the start tag for the
+<tt class="symbol">get</tt> will output the slot up to the split point, then
+output the result of evaluating its content, and finally the end tag
+will output the slot after the split point.
+</p>
+
+
+
+<h4>Example</h4>
+
+
+
+<p>
+See the example given for the <tt class="symbol">insert</tt> tag.
+</p>
+
+
+<h3>
+<a name="N10766">insert</a>
+</h3>
+<p>References the template JSP page to be used by the current
+page.</p> 
+
+
+
+<h4>Context interaction</h4> 
+ 
+
+
+<p>
+This tag does not make any assumptions about its ancestors.
+</p>
+
+
+<p>
+This tag should contain <tt class="symbol">template:put</tt> tags, which
+assign contents to the slots defined by the template page.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">template</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">Path</td><td class="dbTableEntry">The path is relative to the referencing page.</td>
+</tr>
+</table>
+
+
+
+<h4>Execution</h4> 
+ 
+
+
+<p>
+This tag is used in JSP pages to say what template the page should
+use. Execution is done by executing the contents of the tag, which
+stores the contents written into the various page slots. The template
+page is then output with the contents of the various slots inserted in
+the right places.
+</p>
+
+
+
+<h4>Example</h4>
+
+
+
+<p>
+Below is an example of the use of how the three templating tags are
+used together. The <tt>demo.jsp</tt> requested by the
+client uses the template (as defined in
+<tt>template.jsp</tt> as listed a bit further down).
+</p>
+
+
+<p align="center">
+<b>Referring to the template with the insert tag
+(demo.jsp)</b>
+</p>
+
+
+
+<pre>
+&lt;template:insert template="template.jsp"&gt;
+
+  &lt;template:put name="title"&gt;An example page&lt;/template:put&gt;
+
+  &lt;template:put name="content"&gt;
+    &lt;p&gt;This page shows you all the ...&lt;/p&gt;
+  &lt;/template:put&gt;
+
+  &lt;template:put name='footer' content='footer.html'/&gt;
+
+&lt;/template:insert&gt;
+</pre>
+
+
+
+<p>
+The JSP page above produces content in the named slots, which will be
+filled into the template shown below (which is the
+<tt>template.jsp</tt> page) in the named locations.
+</p>
+
+
+<p align="center">
+<b>Defining the slots (template.jsp)</b>
+</p>
+
+
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel=stylesheet type="text/css" href="default.css"&gt;
+  &lt;title&gt;&lt;template:get name='title'/&gt;&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;h1&gt;&lt;template:get name='title'/&gt;&lt;/h1&gt;
+
+  &lt;template:get name="content"/&gt;
+  &lt;template:get name="footer"/&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+
+
+<p align="center">
+<b>Example for external reused data
+(footer.html)</b>
+</p>
+
+
+<pre>
+  &lt;hr&gt;
+  &lt;address&gt;
+    Ontopia A/S
+  &lt;/address&gt;
+</pre>
+
+
+
+
+
+<h3>
+<a name="template-put">put</a>
+</h3>
+<p>Used in pages to put produced content into a named slot in
+the template used by that page.
+</p> 
+
+ 
+
+<h4>Context interaction</h4> 
+
+
+
+<p>
+Must have an <tt class="symbol">insert</tt> tag among its ancestors.
+</p>
+
+
+<p>
+The tag makes no assumptions about its children, whose output it will
+capture and store in order to fill it into the template. It may
+contain one <tt class="symbol">split</tt> tag as well any number of
+<tt class="symbol">put</tt> tags. The <tt class="symbol">split</tt> tag allows the
+named slot to be output by a nested <tt class="symbol">get</tt> tag.
+</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Values</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">name</td><td class="dbTableEntry">Yes</td><td class="dbTableEntry">String</td><td class="dbTableEntry">The name of the slot in the template to write the content
+      produced by the children of this tag into.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">content</td><td class="dbTableEntry">No</td><td class="dbTableEntry">String | Path</td><td class="dbTableEntry">Gives the content of the named slot either as a string
+      (if <tt class="symbol">direct</tt> is true) or as a reference to a file
+      which holds the contents (if <tt class="symbol">direct</tt> is false).
+      </td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">direct</td><td class="dbTableEntry">No</td><td class="dbTableEntry">true | false</td><td class="dbTableEntry">If set to "true", will insert the contents of the
+      <tt class="symbol">content</tt> attribute as the slot content.</td>
+</tr>
+</table> 
+
+
+
+<h4>Execution</h4>
+
+
+
+<p>
+The children of the tag are executed, and their output captured. That
+output is then taken by the <tt class="symbol">insert</tt> tag and inserted
+into the correct slot in the template, which is output.
+</p>
+
+
+
+<h4>Example</h4>
+
+
+
+<p>
+See the example given for the <tt class="symbol">insert</tt> tag.
+</p>
+
+
+<h3>
+<a name="N10902">split</a>
+</h3>
+<p>Used in template pages inside <tt class="symbol">put</tt> tags to
+split the slot so that it can be output by a nested
+<tt class="symbol">get</tt> tag.</p> 
+
+
+
+<h4>Context interaction</h4> 
+
+
+
+<p>This tag must have a <tt class="symbol">put</tt> tag among its
+ancestors.</p>
+
+
+<p>This tag must be empty.</p>
+
+
+
+<h4>Attributes</h4> 
+ 
+
+
+<p>
+This tag has no attributes.
+</p> 
+
+
+
+<h4>Execution</h4>
+
+
+
+<p>
+The tag informs its nearest ancestor <tt class="symbol">put</tt> tag that
+this is the split point for this slot. No other actions are performed.
+</p>
+
+
+
+<h4>Example</h4>
+
+
+
+<p>
+Below is an example of how the <tt class="symbol">split</tt> tag is used.
+The <tt>demo.jsp</tt> requested by the
+client uses the template (as defined in
+<tt>template.jsp</tt> as listed a bit further down).
+</p>
+
+
+<p align="center">
+<b>Referring to the template with the insert tag
+(demo.jsp)</b>
+</p>
+
+
+
+<pre>
+&lt;template:insert template="template.jsp"&gt;
+
+  &lt;template:put name="title"&gt;An example page&lt;/template:put&gt;
+
+  &lt;template:put name="content"&gt;
+    &lt;form ...&gt;
+
+      &lt;template:split/&gt;
+
+      &lt;template:put name="menu"&gt;
+        &lt;input type=button name=button1 value="Button1"&gt;
+        &lt;input type=button name=button2 value="Button2"&gt;
+      &lt;/template:put&gt;
+
+      &lt;template:put name="body"&gt;
+        &lt;input type=text name=field&gt;
+      &lt;/template:put&gt;
+
+    &lt;/form&gt;
+  &lt;/template:put&gt;
+
+  &lt;template:put name='footer' content='footer.html'/&gt;
+
+&lt;/template:insert&gt;
+</pre>
+
+
+
+<p>
+The JSP page above produces a web form that contains a menu (as a
+template slot), consisting of a row of buttons that submit the form,
+and the form body (as another template slot).
+</p>
+
+
+<p align="center">
+<b>Defining the slots (template.jsp)</b>
+</p>
+
+
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+  &lt;link rel=stylesheet type="text/css" href="default.css"&gt;
+  &lt;title&gt;&lt;template:get name='title'/&gt;&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;h1&gt;&lt;template:get name='title'/&gt;&lt;/h1&gt;
+
+  &lt;template:get name="content"&gt;
+    &lt;table&gt;
+    &lt;tr&gt;&lt;td&gt;&lt;template:get name="menu"/&gt;
+
+    &lt;tr&gt;&lt;td&gt;&lt;template:get name="content"/&gt;
+
+    &lt;tr&gt;&lt;td&gt;&lt;template:get name="menu"/&gt;
+    &lt;/table&gt;
+  &lt;/template:get&gt;
+
+  &lt;template:get name="footer"/&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+
+
+<p>
+In this template the <tt class="symbol">get</tt> start tag for the 'content'
+slot outputs the form start tag (basically the 'content' slot up to
+the <tt class="symbol">split</tt> tag), then the content of the
+<tt class="symbol">get</tt> tag is output with the slots inserted, and
+finally the end tag outputs the form end tag.
+</p>
+
+
+
+
+<h2>Appendix: Footnotes</h2>
+<dl>
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+       
+     
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+       
+     
+     
+       
+       
+       
+       
+    
+     
+       
+       
+       
+       
+    
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+<dt>
+<a name="footnote1">[1]</a>
+</dt>
+<dd>The Italian Opera Topic Map only contains
+male composers.</dd>
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+  
+
+
+  
+  
+
+
+  
+  
+
+
+  
+  
+
+
+  
+  
+
+
+  
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+    
+     
+       
+       
+       
+      
+    
+     
+       
+       
+       
+      
+    
+     
+       
+       
+       
+      
+    
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+    
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+    
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+    
+     
+       
+       
+       
+      
+    
+     
+       
+       
+       
+      
+    
+     
+       
+       
+      
+      
+    
+   
+ 
+
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+    
+     
+       
+       
+       
+      
+    
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+    
+     
+       
+       
+       
+      
+    
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+ 
+
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+       
+     
+   
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+     
+     
+       
+       
+       
+      
+     
+   
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+ 
+   
+     
+       
+       
+       
+       
+     
+   
+   
+     
+       
+       
+       
+       
+     
+   
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</dl>
+</body>
+</html>

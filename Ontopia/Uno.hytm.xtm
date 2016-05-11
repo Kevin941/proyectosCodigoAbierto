@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<topicMap xmlns="http://www.topicmaps.org/xtm/1.0/" xmlns:xlink="http://www.w3.org/1999/xlink" id="lor.hytm">
+   <topic id="p0001">
+      <instanceOf>
+         <topicRef xlink:href="#t_persona">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Lorenzo Miguel Elguea Fernandez</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="p0002">
+      <instanceOf>
+         <topicRef xlink:href="#t_persona">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Rosy Neumann</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="p0004">
+      <instanceOf>
+         <topicRef xlink:href="#t_persona">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Hugo Sanchez</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="t_persona">
+      <baseName>
+         <baseNameString>Persona</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="t_mascota">
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_esp"></topicRef>
+        </scope>
+         <baseNameString>Mascota</baseNameString>
+      </baseName>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_eng"></topicRef>
+        </scope>
+         <baseNameString>Pet</baseNameString>
+      </baseName>
+
+   </topic>
+    <topic id="s_esp">
+    <instanceOf>
+         <topicRef xlink:href="#s_idioma">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Espaniol</baseNameString>
+      </baseName>
+   </topic>
+    <topic id="s_eng">
+    <instanceOf>
+         <topicRef xlink:href="#s_idioma">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>English</baseNameString>
+      </baseName>
+   </topic>
+    <topic id="s_idioma">
+      <baseName>
+         <baseNameString>Idioma</baseNameString>
+      </baseName>
+   </topic>
+
+   <topic id="t_alimenta">
+      <baseName>
+         <baseNameString>Alimenta</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="m_perro">
+      <instanceOf>
+         <topicRef xlink:href="#t_mascota">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_esp"></topicRef>
+        </scope>
+         <baseNameString>Perro</baseNameString>
+      </baseName>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_eng"></topicRef>
+        </scope>
+         <baseNameString>Gog</baseNameString>
+      </baseName>
+
+   </topic>
+   <topic id="m_gato">
+      <instanceOf>
+         <topicRef xlink:href="#t_mascota">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_esp"></topicRef>
+        </scope>
+         <baseNameString>Gato</baseNameString>
+      </baseName>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_eng"></topicRef>
+        </scope>
+         <baseNameString>Cat</baseNameString>
+      </baseName>
+   </topic>
+   <topic id="m_pez">
+      <instanceOf>
+         <topicRef xlink:href="#t_mascota">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_esp"></topicRef>
+        </scope>
+         <baseNameString>Pez</baseNameString>
+      </baseName>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_eng"></topicRef>
+        </scope>
+         <baseNameString>Fish</baseNameString>
+      </baseName>
+
+   </topic>
+   <topic id="g_001">
+      <instanceOf>
+         <topicRef xlink:href="#m_gato">
+         </topicRef>
+      </instanceOf>
+      <baseName>
+         <baseNameString>Cookie</baseNameString>
+      </baseName>
+   </topic>
+   
+   
+      <association>
+      <instanceOf>
+         <topicRef xlink:href="#t_alimenta">
+         </topicRef>
+      </instanceOf>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#t_persona">
+            </topicRef>
+         </roleSpec>
+
+         <topicRef xlink:href="#p0001">
+         </topicRef>
+      </member>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#m_gato"></topicRef>
+         </roleSpec>
+         <topicRef xlink:href="#g_001">
+         </topicRef>
+      </member>
+   </association>
+
+
+   <topic id="a_matrimonio">
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_esp"></topicRef>
+        </scope>
+         <baseNameString>Matrimonio</baseNameString>
+      </baseName>
+      <baseName>
+        <scope>
+            <topicRef xlink:href="#s_eng"></topicRef>
+        </scope>
+         <baseNameString>Marriage</baseNameString>
+      </baseName>
+   </topic>
+
+      <association>
+      <instanceOf>
+         <topicRef xlink:href="#a_matrimonio">
+         </topicRef>
+      </instanceOf>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#t_persona">
+            </topicRef>
+         </roleSpec>
+
+         <topicRef xlink:href="#p0001">
+         </topicRef>
+      </member>
+      <member>
+         <roleSpec>
+            <topicRef xlink:href="#t_persona"></topicRef>
+         </roleSpec>
+         <topicRef xlink:href="#p0002">
+         </topicRef>
+      </member>
+   </association>
+   
+
+</topicMap>
+

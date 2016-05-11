@@ -1,0 +1,57 @@
+Que tipo de licencia utiliza jFreeChart?
+Se puede comparti el codigo? si/no y porque
+Si yo desarrollo algo con jFreeChart, puedo incluir la libreria sin pagar nada?
+Si yo desarrollo algo con jFreeChart, puedo incluir la libreria sin incluir ninguna licencia?
+Si yo desarrollo algo con jFreeChart, puedo vender mi codigo?
+Si yo desarrollo algo con jFreeChart, puedo incluir la documentación de la libreria sin pagar nada?
+Si yo desarrollo algo con jFreeChart, puedo incluir ejemplos de la libreria sin incluir una licencia?
+Si yo desarrollo algo con jFreeChart, puedo incluir ejemplos de la libreria sin pagar nada?
+
+Que tipo de licencia utiliza Netbeans?
+Si yo desarrollo algo con y/o en Netbeans, puedo incluir el codigo de java sin pagar nada?
+Si yo desarrollo algo con y/o en Netbeans, puedo incluir el codigo sin incluir ninguna licencia?
+Si yo desarrollo algo con y/o en Netbeans, puedo vender mi codigo?
+Si yo desarrollo algo con y/o en Netbeans, puedo incluir "JAVA" sin pagar nada?
+Si yo desarrollo algo con y/o en Netbeans, puedo incluir el codigo de Netbeans sin una licencia?
+Si yo desarrollo algo con y/o en Netbeans, puedo incluir el instalador de Netbeans?
+
+Se tiene una dirección Ipv6 segmento /64, se puede separar en 2 redes?
+Se tiene una dirección Ipv6 segmento /64, se puede separar en 4 redes?
+Se tiene una dirección Ipv6 segmento /64, se puede separar en "6" redes?
+
+Se tiene una dirección Ipv6 segmento /48, se puede separar en 2 redes?
+Se tiene una dirección Ipv6 segmento /48, se puede separar en 4 redes?
+Se tiene una dirección Ipv6 segmento /48, se puede separar en 8 redes?
+
+Es valida la dirección 2801::1?
+
+Es valida la dirección 2801::cafe?
+
+Es valida la dirección 2801:2801::1:1?
+
+Escribe una apicacion que grafique en un "pie":
+
+Mañana:		45 personas
+Ayer  : 	35 personas
+Hoy   :		65 personas
+
+y guarde el archivo como imagen con 40, 60 y 90% de transparencia.
+
+Escribe una aplicación que solicite el tiempo a 3 servidores, y muestre la diferencia con cada uno, en una grafica de lineas, y se realize la medición 100 veces, espaciadas 3 segundos c/u.
+
+Como configuras un cliente que se va a conectar a 2 ISP usando BGP, el cliente tiene el sistema autonomo 123 y los proveedores tiene 213 y 312 como SA. Vas a anunciar 2 redes, una de IPv4 y otra de IPv6.
+
+Muetra la configuración de los 3 equipos.
+
+Que ventaja tiene usar Mysql sobre Oracle Lite?
+Que ventaja tiene usar Oracle Lite sobre Mysql?
+
+
+Escribe un servlet que te genere una imagen de un termometro en donde muestre la temperatura medida entre una minima de 25°C (Verde), 60° Amarilla y 100° Rojo
+
+http://localhost/servlet?termo=35
+
+
+
+
+

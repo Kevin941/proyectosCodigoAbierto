@@ -1,0 +1,3063 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>The Built-in tolog Predicates</title>
+<link type="text/css" href="whitepapers.css" rel="stylesheet">
+</head>
+<body>
+<h1>The Built-in tolog Predicates</h1>
+<h2 class="subtitle">Reference Documentation</h2>
+<table width="100%">
+<tr>
+<td>
+<table>
+<tr>
+<th>Published by:</th><td>Ontopia</td>
+</tr>
+<tr>
+<th>Date:</th><td>2013-08-01</td>
+</tr>
+<tr>
+<th>Version:</th><td>5.3.0</td>
+</tr>
+</table>
+</td><td><a href="http://www.ontopia.net"><img id="logo" border="0" align="right" alt="" src="logo.gif"></a></td>
+</tr>
+</table>
+<h2>Table of contents</h2>
+<ul>
+<li>
+<a href="#N1001E">1. Introduction</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10030">2. The general predicates</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10348">3. The Topic Maps predicates</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10E1E">4. External fulltext predicates</a>
+</li>
+<ul></ul>
+<li>
+<a href="#N10F12">5. The string module</a>
+</li>
+<ul></ul>
+</ul> 
+
+
+
+
+
+
+
+
+<h2>
+<a name="N1001E">1. Introduction</a>
+</h2> 
+ 
+
+<p>
+The tolog query language has a number of predefined predicates which
+are part of the language itself. Some of these exist in order to allow
+access to various parts of the Topic Maps model, while others exist
+because they provide generally useful query functionality. This
+document provides a reference to all predicates that are part of the
+language.
+</p>
+
+
+<p>
+This document is quite difficult to read without a thorough
+understanding of the Topic Maps model. It is recommended to study the
+<a href="http://www.isotopicmaps.org/sam/sam-model/">Topic Maps
+Data Model</a>.
+</p>
+
+  
+
+
+
+<h2>
+<a name="N10030">2. The general predicates</a>
+</h2>
+<p>
+These are predicates that are built directly into the language without
+being part of any specific module.
+</p>
+<h3>Index</h3>
+<ul>
+<li>
+<a href="#p-not-equal">/=</a>
+</li>
+<li>
+<a href="#p-less-than">&lt;</a>
+</li>
+<li>
+<a href="#p-less-than-equal">&lt;=</a>
+</li>
+<li>
+<a href="#p-equal">=</a>
+</li>
+<li>
+<a href="#p-greater-than">&gt;</a>
+</li>
+<li>
+<a href="#p-greater-than-equal">&gt;=</a>
+</li>
+<li>
+<a href="#p-coalesce">coalesce</a>
+</li>
+</ul>
+<h3>
+<a name="p-not-equal">/=</a>
+</h3>
+<p>
+Compares two values to ensure they are different.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v1</td><td class="dbTableEntry">object</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The first value to compare.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v2</td><td class="dbTableEntry">object</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The second value to compare.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the two values are different. For strings
+this means the values must be different when compared character by
+character case-sensitively, including all whitespace and special
+characters. For topic map objects this means they must be different
+objects. Null is different from everything except itself.
+</p>
+
+
+<p>
+Note that this predicate <em>cannot</em> produce new rows
+in the query or new values in any columns; it can only remove rows.
+</p>
+
+
+<p align="center">
+<b>Find all association types with more than two roles</b>
+</p>
+
+
+<pre>select $TYPE from
+  association-role($ASSOC, $ROLE1),
+  association-role($ASSOC, $ROLE2), $ROLE1 /= $ROLE2,
+  association-role($ASSOC, $ROLE3), $ROLE3 /= $ROLE1, $ROLE3 /= $ROLE2
+  type($ASSOC, $TYPE)?
+</pre>
+
+
+
+<p>
+This query will first find all association roles and their
+associations, then repeat each row once for each role in the same
+association, and finaly remove the rowws where the two roles are the
+same. The rest of the query is similar, except that the final
+predicate finds the type of the association.
+</p>
+
+
+<h3>
+<a name="p-less-than">&lt;</a>
+</h3>
+<p>
+Compares two values to ensure the first is less than the second.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v1</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The first value to compare.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v2</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The second value to compare.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the first value is less than the second.
+Note that this predicate will never bind any values, nor produce any
+new result rows. Like <a href="#p-not-equal"><a href="#p-not-equal">/=</a></a> it can only filter
+out matches.
+</p>
+
+
+<p align="center">
+<b>Find all operas premiered before 1900</b>
+</p>
+
+
+<pre>premiere-date($OPERA, $DATE),
+$DATE &lt; "1900"?</pre>
+
+
+
+<h3>
+<a name="p-less-than-equal">&lt;=</a>
+</h3>
+<p>
+Compares two values to ensure the first is less than or equal to the
+second.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v1</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The first value to compare.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v2</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The second value to compare.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the first value is less than or equal to
+the second.  Note that this predicate will never bind any values, nor
+produce any new result rows. Like <a href="#p-not-equal"><a href="#p-not-equal">/=</a></a> it can
+only filter out matches.
+</p>
+
+
+<p align="center">
+<b>Find all operas premiered before 1900</b>
+</p>
+
+
+<pre>premiere-date($OPERA, $DATE),
+$DATE &lt;= "1900"?</pre>
+
+
+
+<h3>
+<a name="p-equal">=</a>
+</h3>
+<p>
+Compares two values to ensure they are equal.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v1</td><td class="dbTableEntry">object</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The first value to compare.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v2</td><td class="dbTableEntry">object</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The second value to compare.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the two values are equal using the same
+comparison rule as <a href="#p-not-equal"><a href="#p-not-equal">/=</a></a>. Note that at least
+one of the values must be present. (That is, it cannot compare two
+unbound variables.)
+</p>
+
+
+<p>
+Note that unlike <a href="#p-not-equal"><a href="#p-not-equal">/=</a></a> this predicate
+<em>can</em> produce new values in columns.
+</p>
+
+
+<p align="center">
+<b>Find all operas premiered on a given date</b>
+</p>
+
+
+<pre>premiere-date($OPERA, $DATE),
+$DATE = "1870 (22 Feb)"?</pre>
+
+
+
+<p>
+This query will first set <tt class="symbol">$DATE</tt> to the given date,
+then find all operas premiered on that date. (Thanks to the query
+optimizer; if that is turned off the query will be rather less
+efficient, if not really slow.)
+</p>
+
+
+<h3>
+<a name="p-greater-than">&gt;</a>
+</h3>
+<p>
+Compares two values to ensure the first is greater than the second.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v1</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The first value to compare.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v2</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The second value to compare.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the first value is greater than the second.
+Note that this predicate will never bind any values, nor produce any
+new result rows. Like <a href="#p-not-equal"><a href="#p-not-equal">/=</a></a> it can only filter
+out matches.
+</p>
+
+
+<p align="center">
+<b>Find all operas premiered after 1900</b>
+</p>
+
+
+<pre>premiere-date($OPERA, $DATE),
+$DATE &gt; "1900"?</pre>
+
+
+
+<h3>
+<a name="p-greater-than-equal">&gt;=</a>
+</h3>
+<p>
+Compares two values to ensure the first is greater than or equal to
+the second.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v1</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The first value to compare.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v2</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The second value to compare.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the first value is greater than or equal to
+the second. Note that this predicate will never bind any values, nor
+produce any new result rows. Like <a href="#p-not-equal"><a href="#p-not-equal">/=</a></a> it can
+only filter out matches.
+</p>
+
+
+<p align="center">
+<b>Find all operas premiered after 1900</b>
+</p>
+
+
+<pre>premiere-date($OPERA, $DATE),
+$DATE &gt;= "1900"?</pre>
+
+
+
+<h3>
+<a name="p-coalesce">coalesce</a>
+</h3>
+<p>
+ This predicate is often used to assign fallback or default values to
+ variables. If the first argument is unbound then it is bound to the
+ first non-null argument following it. If the first argument is bound
+ then it will be compared to the first non-null argument following it.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">result</td><td class="dbTableEntry">object</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The result value.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">v1..vN</td><td class="dbTableEntry">object+</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The value to check to see if it is not null. If not null then it will be bound or compared to the result argument. In that case any following arguments will be ignored.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The coalesce predicate is often used to assign default values, and is
+quite often used with optional clauses as can be seen in the example
+below:
+</p>
+
+
+<p align="center">
+<b>Find all operas and their illustrations. Assign a default illustration to the operas that do not have one already.</b>
+</p>
+
+
+<pre>select $OPERA, $ILLUSTRATION from 
+instance-of($OPERA, opera), { illustration($OPERA, $I) }, 
+coalesce($ILLUSTRATION, $I, "http://example.org/nicephoto.jpg")?</pre>
+
+
+
+
+
+
+<h2>
+<a name="N10348">3. The Topic Maps predicates</a>
+</h2>
+<h3>Index</h3>
+<ul>
+<li>
+<a href="#p-association">association</a>
+</li>
+<li>
+<a href="#p-association-role">association-role</a>
+</li>
+<li>
+<a href="#p-base-locator">base-locator</a>
+</li>
+<li>
+<a href="#p-datatype">datatype</a>
+</li>
+<li>
+<a href="#p-direct-instance-of">direct-instance-of</a>
+</li>
+<li>
+<a href="#p-instance-of">instance-of</a>
+</li>
+<li>
+<a href="#p-item-identifier">item-identifier</a>
+</li>
+<li>
+<a href="#p-object-id">object-id</a>
+</li>
+<li>
+<a href="#p-occurrence">occurrence</a>
+</li>
+<li>
+<a href="#p-reifies">reifies</a>
+</li>
+<li>
+<a href="#p-resource">resource</a>
+</li>
+<li>
+<a href="#p-role-player">role-player</a>
+</li>
+<li>
+<a href="#p-scope">scope</a>
+</li>
+<li>
+<a href="#p-subject-identifier">subject-identifier</a>
+</li>
+<li>
+<a href="#p-subject-locator">subject-locator</a>
+</li>
+<li>
+<a href="#p-topic">topic</a>
+</li>
+<li>
+<a href="#p-topicmap">topicmap</a>
+</li>
+<li>
+<a href="#p-topic-name">topic-name</a>
+</li>
+<li>
+<a href="#p-type">type</a>
+</li>
+<li>
+<a href="#p-value">value</a>
+</li>
+<li>
+<a href="#p-value-like">value-like</a>
+</li>
+<li>
+<a href="#p-variant">variant</a>
+</li>
+</ul>
+<h3>
+<a name="p-association">association</a>
+</h3>
+<p>
+Used to verify that a value is actually an association.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">assoc</td><td class="dbTableEntry">association</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The value being tested.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true if the parameter is an association, and false
+if it is not. If used with an unbound variable it will produce all
+associations in the topic map.
+</p>
+
+
+<p align="center">
+<b>Counting the associations in the topic map</b>
+</p>
+
+
+<pre>select count($ASSOC) from
+  association($ASSOC)?
+</pre>
+
+
+
+<p>
+The above query counts the associations in the topic map by first
+producing all of them, then counting them.
+</p>
+
+
+<p align="center">
+<b>Finding all association types</b>
+</p>
+
+
+<pre>select $TYPE from
+  association($ASSOC), type($ASSOC, $TYPE)?
+</pre>
+
+
+
+<p>
+The above query first finds all associations in the topic map, then
+finds the type of each, and finally reduces the result to only the
+types.
+</p>
+
+
+<h3>
+<a name="p-association-role">association-role</a>
+</h3>
+<p>
+Used to query the relationship between associations and the roles they
+contain.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">assoc</td><td class="dbTableEntry">association</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The association containing the roles.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">role</td><td class="dbTableEntry">association role</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The association role contained in the association.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true for a given association and association role if
+the association role is contained in the role. Can be used to find the
+association a role belongs to, all roles in an association, or all
+roles in all associations. 
+</p>
+
+
+<p align="center">
+<b>Finding all unary association types</b>
+</p>
+
+
+<pre>select $TYPE from
+  association-role($ASSOC, $ROLE1),
+  not(association-role($ASSOC, $ROLE2), $ROLE2 /= $ROLE1),
+  type($ASSOC, $TYPE)?
+</pre>
+
+
+
+<p>
+The above query first finds all roles in all associations, then
+removes the associations where there exists another role in the same
+association, finds the type of the association, and projects us down
+to the list of types. (So for any given type in the result there
+<em>could</em> be associations that are instances of it
+which are not unary. This can be solved, but is more involved.)
+</p>
+
+
+<p align="center">
+<b>Finding all associations between two topics</b>
+</p>
+
+
+<pre>select $ASSOC from
+  role-player($ROLE1, topic1),
+  association-role($ASSOC, $ROLE1),
+  association-role($ASSOC, $ROLE2),
+  role-player($ROLE2, topic2)?
+</pre>
+
+
+
+<p>
+The above query first finds all roles played by
+<tt class="symbol">topic1</tt>, then finds the association of the role, then
+finds all other roles in the same association, then removes all rows
+where the second role isn't played by <tt class="symbol">topic2</tt>, and
+finally projects us down to just the associations.
+</p>
+
+
+<h3>
+<a name="p-base-locator">base-locator</a>
+</h3>
+<p>
+Used to find the base locator of the topic map.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">locator</td><td class="dbTableEntry">locator</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The base locator of the topic map.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true for a single value: the base locator of the
+topic map, if it has one.
+</p>
+
+
+<p align="center">
+<b>Finding the base locator of the topic map</b>
+</p>
+
+
+<pre>base-locator($LOC)?
+</pre>
+
+
+
+<p>
+This will return the base locator of the topic map, if it has one.
+For a topic map loaded from a file this will be the URI of the file,
+while for an RDBMS topic map this will a JDBC URI pointing to the
+database.
+</p>
+
+
+<h3>
+<a name="p-datatype">datatype</a>
+</h3>
+<p>
+Finds the datatype of an occurrence or variant name.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">object</td><td class="dbTableEntry">variant, occurrence</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The object having the datatype.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">datatype</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The URI of the object's datatype, as a string.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">object</tt> has the
+<tt class="symbol">datatype</tt> as its datatype URI. The predicate can be
+used to find the datatype of an object, all objects with a specific
+datatype, or all object/datatype combinations.
+</p>
+
+
+<p align="center">
+<b>Find all occurrences with integer values</b>
+</p>
+
+
+<pre>select $OCC from
+  occurrence($TOPIC, $OCC),
+  datatype($OCC, "http://www.w3.org/2001/XMLSchema#integer")?
+</pre>
+
+
+
+<p>
+This query will find all occurrences in the topic map, then remove the
+ones whose datatype is not the XML Schema integer datatype.
+</p>
+
+
+<h3>
+<a name="p-direct-instance-of">direct-instance-of</a>
+</h3>
+<p>
+Used to query the types topic are instances of; usually to find the
+most specific types of the topics.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">instance</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The instance topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">type</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The type topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true when the <tt class="symbol">instance</tt> topic is
+explicitly defined by the topic map as being an instance of the
+<tt class="symbol">type</tt> topic. (Contrast with <a href="#p-instance-of"><a href="#p-instance-of">instance-of</a></a>, where this need not be said explicitly.)
+</p>
+
+
+<p align="center">
+<b>Finding all topic types in the topic map</b>
+</p>
+
+
+<pre>select $TYPE from
+  direct-instance-of($INSTANCE, $TYPE)?
+</pre>
+
+
+
+<p>
+This will find all instance-type pairs in the topic map, then cut away
+the instances, leaving only the types.
+</p>
+
+
+<p align="center">
+<b>Finding persons and their types</b>
+</p>
+
+
+<pre>
+  instance-of($PERSON, person),
+  direct-instance-of($PERSON, $TYPE)?
+</pre>
+
+
+
+<p>
+In the <tt>opera.ltm</tt> topic map this query would
+first find all instances of the type <tt class="symbol">person</tt> (that is,
+the instances of all subtypes of person, such as composers,
+librettists, writers, characters, and so on), and then find the types
+actually given to the topics in the topic map. The result would be
+something like the table shown below.</p>
+
+
+<p align="center">
+<b>Table 3.1. Example query result</b>
+</p>
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">PERSON</th><th class="dbTableHeaderEntry">TYPE</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Ulrica</td><td class="dbTableEntry">Character</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">La Rocca</td><td class="dbTableEntry">Character</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Maddalena</td><td class="dbTableEntry">Character</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td><td class="dbTableEntry">...</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Cammarano, Salvatore</td><td class="dbTableEntry">Librettist</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Civinini, Guelfo</td><td class="dbTableEntry">Librettist</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">Daudet, Alphonse</td><td class="dbTableEntry">Writer</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">...</td><td class="dbTableEntry">...</td>
+</tr>
+</table>
+
+
+<h3>
+<a name="p-instance-of">instance-of</a>
+</h3>
+<p>
+Used to query the types topic are instances of; takes the
+superclass-subclass association into account.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">instance</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The instance topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">type</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The type topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true when the <tt class="symbol">instance</tt> topic is an
+instance of the <tt class="symbol">type</tt> topic. This can be either
+directly, or <tt class="symbol">instance</tt> can be an instance of a type
+that is a subtype of <tt class="symbol">type</tt>. Note that for this to work
+the superclass-subclass association type must use the XTM 1.0 PSIs.
+(Contrast with <a href="#p-direct-instance-of"><a href="#p-direct-instance-of">direct-instance-of</a></a>, where this
+needs to be said explicitly in the topic map, and the
+superclass-subclass associations are ignored.)
+</p>
+
+
+<p align="center">
+<b>Finding all abstract topic types in the topic map</b>
+</p>
+
+
+<pre>select $TYPE from
+  instance-of($INST, $TYPE),
+  not(direct-instance-of($INST, $TYPE))?
+</pre>
+
+
+
+<p>
+This will find all type-instance pairs, but then remove pairs where it
+is explicitly said in the topic map that <tt>$INST</tt> is
+an instance of <tt>$TYPE</tt>. This will leave us with only
+the types which have no direct instances, that is, where all instances
+are instances of one of the subtypes. Such types are often called
+abstract types. One example of this in the Italian Opera topic map is
+"place". There are lots of places, such as cities, regions, and
+countries, but they are always defined as instances of one of the more
+specific types, never as just "place".
+</p>
+
+
+<h3>
+<a name="p-item-identifier">item-identifier</a>
+</h3>
+<p>
+Used to query the item identifiers of a topic map construct.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">object</td><td class="dbTableEntry">topic map, topic, topic name, variant, occurrence, association,
+association role</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The object having the item identifier.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">locator</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The item identifier of the object.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p> The predicate is true when the <tt class="symbol">locator</tt> is a
+item identifier for the <tt class="symbol">object</tt>. This is useful for
+finding the item identifiers of a particular object, for looking up
+the object that has a particular item identifier, or for listing all
+item identifiers in the topic map.  </p>
+
+
+<p align="center">
+<b>Find all non-topics which have item identifiers</b>
+</p>
+
+
+<pre>select $OBJECT from
+  item-identifier($OBJECT, $LOC),
+  not(topic($OBJECT))?
+</pre>
+
+
+
+<p>
+This query will, if run against a topic map that was loaded from an
+XTM file, find all objects in the topic map other than topics which
+had <tt class="symbol">id</tt> attributes. It works by first finding all
+objects which have item identifiers (and the item identifiers), then
+remove the rows where the object is a topic.
+</p>
+
+
+<h3>
+<a name="p-object-id">object-id</a>
+</h3>
+<p>
+Used to query object IDs of topic map objects.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">object</td><td class="dbTableEntry">topic map, topic, topic name, variant, occurrence, association,
+       association role</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic map object that has the ID.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">id</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The object ID of the topic map object.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true when the <tt class="symbol">id</tt> is the object ID
+of the <tt class="symbol">object</tt>. It can be used to find the object ID
+of a specific object, to find the object that has a specific ID, or to
+find all object IDs in the topic map.
+</p>
+
+
+<p>
+Note that the object ID is <em>not</em> the same as the
+symbolic ID used in XTM or LTM files; for this, see the <a href="#p-item-identifier"><a href="#p-item-identifier">item-identifier</a></a> predicate.
+</p>
+
+
+<p align="center">
+<b>Finding the object ID of Puccini</b>
+</p>
+
+
+<pre>object-id(puccini, $ID)?</pre>
+
+
+
+<p>
+This query will produce the object ID after having looked up the
+Puccini topic. Note that the ID will <em>not</em> be
+<tt class="literal">"puccini"</tt>, but rather something like
+<tt class="literal">"2532"</tt>.
+</p>
+
+
+<p align="center">
+<b>Finding the object with ID 241</b>
+</p>
+
+
+<pre>object-id($OBJECT, "241")?
+</pre>
+
+
+
+<p>
+What this will return for any given topic map can't be predicted (try
+it in the Omnigator!), but in any non-trivial topic map it will find
+<em>something</em>.
+</p>
+
+
+<h3>
+<a name="p-occurrence">occurrence</a>
+</h3>
+<p>
+Used to query the topic-occurrence relationship.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic that has the occurrence.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">occurrence</td><td class="dbTableEntry">occurrence</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The occurrence of the topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true when the <tt class="symbol">occurrence</tt> is an
+occurrence of the <tt class="symbol">topic</tt>. This is useful for finding
+the topic an occurrence belongs to, or all occurrences of a topic, or
+just all occurrences in the topic map.
+</p>
+
+
+<p align="center">
+<b>Finding all occurrences of a topic</b>
+</p>
+
+
+<pre>select $TYPE, $VALUE from
+  occurrence(topic, $OCC),
+  type($OCC, $TYPE),
+  { resource($OCC, $VALUE) | value($OCC, $VALUE) }?
+</pre>
+
+
+
+<p>
+This query will first find all occurrences of the topic, then the type
+of the occurrence, then either the URI of the occurrence or its string
+value, and finally make a (type, value) table of the results.
+</p>
+
+
+<p align="center">
+<b>Finding all persons born on a specific date</b>
+</p>
+
+
+<pre>select $PERSON from
+  occurrence($PERSON, $OCC),
+  type($OCC, date-of-birth),
+  value($OCC, "1973-12-25")?
+</pre>
+
+
+
+<p>
+This query will first find all occurrences of all topics, then remove
+the occurrences that are not <tt class="symbol">date-of-birth</tt>
+occurrences, and then remove all occurrences that don't have
+<tt class="literal">"1973-12-25"</tt> as their value, and finally we project
+down to only the topics that have these occurrences. 
+</p>
+
+
+<p>
+Note that the easiest way to do this is to use a dynamic occurrence
+predicate:
+</p>
+
+
+<p align="center">
+<b>Finding all persons born on a specific date</b>
+</p>
+
+
+<pre>date-of-birth($PERSON, "1973-12-25")?</pre>
+
+
+
+<h3>
+<a name="p-reifies">reifies</a>
+</h3>
+<p>
+Used to query the relationship between a reifying topic and the thing
+it reifies.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">reifier</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The reifying topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">reified</td><td class="dbTableEntry">topic map, association, association role, topic name, variant, or
+       occurrence</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The reified topic map construct.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+This predicate is true when the <tt class="symbol">reifier</tt> is an
+topic that reifies the <tt class="symbol">reified</tt>. This is useful when
+you use reification and want to navigate from the name, occurrence, or
+association to the reifying topic (or vice versa).
+</p>
+
+
+<p align="center">
+<b>Finding the topic reifying the topic map</b>
+</p>
+
+
+<pre>select $TOPIC from
+  topicmap($TM), reifies($TOPIC, $TM)?
+</pre>
+
+
+
+<p>
+This query finds the topic map first, then the topic reifying it (if
+there is one).
+</p>
+
+
+<h3>
+<a name="p-resource">resource</a>
+</h3>
+<p>
+Used to find the URI of an occurrence or variant name, or to find the
+occurrences and variant names that have a particular URI.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">object</td><td class="dbTableEntry">occurrence, variant</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The occurrence or variant which has the URI.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">locator</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The URI of the occurrence or variant.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the occurrence or variant has the
+<tt class="symbol">locator</tt> as its URI value. This is useful for looking
+up all occurrences/variants with a specific URI, or finding the URI of
+a variant/occurrence, or all occurrences/variants which have URI
+values.
+</p>
+
+
+<p align="center">
+<b>Find Ontopia's home page</b>
+</p>
+
+
+<pre>select $URI from
+  occurrence(ontopia, $OCC),
+  type($OCC, homepage),
+  resource($OCC, $URI)?
+</pre>
+
+
+
+<p>
+This query will find all occurrences of the topic
+<tt class="symbol">ontopia</tt>, then remove the ones that are not homepage
+occurrences, and finally find the URIs of the ones remaining.
+</p>
+
+
+<h3>
+<a name="p-role-player">role-player</a>
+</h3>
+<p>
+Used to find the topic playing a specific role, or all the roles
+played by a topic.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">role</td><td class="dbTableEntry">association role</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The role played by the topic.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic playing the role.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">topic</tt> plays the given
+<tt class="symbol">role</tt>. This is useful for finding all roles played by
+a topic, or the topic playing a particular role.
+</p>
+
+
+<p align="center">
+<b>Finding all associations between two topics</b>
+</p>
+
+
+<pre>select $ASSOC from
+  role-player($ROLE1, topic1),
+  association-role($ASSOC, $ROLE1),
+  association-role($ASSOC, $ROLE2),
+  role-player($ROLE2, topic2)?
+</pre>
+
+
+
+<p>
+The above query first finds all roles played by
+<tt class="symbol">topic1</tt>, then finds the association of the role, then
+finds all other roles in the same association, then removes all rows
+where the second role isn't played by <tt class="symbol">topic2</tt>, and
+finally projects us down to just the associations.
+</p>
+
+
+<h3>
+<a name="p-scope">scope</a>
+</h3>
+<p>
+Used to query the scopes of topic characteristics.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">scoped</td><td class="dbTableEntry">topic name, variant, occurrence, association</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The thing having the scope.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">theme</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The scoping topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">theme</tt> is a topic in
+the scope of the <tt class="symbol">scoped</tt> thing. This is useful for
+finding topic characteristics in a particular scope, finding the scope
+of a topic characteristic, and so on.
+</p>
+
+
+<p align="center">
+<b>Finding the English names of all operas</b>
+</p>
+
+
+<pre>select $NAME from
+  instance-of($OPERA, opera),
+  topic-name($OPERA, $TNAME),
+  scope($TNAME, english),
+  value($TNAME, $NAME)?
+</pre>
+
+
+
+<p>
+The above query first finds all operas, then all topic names (or base
+names) of the operas, then removes the names that are not in the
+English scope, and finally finds the string value of the remaining
+names.
+</p>
+
+
+<h3>
+<a name="p-subject-identifier">subject-identifier</a>
+</h3>
+<p>
+Used to query the subject identifiers of a topic. (A subject
+identifier is the URI of a subject identifier.)
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic having the subject identifier.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">locator</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The subject identifier of the topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">locator</tt> is a subject
+identifier for the <tt class="symbol">topic</tt>. This is useful for finding
+the subject identifiers of a particular topic, for looking up the
+topic that has a particular subject identifier, or for listing all
+subject identifiers in the topic map.
+</p>
+
+
+<p align="center">
+<b>Find all topics which have more than one subject identifier</b>
+</p>
+
+
+<pre>select $TOPIC from
+  subject-identifier($TOPIC, $LOC1),
+  subject-identifier($TOPIC, $LOC2),
+  $LOC1 /= $LOC2?
+</pre>
+
+
+
+<p>
+The query will first find all subject identifiers in the topic map and
+the topics that have them, then for each topic find other subject
+identifiers belonging to it (again), and finally remove the rows where
+the two subject identifiers are the same.
+</p>
+
+
+<h3>
+<a name="p-subject-locator">subject-locator</a>
+</h3>
+<p>
+Used to query the subject locator of a topic. (A subject locator is
+the URI of the information resource that the topic represents.)
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic having the subject locator.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">locator</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The subject locator of the topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">locator</tt> is a subject
+locator for the <tt class="symbol">topic</tt>. This is useful for finding the
+subject locator of a particular topic, for looking up the topic that
+has a particular subject locator, or for listing all subject locators
+in the topic map.
+</p>
+
+
+<p align="center">
+<b>Find all topics which represent an occurrence</b>
+</p>
+
+
+<pre>select $TOPIC from
+  occurrence($OTHERTOPIC, $OCC),
+  resource($OCC, $LOC),
+  subject-locator($TOPIC, $LOC)?
+</pre>
+
+
+
+<p>
+This query will find all topics which represent information resources
+that are occurrences of some topic in the topic map. It starts by
+finding all occurrences, then removes all occurrences which don't have
+a URI and at the same time notes the URI, and finally finds all topics
+which have this URI as their subject locator.
+</p>
+
+
+<h3>
+<a name="p-topic">topic</a>
+</h3>
+<p>
+Used to verify that an object is a topic or to find all topics in the
+topic map.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The object that is a topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">topic</tt> is a topic. Can
+be used to find all topics or to verify that some object is a topic.
+</p>
+
+
+<p align="center">
+<b>Count the topics in the topic map</b>
+</p>
+
+
+<pre>select count($TOPIC) from
+  topic($TOPIC)?
+</pre>
+
+
+
+<p>
+This query will find all topics in the topic map, then count them.
+</p>
+
+
+<p align="center">
+<b>Find all topics which have no name</b>
+</p>
+
+
+<pre>select $TOPIC from
+  topic($TOPIC),
+  not(topic-name($TOPIC, $NAME))?
+</pre>
+
+
+
+<p>
+This query will find all topics in the topic map, then remove the ones
+that have at least one name.
+</p>
+
+
+<h3>
+<a name="p-topicmap">topicmap</a>
+</h3>
+<p>
+Finds the topic map.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicmap</td><td class="dbTableEntry">topic map</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic map.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">topicmap</tt> is the topic
+map itself. This is useful for finding the topic map.
+</p>
+
+
+<p align="center">
+<b>Find the name of the topic map</b>
+</p>
+
+
+<pre>select $VALUE from
+  topicmap($TM),
+  reifies($TMTOPIC, $TM),
+  topic-name($TMTOPIC, $NAME),
+  value($NAME, $VALUE)?
+</pre>
+
+
+
+<p>
+This query will first find the topic map, then the topic that reifies
+it (if any), then all names of that topic, then their string values.
+</p>
+
+
+<h3>
+<a name="p-topic-name">topic-name</a>
+</h3>
+<p>
+Queries the topic-name relationship.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topic</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic that has the name.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">name</td><td class="dbTableEntry">topic name</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The name of the topic.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">topic</tt> has the
+<tt class="symbol">name</tt> as a topic name. Note that <tt class="symbol">name</tt>
+is <em>not</em> a string, but an object. To find the
+string value use the <a href="#p-value"><a href="#p-value">value</a></a> predicate on the name
+object. (Example below.) 
+</p>
+
+
+<p>
+The predicate can be used to find all names of a topic, the topic that
+has a particular name, or to find all names in the topic map.
+</p>
+
+
+<p align="center">
+<b>Find all topics named "Tosca"</b>
+</p>
+
+
+<pre>select $TOPIC from
+  topic-name($TOPIC, $NAME), value($NAME, "Tosca")?
+</pre>
+
+
+
+<p>
+This query will find all topic names in the topic map, then remove the
+ones whose string value is not <tt class="literal">"Tosca"</tt>. Note that
+this will only find names that match exactly. For inexact matching,
+use <a href="#p-value-like"><a href="#p-value-like">value-like</a></a>.
+</p>
+
+
+<p align="center">
+<b>Find all topics which have no name</b>
+</p>
+
+
+<pre>select $TOPIC from
+  topic($TOPIC),
+  not(topic-name($TOPIC, $NAME))?
+</pre>
+
+
+
+<p>
+This query will find all topics in the topic map, then remove the ones
+that have at least one name.
+</p>
+
+
+<h3>
+<a name="p-type">type</a>
+</h3>
+<p>
+Queries the type of topic map objects (but not topics).
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">object</td><td class="dbTableEntry">association, topic name, occurrence, association role</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The object having the type.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">type</td><td class="dbTableEntry">topic</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The type of the object.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">object</tt> has the
+<tt class="symbol">type</tt> as its type. This can be used to find the type
+of an object, all objects of a specific type, or all types. This
+predicate does not take the superclass-subclass associations into
+account. Also note that for topics the <a href="#p-instance-of"><a href="#p-instance-of">instance-of</a></a>
+and <a href="#p-direct-instance-of"><a href="#p-direct-instance-of">direct-instance-of</a></a> predicates must be used.
+</p>
+
+
+<p align="center">
+<b>Find all association types</b>
+</p>
+
+
+<pre>select $TYPE from
+  association($ASSOC),
+  type($ASSOC, $TYPE)?
+</pre>
+
+
+
+<p>
+This query will first find all associations, then the type of each
+association, and finally produce just a list of the types.
+</p>
+
+
+<h3>
+<a name="p-value">value</a>
+</h3>
+<p>
+Finds the string value of an object.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">object</td><td class="dbTableEntry">topic name, variant, occurrence</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The object having the string value.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">value</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string value of the object.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">object</tt> has the
+<tt class="symbol">value</tt> as its string value. Variant names and
+occurrences which have URIs have no string value, and so will not be
+matched by this predicate. The predicate can be used to find the
+string value of an object, all objects with a specific value, or all
+string values.
+</p>
+
+
+<p align="center">
+<b>Find all topics named "Tosca"</b>
+</p>
+
+
+<pre>select $TOPIC from
+  topic-name($TOPIC, $NAME), value($NAME, "Tosca")?
+</pre>
+
+
+
+<p>
+This query will find all topic names in the topic map, then remove the
+ones whose string value is not <tt class="literal">"Tosca"</tt>. Note that
+this will only find names that match exactly. For inexact matching,
+use <a href="#p-value-like"><a href="#p-value-like">value-like</a></a>.
+</p>
+
+
+<h3>
+<a name="p-value-like">value-like</a>
+</h3>
+<p>
+Performs a full-text search.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">object</td><td class="dbTableEntry">topic name, variant, occurrence</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The object having the string value matched by the full-text
+search.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The full-text query string. tolog does not define the syntax to
+be used here; the interpretation depends on the full-text search
+engine used by the backend, and different backends may well use
+different search engines.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">score</td><td class="dbTableEntry">float</td><td class="dbTableEntry">no</td><td class="dbTableEntry">no</td><td class="dbTableEntry">The score/relevancy of the matched object. The value is a float 
+greater than 0.0 and less than 1.0.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">object</tt> has a string
+value which matches the <tt class="symbol">query</tt>. This can be used to
+find topic names, variants, and occurrences matching a particular
+string. Note that the object found is <em>not</em> a
+topic, but a topic name, variant, or occurrence. The other predicates
+must be used to connect this to a topic.
+</p>
+
+
+<p align="center">
+<b>Find all topics matching "tosca"</b>
+</p>
+
+
+<pre>select $TOPIC from
+  { topic-name($TOPIC, $NAME), value-like($NAME, "tosca") |
+    occurrence($TOPIC, $OCC),  value-like($OCC,  "tosca") |
+    topic-name($TOPIC, $TN), variant($TN, $V), value-like($V, "tosca")
+    }?
+</pre>
+
+
+
+<p>
+This query will find all topics in the topic map matching the
+full-text query, whether the full-text query matches a topic name,
+variant, or occurrence.
+</p>
+
+
+<p align="center">
+<b>Find default names matching "tosca"</b>
+</p>
+
+
+<pre>select $NAME, $SCORE from
+  topic-name($TOPIC, $NAME), not(scope($NAME, $SCOPE)),
+  value-like($NAME, "tosca", $SCORE), $SCORE &gt;= 0.50 ?
+</pre>
+
+
+
+<p>
+This query makes use of the optional third argument to the value-like 
+predicate. The query finds all unconstrained topic names containing the 
+pattern "tosca", and where the score value is greater than or equal to 
+0.50. The score value is also included in the projection.
+</p>
+
+
+
+<h3>
+<a name="p-variant">variant</a>
+</h3>
+<p>
+Queries the topic name-variant relationship.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">topicname</td><td class="dbTableEntry">topic name</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The topic name of which the variant is a variant.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">variant</td><td class="dbTableEntry">variant</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The variant of the topic name.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when the <tt class="symbol">variant</tt> is a variant
+of the <tt class="symbol">topicname</tt>. Can be used to find all variants of
+a topic name, the topic name of a variant, or all variants. 
+</p>
+
+
+<p>
+Note that although XTM allows variants to nest within each other
+<a href="http://www.isotopicmaps.org/sam/sam-model/">TMDM</a>
+collapses this structure, and so that structure is not available to be
+queried in tolog.
+</p>
+
+
+<p align="center">
+<b>Find all topics which have a sort name</b>
+</p>
+
+
+<pre>select $TOPIC from
+  topic-name($TOPIC, $NAME),
+  variant($NAME, $VARIANT),
+  scope($VARIANT, i"http://www.topicmaps.org/xtm/1.0/core.xtm#sort")?
+</pre>
+
+
+
+<p>
+This query will find all topic names in the topic map together with
+their topics, then all variants of the topic names, and finally
+removes the rows where the variant is not in the scope of the sort PSI
+defined by XTM 1.0.
+</p>
+
+
+
+
+
+<h2>
+<a name="N10E1E">4. External fulltext predicates</a>
+</h2>
+
+
+
+<p>
+It is possible to extend tolog with external fulltext predicates by
+implementing the <tt class="interfacename">SearcherIF</tt> and
+<tt class="interfacename">SearchResultIF</tt> interfaces from the
+<tt class="symbol">net.ontopia.topicmaps.query.spi</tt> package (see the API
+documentation for more information). If the class
+<tt class="symbol">com.foo.MySearcher</tt> implements the
+<tt class="interfacename">SearcherIF</tt> interface, that class can be
+used in tolog as follows:
+</p>
+
+
+<pre>import "urn:x-java:com.foo.MySearcher" as fulltext
+select $A, $RELEVANCE from
+  fulltext:search($A, "CMS", $RELEVANCE)
+order by $RELEVANCE?</pre>
+
+
+<p>
+The class name in the import URI is enough for Ontopia to instantiate
+the class and use it. The actual predicate name
+(<tt class="symbol">fulltext:search</tt> in the example above) does not need
+to be significant. The name is passed into the
+<tt class="interfacename">SearcherIF</tt> class, but it is up to the
+<tt class="interfacename">SearcherIF</tt> class to attach significance
+to the predicate name. (One alternative is to always use a specific
+name, such as "search". Another is to use the name to select which
+full-text index to search.)
+</p>
+
+
+<p>
+The parameters to external fulltext predicates are:
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">result</td><td class="dbTableEntry">unspecified</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">This is the value found by the search. The type depends on the
+searcher implementation. More information about this below.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">query</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">This is the query passed to the external full-text
+implementation.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">relevance</td><td class="dbTableEntry">float</td><td class="dbTableEntry">no</td><td class="dbTableEntry">no</td><td class="dbTableEntry">This is a floating-point number between 0 and 1 indicating the
+relevance of this item in the search result to the search criteria. 1
+indicates the highest relevance, 0 the lowest.</td>
+</tr>
+</table>
+
+
+<p>
+The <tt class="interfacename">SearcherIF</tt> implementation can
+produce values of different types, as indicated by the
+<tt class="methodname">getValueType</tt> method. The table below explains
+the different possible values.
+</p>
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Value type</th><th class="dbTableHeaderEntry">Result type</th><th class="dbTableHeaderEntry">Meaning</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt class="symbol">SUBJECT_LOCATOR</tt></td><td class="dbTableEntry">topic</td><td class="dbTableEntry">The searcher must return a string, and the predicate will
+return the topic with that subject locator.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt class="symbol">SUBJECT_IDENTIFIER</tt></td><td class="dbTableEntry">topic</td><td class="dbTableEntry">The searcher must return a string, and the predicate will
+return the topic with that subject identifier.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt class="symbol">ITEM_IDENTIFIER</tt></td><td class="dbTableEntry">topic map object</td><td class="dbTableEntry">The searcher must return a string, and the predicate will
+return the topic map object with that item identifier (a.k.a. source
+locator).</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt class="symbol">OBJECT_ID</tt></td><td class="dbTableEntry">topic map object</td><td class="dbTableEntry">The searcher must return a string, and the predicate will
+return the topic map object with that object ID.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt class="symbol">STRING_VALUE</tt></td><td class="dbTableEntry">string</td><td class="dbTableEntry">The predicate will return the result of calling the
+<tt class="methodname">toString</tt> on the object returned by the
+searcher. There is no defined Topic Maps interpretation of the
+string.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry"><tt class="symbol">OBJECT_VALUE</tt></td><td class="dbTableEntry">any</td><td class="dbTableEntry">The predicate will return the the object returned by the
+searcher. There is no defined Topic Maps interpretation of the
+object.</td>
+</tr>
+</table>
+
+
+
+
+<h2>
+<a name="N10F12">5. The string module</a>
+</h2>
+<p>
+The URI of this module is
+<tt class="symbol">http://psi.ontopia.net/tolog/string/</tt>. For usage, see
+the examples.
+</p>
+<h3>Index</h3>
+<ul>
+<li>
+<a href="#p-str-concat">concat</a>
+</li>
+<li>
+<a href="#p-str-contains">contains</a>
+</li>
+<li>
+<a href="#p-str-ends-with">ends-with</a>
+</li>
+<li>
+<a href="#p-str-index-of">index-of</a>
+</li>
+<li>
+<a href="#p-str-last-index-of">last-index-of</a>
+</li>
+<li>
+<a href="#p-str-length">length</a>
+</li>
+<li>
+<a href="#p-str-starts-with">starts-with</a>
+</li>
+<li>
+<a href="#p-str-substring">substring</a>
+</li>
+<li>
+<a href="#p-str-substring-after">substring-after</a>
+</li>
+<li>
+<a href="#p-str-substring-before">substring-before</a>
+</li>
+<li>
+<a href="#p-str-translate">translate</a>
+</li>
+</ul>
+<h3>
+<a name="p-str-concat">concat</a>
+</h3>
+<p>
+Concatenates two strings.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">OUT</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The concatenated string.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">IN1</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The first of the two strings to concatenate.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">IN2</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The second of the two strings to concatenate.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">OUT</tt> is equal to
+<tt class="parameter">IN1</tt> immediately followed by
+<tt class="parameter">IN2</tt>. 
+</p>
+
+
+<p align="center">
+<b>Concatenate two strings</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+  str:concat($NAME, "Ontopia", " AS")? 
+</pre>
+
+
+<p>
+This results in a single row with a single column containing the
+string <tt class="literal">"Ontopia AS"</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-contains">contains</a>
+</h3>
+<p>
+Tests whether a substring appears in another string.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to test.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">SUBSTRING</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The substring that must appear inside
+<tt class="parameter">STR</tt>.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">SUBSTRING</tt> appears at
+some position inside <tt class="parameter">STR</tt>.
+</p>
+
+
+<p align="center">
+<b>Find all PSIs defined by Ontopia</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $SI from
+  subject-identifier($TOPIC, $SI),
+  str:contains($SI, ".ontopia.net/")?</pre>
+
+
+<p>
+In the following topic map:
+</p>
+
+
+<pre>[subtype-of : hierarchical-relation-type = "Subtype of"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"]
+[supertype = "Supertype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"]
+[subtype = "Subtype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"]
+[descr = "Description"
+    @"http://psi.ontopia.net/occurrence/description"]
+</pre>
+
+
+<p>
+The result of this query would be one row, containing
+<tt class="literal">"http://psi.ontopia.net/occurrence/description"</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-ends-with">ends-with</a>
+</h3>
+<p>
+Tests whether a substring appears at the end of another string.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to test.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">SUFFIX</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The substring that must appear at the end of
+<tt class="parameter">STR</tt>.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">SUFFIX</tt> appears
+as the last part of <tt class="parameter">STR</tt>. In other words, if
+<tt class="parameter">STR</tt> is the concatenation of some other string
+and <tt class="parameter">SUFFIX</tt> the predicate is true.
+</p>
+
+
+<p align="center">
+<b>Find all class PSIs</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $SI from
+  subject-identifier($TOPIC, $SI),
+  str:ends-with($SI, "class")?</pre>
+
+
+<p>
+In the following topic map:
+</p>
+
+
+<pre>[subtype-of : hierarchical-relation-type = "Subtype of"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"]
+[supertype = "Supertype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"]
+[subtype = "Subtype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"]
+[descr = "Description"
+    @"http://psi.ontopia.net/occurrence/description"]
+</pre>
+
+
+<p>
+The result of this query would be three rows, containing
+<tt class="literal">"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"</tt>,
+<tt class="literal">"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"</tt>, and
+<tt class="literal">"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-index-of">index-of</a>
+</h3>
+<p>
+Finds the first occurrence of a substring within another string.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">OUT</td><td class="dbTableEntry">number</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The position of the substring.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">IN</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to search in.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">SEARCHFOR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The substring to search for.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">SEARCHFOR</tt> can be
+found inside <tt class="parameter">IN</tt> starting at position
+<tt class="parameter">OUT</tt>, and there are no occurrences of
+<tt class="parameter">SEARCHFOR</tt> at a lower position inside
+<tt class="parameter">IN</tt>. Position counts start at zero.
+
+This means that if the substring cannot be found at all the predicate
+does not match. Multiple occurrences of the substring later in the
+string are ignored.
+</p>
+
+
+<p align="center">
+<b>Find the first occurrence of a word in a string.</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+  str:index-of($POS, "The first occurrence of 'the' in the sentence.", "the")? 
+</pre>
+
+
+<p>
+This results is a single row with a single column containing the position of the
+left-most occurrence of 'the' (all lowercase)
+in the sentence, i.e. <tt class="literal">25</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-last-index-of">last-index-of</a>
+</h3>
+<p>
+Finds the last occurrence of a substring within another string.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">OUT</td><td class="dbTableEntry">number</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The position of the substring.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">IN</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to search in.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">SEARCHFOR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The substring to search for.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">SEARCHFOR</tt> can be
+found inside <tt class="parameter">IN</tt> starting at position
+<tt class="parameter">OUT</tt>, and there are no occurrences of
+<tt class="parameter">SEARCHFOR</tt> at a higher position inside
+<tt class="parameter">IN</tt>. Position counts start at zero.
+
+This means that if the substring cannot be found at all the predicate
+does not match. Multiple occurrences of the substring earlier in the
+string are ignored.
+</p>
+
+
+<p align="center">
+<b>Find all PSI namespaces in a topic map</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $PREFIX from
+  subject-identifier($TOPIC, $SI),
+  str:last-index-of($IX, $SI, "/"),
+  str:substring($PREFIX, $SI, 0, $IX)
+order by $PREFIX?</pre>
+
+
+<p>
+In the following topic map:
+</p>
+
+
+<pre>[subtype-of : hierarchical-relation-type = "Subtype of"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"]
+[supertype = "Supertype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"]
+[subtype = "Subtype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"]
+[descr = "Description"
+    @"http://psi.ontopia.net/occurrence/description"]
+</pre>
+
+
+<p>
+The result of this query would be two rows, containing
+<tt class="literal">"http://www.topicmaps.org/xtm/1.0/"</tt> and
+<tt class="literal">"http://psi.ontopia.net/occurrence/"</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-length">length</a>
+</h3>
+<p>
+Finds the length of a string.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to test.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">LENGTH</td><td class="dbTableEntry">number</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The number of characters in
+<tt class="parameter">STR</tt>.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">STRING</tt> contains
+exactly <tt class="parameter">LEN</tt> characters.
+</p>
+
+
+<p align="center">
+<b>Find the topics with the longest names</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $TOPIC from
+  topic-name($TOPIC, $TN),
+  value($TN, $NAME),
+  str:length($NAME, $LEN),
+  not(topic-name($TOPIC2, $TN2),
+      value($TN2, $NAME2),
+      str:length($NAME2, $LEN2),
+      $LEN &lt; $LEN2)?</pre>
+
+
+<p>
+This query will find the topic with the longest name, or almost. What
+it in fact will do is to find all topics for which there is no topic
+with a longer name. This means that if, say, three topics all have
+names 26 characters long, and no topics have longer names, then all
+those three topics will be found.
+</p>      
+
+
+
+<h3>
+<a name="p-str-starts-with">starts-with</a>
+</h3>
+<p>
+Tests whether a substring appears at the beginning of another string.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to test.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">PREFIX</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The substring that must appear at the beginning of
+<tt class="parameter">STR</tt>.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">PREFIX</tt> appears
+inside <tt class="parameter">STR</tt> starting at position 0.
+</p>
+
+
+<p align="center">
+<b>Find all PSIs defined by Ontopia</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $SI from
+  subject-identifier($TOPIC, $SI),
+  str:starts-with($SI, "http://psi.ontopia.net/")?</pre>
+
+
+<p>
+In the following topic map:
+</p>
+
+
+<pre>[subtype-of : hierarchical-relation-type = "Subtype of"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass-subclass"]
+[supertype = "Supertype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#superclass"]
+[subtype = "Subtype"
+  @"http://www.topicmaps.org/xtm/1.0/core.xtm#subclass"]
+[descr = "Description"
+    @"http://psi.ontopia.net/occurrence/description"]
+</pre>
+
+
+<p>
+The result of this query would be one row, containing
+<tt class="literal">"http://psi.ontopia.net/occurrence/description"</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-substring">substring</a>
+</h3>
+<p>
+Extract part of a string.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">OUT</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The resulting string.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to operate on.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">FROM</td><td class="dbTableEntry">number</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The position of the start of the substring.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">TO</td><td class="dbTableEntry">number</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">no</td><td class="dbTableEntry">The position of the end of the substring.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">OUT</tt> is equal to the
+substring of <tt class="parameter">STR</tt> starting at position
+<tt class="parameter">FROM</tt> and ending at position
+<tt class="parameter">TO</tt> (non-inclusive). If
+<tt class="parameter">TO</tt> is not given, the substring extends to the
+end of the string. All position counts are zero-based.
+</p>
+
+
+<p align="center">
+<b>Find all PSI namespaces in a topic map</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $PREFIX from
+  subject-identifier($TOPIC, $SI),
+  str:last-index-of($IX, $SI, "/"),
+  str:substring($PREFIX, $SI, 0, $IX)
+order by $PREFIX?</pre>
+
+
+<p>
+This query would produce all PSI namespaces used in a given topic map.
+</p>
+
+
+
+<h3>
+<a name="p-str-substring-after">substring-after</a>
+</h3>
+<p>
+Extract part of a string after the first occurrence of a substring.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">OUT</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The resulting string.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to operate on.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">SUB</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The substring to search for.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">OUT</tt> is equal to the
+substring of <tt class="parameter">STR</tt> after the first occurrence
+of <tt class="parameter">SUB</tt> within <tt class="parameter">STR</tt>. If
+there are no occurrences of <tt class="parameter">SUB</tt> the predicate
+is false.
+</p>
+
+
+<p align="center">
+<b>Get month and day</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $DATE from
+  str:substring-after($DATE, "2007-03-12", "-")?</pre>
+
+
+<p>
+This query would produce <tt class="literal">03-12</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-substring-before">substring-before</a>
+</h3>
+<p>
+Extract part of a string before the first occurrence of a substring.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">OUT</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The resulting string.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to operate on.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">SUB</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The substring to search for.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate is true when <tt class="parameter">OUT</tt> is equal to the
+substring of <tt class="parameter">STR</tt> before the first occurrence
+of <tt class="parameter">SUB</tt> within <tt class="parameter">STR</tt>. If
+there are no occurrences of <tt class="parameter">SUB</tt> the predicate
+is false.
+</p>
+
+
+<p align="center">
+<b>Get month and day</b>
+</p>
+
+
+<pre>import "http://psi.ontopia.net/tolog/string/" as str
+select $DATE from
+  str:substring-before($DATE, "2007-03-12", "-")?</pre>
+
+
+<p>
+This query would produce <tt class="literal">2007</tt>.
+</p>
+
+
+
+<h3>
+<a name="p-str-translate">translate</a>
+</h3>
+<p>
+Replace and/or delete characters in one string. Often used to remove
+whitespace or do case normalization.
+</p>
+
+
+
+<h4>Parameters</h4>
+
+
+
+<table width="" cellpadding="4" cellspacing="0" border="1" class="dbTable">
+<tr class="dbTableHeaderRow">
+<th class="dbTableHeaderEntry">Name</th><th class="dbTableHeaderEntry">Type</th><th class="dbTableHeaderEntry">Must be bound</th><th class="dbTableHeaderEntry">Required</th><th class="dbTableHeaderEntry">Description</th>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">OUT</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The resulting string.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">STR</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The string to operate on.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">FROM</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The list of characters to translate from.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">TO</td><td class="dbTableEntry">string</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The list of characters to translate to.</td>
+</tr>
+<tr class="dbTableRow">
+<td class="dbTableEntry">DELETE</td><td class="dbTableEntry">string</td><td class="dbTableEntry">no</td><td class="dbTableEntry">yes</td><td class="dbTableEntry">The list of characters to remove.</td>
+</tr>
+</table>
+
+
+
+<h4>Description</h4>
+
+
+
+<p>
+The predicate builds a translation table where the first character in
+<tt class="parameter">FROM</tt> maps to the first character in
+<tt class="parameter">TO</tt> (and so on). This is the basic function
+performed by the predicate.
+</p>
+
+
+<p>
+The predicate is really a mix of the XPath <tt class="symbol">translate</tt>
+function and the Python <tt class="symbol">translate</tt> function, turned
+into a predicate. If the <tt class="parameter">DELETE</tt> parameter is
+provided it behaves like the Python function, and if not it behaves
+like the XPath function.
+</p>
+
+
+<p>
+That is, if the <tt class="parameter">DELETE</tt> is not present, then the
+predicate translates characters as specified by the translation table,
+but any characters for which no mapping has been defined will be
+deleted. Characters in the <tt class="parameter">FROM</tt> string for
+which there are no corresponding characters in the
+<tt class="parameter">TO</tt> string will map to themselves (that is, if
+<tt class="parameter">FROM</tt> is longer than <tt class="parameter">TO</tt>).
+Conversely, if <tt class="parameter">TO</tt> is longer than
+<tt class="parameter">FROM</tt> any excess characters in
+<tt class="parameter">TO</tt> will be ignored.
+</p>
+
+
+<p align="center">
+<b>Lowercasing</b>
+</p>
+
+
+<pre>
+import "http://psi.ontopia.net/tolog/string/" as str
+select $OUT from
+  str:translate($OUT,
+    "Addis Abeba (12)",
+    "ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz ",
+    "abcdefghijklmnopqrstuvxyzabcdefghijklmnopqrstuvxyz ")?
+</pre>
+
+
+
+<p>
+The example above produces "addis abeba " as the output. If we remove
+the space at the end of the <tt class="parameter">FROM</tt> string the
+result is "addisabeba".
+</p>
+
+
+<p>
+If the <tt class="parameter">DELETE</tt> <em>is</em> present,
+then the predicate translates characters as specified by the
+translation table and any characters for which no mapping has been
+defined will be mapped to themselves. Any characters in the
+<tt class="parameter">DELETE</tt> string will be deleted, of course. If
+<tt class="parameter">FROM</tt> and <tt class="parameter">TO</tt> are of
+different lengths the effect is the same as specified above when
+<tt class="parameter">DELETE</tt> is not present.
+</p>
+
+
+<p align="center">
+<b>Lowercasing</b>
+</p>
+
+
+<pre>
+import "http://psi.ontopia.net/tolog/string/" as str
+select $OUT from
+  str:translate($OUT,
+    "Addis Abeba (12)",
+    "ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvxyz",
+    "abcdefghijklmnopqrstuvxyzabcdefghijklmnopqrstuvxyz",
+    "()")?
+</pre>
+
+
+
+<p>
+The example above produces "addis abeba 12" as the output.
+</p>
+
+
+
+</body>
+</html>
